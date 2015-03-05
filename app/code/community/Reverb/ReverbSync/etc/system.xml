@@ -1,0 +1,128 @@
+<config>
+	<tabs>
+		<ReverbSync translate="label" module="ReverbSync">
+			<label>Reverb</label>
+			<sort_order>99999</sort_order>
+		</ReverbSync>
+	</tabs>
+	<sections>
+		<ReverbSync translate="label" module="ReverbSync">
+			<label>Reverb Configuration</label>
+			<tab>ReverbSync</tab>
+			<sort_order>1</sort_order>
+			<show_in_default>2</show_in_default>
+			<show_in_website>2</show_in_website>
+			<show_in_store>2</show_in_store>
+			<groups>
+
+				<extensionOption_group translate="label" module="ReverbSync">
+					<label>Reverb Extension</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>100</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<module_select translate="label tooltip comment">
+							<label>Enable Reverb Module:</label>
+							<comment>Select Yes/No to enable/disable module</comment>
+							<frontend_type>select</frontend_type>
+							<sort_order>1000</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<tooltip>Please Select Yes to Enable this Module</tooltip>
+						</module_select>
+					</fields>
+				</extensionOption_group>
+				<extension translate="label comment tooltip">
+					<label>Reverb Credential Details</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>140</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<revUrl translate="label">
+							<label>Reverb URL*:</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>1</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<validate>input-text required-entry</validate>
+						</revUrl>
+						<revEmailId translate="label">
+							<label>Email*:</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>1</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<validate>validate-email required-entry</validate>
+						</revEmailId>
+						<revPassword translate="label">
+							<label>Password*:</label>
+							<frontend_type>password</frontend_type>
+							<sort_order>2</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<validate>input-text required-entry</validate>
+						</revPassword>
+					</fields>
+				</extension>
+				<reverbDefault translate="label comment tooltip">
+					<label>Reverb Default</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>142</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<revCond translate="label">
+							<label>Condition*:</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>1</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<validate>input-text required-entry</validate>
+
+						</revCond>
+						<revInvent translate="label">
+							<label>Has Inventory?*:</label>
+							<frontend_type>select</frontend_type>
+							<sort_order>1</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<validate>input-text required-entry</validate>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+
+						</revInvent>
+						<revMake translate="label">
+							<label>Make*:</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>2</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<validate>input-text required-entry</validate>
+						</revMake>
+						<revModel translate="label">
+							<label>Model*:</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>2</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<validate>input-text required-entry</validate>
+						</revModel>
+					</fields>
+				</reverbDefault>
+			</groups>
+		</ReverbSync>
+	</sections>
+</config>

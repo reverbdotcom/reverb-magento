@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<layout>
+	<add_reverb_product_tab>
+		<reference name="product_tabs">
+			<action method="addTab">
+				<name>offlinesynctab</name>
+				<block>ReverbSync/adminhtml_catalog_product_tab</block>
+			</action>
+		</reference>
+	</add_reverb_product_tab>
+	<!-- supports simple product -->
+	<adminhtml_catalog_product_edit>
+		<update handle="add_reverb_product_tab"/>
+	</adminhtml_catalog_product_edit>
+</layout>
+
