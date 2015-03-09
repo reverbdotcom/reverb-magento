@@ -39,7 +39,7 @@ class Reverb_ReverbSync_Adminhtml_RevOfflineSync_SyncController extends Mage_Cor
                 $product -> getResource() -> saveAttribute($product, 'rev_product_url');
                 $sucessBlock = $this -> getLayout() -> createBlock('Mage_Core_Block_Template', 'ReverbSync', array('template' => 'ReverbSync/product/productsync.phtml'));
                 $sucessBlock -> setRevProductSync($revPid);
-                $sucessBlock -> setRevProductUrlSync($responseId);
+                $sucessBlock -> setRevProductUrlSync($responseData);
                 echo $sucessBlock -> toHTML();
             } catch(Exception $e) {
                 $errorMessage = $this -> __($e -> getMessage());
