@@ -32,7 +32,7 @@ class Reverb_ReverbSync_Model_Observer {
                     //pass the data to create the product in Reverb
                     $responseData = Mage::helper('ReverbSync/data') -> createObject($revConnection, $fieldsArray, 'listings');
                     Mage::app() -> getRequest() -> setParam('revProduct', "saveResponse");
-                    if (isset($responseId)) {
+                    if (isset($responseData)) {
                         $revPurl = parse_url($responseData, PHP_URL_PATH);
                         $revPid = explode("/", $revPurl);
                         $revPid = explode('-', $revPid[2]);
@@ -48,7 +48,7 @@ class Reverb_ReverbSync_Model_Observer {
             }
         } catch (Exception $e) {
             Mage::getSingleton('adminhtml/session') -> addWarning($e -> getMessage());
-            
+
         }
 
     }
