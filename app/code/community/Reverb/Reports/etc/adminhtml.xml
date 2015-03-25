@@ -30,9 +30,7 @@
         </resources>
     </acl>
     <menu>
-        <reverb_reports translate="title" module="reverb_reports">
-            <title>Reverb Reports</title>
-            <sort_order>92</sort_order>
+        <report translate="title" module="reverb_reports">
             <children>
                 <reverbreport translate="title" module="reverb_reports">
                     <title>Reverb Report</title>
@@ -40,6 +38,6 @@
                     <sort_order>0</sort_order>
                 </reverbreport>
             </children>
-        </reverb_reports>
+        </report>
     </menu>
 </config>

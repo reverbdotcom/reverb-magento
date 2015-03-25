@@ -57,6 +57,7 @@ class Reverb_Reports_Block_Adminhtml_Reverbreport_Grid
             'index' => 'rev_url',
             'type'=> 'text',
             'filter' => false,
+            'renderer' =>  'Reverb_Reports_Block_Adminhtml_Reverbreport_Render',
         ));
         $this->addColumn('status', array(
             'header'    => Mage::helper('reverb_reports')->__('Sync Status'),
