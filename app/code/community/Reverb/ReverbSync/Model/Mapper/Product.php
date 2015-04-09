@@ -6,7 +6,7 @@ class Reverb_ReverbSync_Model_Mapper_Product
     public function productMapping($product)
     { try
         {
-            
+
         $id = $product->getId();
         $stock = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product);
         $qty = $stock->getQty();
@@ -18,9 +18,7 @@ class Reverb_ReverbSync_Model_Mapper_Product
         $sku = $product->getSku();
         $condition = Mage::getStoreConfig('ReverbSync/reverbDefault/revCond');
         $hasInventory = Mage::getStoreConfig('ReverbSync/reverbDefault/revInvent');
-        $Model = Mage::getStoreConfig('ReverbSync/reverbDefault/revModel');
-        $make = Mage::getStoreConfig('ReverbSync/reverbDefault/revMake');
-         
+
         $fieldsArray = array(
                 'title'=> $name,
                 'sku'=> $sku,
@@ -28,9 +26,7 @@ class Reverb_ReverbSync_Model_Mapper_Product
                 'condition' => $condition,
                 "has_inventory"=>$hasInventory,
                 "inventory"=>$qty,
-                "price"=>$price,
-                "make"=>$make,
-                "model"=>$Model
+                "price"=>$price
                );
 
         } catch (Exception $e) {

@@ -16,11 +16,11 @@ class Reverb_ReverbSync_Adminhtml_RevOfflineSync_SyncController extends Mage_Cor
             $revSync = $product -> getRevSync();
             $productType = $product -> getTypeID();
             if ($productType != 'simple') {
-                die("Only simple product can be sync.");
+                die("Only simple products can be synced.");
             }
             if (!$revSync) {
 
-                die("Please select Sync to Reverb as yes and click on Save.");
+                die("Please enable Sync to Reverb and click on Save.");
             }
             $mapperModel = Mage::getModel('reverbSync/Mapper_Product');
             //map the product

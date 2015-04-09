@@ -73,6 +73,4 @@ class Reverb_ReverbSync_Block_Adminhtml_Catalog_Product_Tab extends Mage_Adminht
         }
         return $revProductUrl;
     }
-    
-
 }

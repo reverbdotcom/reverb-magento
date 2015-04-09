@@ -102,24 +102,6 @@
 							<source_model>adminhtml/system_config_source_yesno</source_model>
 
 						</revInvent>
-						<revMake translate="label">
-							<label>Make*:</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>2</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-							<validate>input-text required-entry</validate>
-						</revMake>
-						<revModel translate="label">
-							<label>Model*:</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>2</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-							<validate>input-text required-entry</validate>
-						</revModel>
 					</fields>
 				</reverbDefault>
 			</groups>

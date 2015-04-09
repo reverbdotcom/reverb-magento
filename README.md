@@ -14,6 +14,8 @@ It will also create new listings on Reverb if the SKU is not found.
 
 The result of the sync is logged to a sync log available from the settings screen.
 
+Only simple products are synced. Configurable products are not synced.
+
 ## LICENSE
 
 Copyright Reverb.com, LLC 2015.
