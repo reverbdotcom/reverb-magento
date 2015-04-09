@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <config>
- <modules>
+  <modules>
     <Reverb_ReverbSync>
-           <active>true</active>
-            <codePool>community</codePool>
-	</Reverb_ReverbSync>
-    </modules>
+      <active>true</active>
+      <codePool>community</codePool>
+    </Reverb_ReverbSync>
+  </modules>
 </config>

@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 
 <config>
-    <modules>
-        <Reverb_Reports>
-            <active>true</active>
-            <codePool>community</codePool>
-            <depends>
-                <Mage_Core />
-             </depends>
-        </Reverb_Reports>
-    </modules>
+  <modules>
+    <Reverb_Reports>
+      <active>true</active>
+      <codePool>community</codePool>
+      <depends>
+        <Mage_Core />
+      </depends>
+    </Reverb_Reports>
+  </modules>
 </config>

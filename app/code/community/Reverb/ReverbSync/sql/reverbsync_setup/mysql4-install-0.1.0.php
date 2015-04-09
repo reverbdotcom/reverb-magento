@@ -1,4 +1,4 @@
-<?php  
+<?php
 
 $installer  = $this;
 $installer->startSetup();
@@ -25,7 +25,7 @@ try
 }
 catch (Exception $excp)
 {
-    Mage::log($excp->getMessage());  
+    Mage::log($excp->getMessage());
 }
 try
 {
@@ -48,7 +48,7 @@ try
 }
 catch (Exception $excp)
 {
-    Mage::log($excp->getMessage());  
+    Mage::log($excp->getMessage());
 }
 try{
     $setup->addAttribute(Mage_Catalog_Model_Product::ENTITY, 'rev_sync', array(
@@ -59,7 +59,7 @@ try{
         'label' => 'Sync to Reverb',
         'input' => 'select',
         'global' => Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_WEBSITE,
-        'visible' => true,    
+        'visible' => true,
         'required' => false,
         'default' => '0',
         'user_defined' => false,
@@ -67,11 +67,11 @@ try{
         'visible_on_front' => false,
         'source' => 'eav/entity_attribute_source_boolean',
         'used_in_product_listing' => false
-   
+
     ));
 }
 catch (Exception $excp)
 {
-    Mage::log($excp->getMessage());  
+    Mage::log($excp->getMessage());
 }
 $installer->endSetup();
