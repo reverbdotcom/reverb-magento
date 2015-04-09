@@ -11,6 +11,7 @@ class Reverb_ReverbSync_Adminhtml_RevOfflineSync_SyncController extends Mage_Cor
             $revConnection = Mage::helper('ReverbSync/connection') -> revConnection();
             $productId = $this -> getRequest() -> getParam('product_id');
             $product = Mage::getModel('catalog/product') -> load($productId);
+            $stock = Mage::getModel('cataloginventory/stock_item') -> loadByProduct($product);
             //load the product
             $revSync = $product -> getRevSync();
             $productType = $product -> getTypeID();
@@ -37,12 +38,14 @@ class Reverb_ReverbSync_Adminhtml_RevOfflineSync_SyncController extends Mage_Cor
                 //$product -> save();
                 $product -> getResource() -> saveAttribute($product, 'rev_product_id');
                 $product -> getResource() -> saveAttribute($product, 'rev_product_url');
+                Mage::helper('ReverbSync/data') -> reverbReports($productId, $product -> getName(), $product -> getSku(), $stock -> getQty(), $responseData, 1, null);
                 $sucessBlock = $this -> getLayout() -> createBlock('Mage_Core_Block_Template', 'ReverbSync', array('template' => 'ReverbSync/product/productsync.phtml'));
                 $sucessBlock -> setRevProductSync($revPid);
                 $sucessBlock -> setRevProductUrlSync($responseData);
                 echo $sucessBlock -> toHTML();
             } catch(Exception $e) {
                 $errorMessage = $this -> __($e -> getMessage());
+                Mage::helper('ReverbSync/data') -> reverbReports($productId, $product -> getName(), $product -> getSku(), $stock -> getQty(), null, 0, $e -> getMessage());
                 $errorBlock = $this -> getLayout() -> createBlock('Mage_Core_Block_Template', 'Reverb_ReverbSync', array('template' => 'ReverbSync/product/productfailsync.phtml'));
                 $errorBlock -> setErrorMessage($errorMessage);
                 echo $errorBlock -> toHTML();
