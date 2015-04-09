@@ -16,6 +16,14 @@ The result of the sync is logged to a sync log available from the settings scree
 
 Only simple products are synced. Configurable products are not synced.
 
+## Contributing
+
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create new Pull Request
+
 ## LICENSE
 
 Copyright 2015 Reverb.com, LLC
