@@ -16,6 +16,13 @@ The result of the sync is logged to a sync log available from the settings scree
 
 Only simple products are synced. Configurable products are not synced.
 
+## What's not working
+
+* Syncing configurable products
+* Syncing images from magento to Reverb
+* Syncing inventory (decrements/increments) from Reverb to Magneto [using webhooks](https://reverb.com/page/api#webhooks)
+* Order syncing from Reverb to Magento
+
 ## Contributing
 
 1. Fork it
