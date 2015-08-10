@@ -1,6 +1,6 @@
 <?php
 
-class Reverb_ReverbSync_Adminhtml_RevOfflineSync_SyncController extends Mage_Core_Controller_Front_Action {
+class Reverb_ReverbSync_Adminhtml_RevOfflineSync_SyncController extends Mage_Adminhtml_Controller_Action {
 
     //offline syn function
     public function productSyncAction() {

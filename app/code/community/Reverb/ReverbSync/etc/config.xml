@@ -5,17 +5,6 @@
             <version>0.1.0</version>
         </Reverb_ReverbSync>
     </modules>
-    <frontend>
-        <routers>
-            <reverbSync>
-                <use>standard</use>
-                <args>
-                    <module>Reverb_ReverbSync</module>
-                    <frontName>reverbSync</frontName>
-                </args>
-            </reverbSync>
-        </routers> 
-    </frontend>
     <global>       
         <models>
             <reverbSync>
@@ -110,6 +99,7 @@
             </resources>
         </acl>
     </adminhtml>
+
       <admin>
         <routers>
             <adminhtml>
@@ -119,6 +109,15 @@
                     </modules>
                 </args>
             </adminhtml>
+
+                <reverb_sync>
+                    <use>admin</use>
+                    <args>
+                        <module>Reverb_ReverbSync</module>
+                        <frontName>reverbSync</frontName>
+                    </args>
+                </reverb_sync>
+
         </routers>
     </admin>
 </config>
