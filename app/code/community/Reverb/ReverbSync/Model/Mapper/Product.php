@@ -3,14 +3,11 @@
 class Reverb_ReverbSync_Model_Mapper_Product
 {
     //function to Map the Mgento and Reverb attributes
-    public function productMapping($product)
-    { try
-        {
+    public function getListingWrapper($product)
+    {
+        $reverbListingWrapper = Mage::getModel('reverbSync/wrapper_listing');
 
-        $id = $product->getId();
         $stock = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product);
-        $qty = $stock->getQty();
-        $weight = $product->getWeight();
         $qty = $stock->getQty();
         $price = $product->getPrice();
         $name = $product->getName();
@@ -29,12 +26,10 @@ class Reverb_ReverbSync_Model_Mapper_Product
                 "price"=>$price
                );
 
-        } catch (Exception $e) {
-            $excp = 'Message: ' . $e -> getMessage();
-            Mage::log($excp);
-        }
-		Mage::log($fieldsArray,1,"field.log");
-        return $fieldsArray;
+        $reverbListingWrapper->setApiCallContentData($fieldsArray);
+        $reverbListingWrapper->setMagentoProduct($product);
+
+        return $reverbListingWrapper;
     }
 
 

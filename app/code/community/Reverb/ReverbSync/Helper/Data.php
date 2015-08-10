@@ -5,18 +5,35 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
     /**
      * $fieldsArray should eventually be a model
      *
-     * @param $fieldsArray
+     * @param $listingWrapper
      */
-    public function createOrUpdateReverbListing($fieldsArray)
+    public function createOrUpdateReverbListing($listingWrapper)
     {
-        $magento_sku = $fieldsArray['sku'];
-        $reverb_listing_url = $this->findReverbListingUrlByMagentoSku($magento_sku);
-        if ($reverb_listing_url)
+        try
         {
-            return $this->updateObject($fieldsArray, $reverb_listing_url);
+            $api_call_content_data_array = $listingWrapper->getApiCallContentData();
+            $magento_sku = $api_call_content_data_array['sku'];
+            $reverb_listing_url = $this->findReverbListingUrlByMagentoSku($magento_sku);
+            if ($reverb_listing_url)
+            {
+                $reverb_web_url = $this->updateObject($listingWrapper, $reverb_listing_url);
+            }
+            else
+            {
+                $reverb_web_url = $this->createObject($listingWrapper);
+            }
+
+            $listingWrapper->setReverbWebUrl($reverb_web_url);
+        }
+        catch(Exception $e)
+        {
+            // Log Exception on reports row
+            $listingWrapper->setErrorMessage($e->getMessage());
         }
 
-        return $this->createObject($fieldsArray);
+        Mage::dispatchEvent('reverb_listing_synced', array('reverb_listing' => $listingWrapper));
+
+        return $listingWrapper;
     }
 
     /**
@@ -25,8 +42,9 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
      * @return mixed
      * @throws Exception
      */
-    public function createObject($fieldsArray)
+    public function createObject($listingWrapper)
     {
+        $fieldsArray = $listingWrapper->getApiCallContentData();
         $revUrl = Mage::getStoreConfig('ReverbSync/extension/revUrl');
         $url = $revUrl . "/api/listings";
         $content = json_encode($fieldsArray);
@@ -53,16 +71,24 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
             $response['message'] = 'The response could not be decoded as a json.';
         }
 
-        if ($status != 201) {
+        if ($status != 201)
+        {
+            $listingWrapper->setStatus(0);
             //throw new Exception(curl_error($curl));
             if (isset($response['errors'])) {
-                throw new Exception($response['message'] . $response['errors'][key($response['errors'])][0]);
+                $errors_messaging = $response['message'] . $response['errors'][key($response['errors'])][0];
+                $listingWrapper->setSyncDetails($errors_messaging);
+                throw new Exception($errors_messaging);
             } else {
-                throw new Exception($response['message']);
+                $error_message = $response['message'];
+                $listingWrapper->setSyncDetails($error_message);
+                throw new Exception($error_message);
             }
 
         }
 
+        $listingWrapper->setStatus(1);
+        $listingWrapper->setSyncDetails(null);
         $listing_response = isset($response['listing']) ? $response['listing'] : array();
         $web_url = $this->_getWebUrlFromListingResponseArray($listing_response);
 
@@ -127,8 +153,9 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
                 ? $listing_response['_links']['self']['href'] : null;
     }
 
-    public function updateObject($fieldsArray, $url_to_put)
+    public function updateObject($listingWrapper, $url_to_put)
     {
+        $fieldsArray = $listingWrapper->getApiCallContentData();
         $content = json_encode($fieldsArray);
         $revUrl = Mage::getStoreConfig('ReverbSync/extension/revUrl');
         $revUrlToPut  = $revUrl . $url_to_put;
@@ -150,41 +177,26 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         $response = json_decode($updateStatus, true);
         $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         curl_close($curl);
-        if ($status != 200) {
+        if ($status != 200)
+        {
             $updateStatus = json_decode($updateStatus, true);
-            throw new Exception($updateStatus['message']);
+
+            $error_message = $updateStatus['message'];
+            $listingWrapper->setSyncDetails($error_message);
+            $listingWrapper->setStatus(0);
+
+            throw new Exception($error_message);
         }
 
+        $listingWrapper->setSyncDetails(null);
+        $listingWrapper->setStatus(1);
         $listing_response = isset($response['listing']) ? $response['listing'] : array();
         $web_url = $this->_getWebUrlFromListingResponseArray($listing_response);
 
         return $web_url;
     }
 
-  public function reverbReports($revProductId, $revProductName, $revProductSku, $revProductInvent, $revProductUrl, $revProductStatus, $revSyncDetails) {
 
-    try {
-
-      $table = (string)Mage::getConfig() -> getTablePrefix() . 'reverb_reports_reverbreport';
-      $writeConn = Mage::getSingleton('core/resource') -> getConnection('core_write');
-      $readConn = Mage::getSingleton('core/resource') -> getConnection('core_read');
-      $existReport = $readConn -> fetchAll("select entity_id from " . $table . " where product_id = '" . $revProductId . "'");
-      if (count($existReport) == 0) {
-        $writeConn -> query("insert into " . $table . "(product_id,title,product_sku ,inventory,rev_url,status,sync_details,last_synced) values(?,?,?,?,?,?,?,?)", array($revProductId, $revProductName, $revProductSku, $revProductInvent, $revProductUrl, $revProductStatus, $revSyncDetails, $this -> getCurrentDate('Y-m-d H:i:s')));
-      } else {
-        if ($revProductUrl != null) {
-          $writeConn -> query('update ' . $table . ' set title = "' . $revProductName . '", rev_url = "' . $revProductUrl . '", product_sku = "' . $revProductSku . '",inventory = "' . $revProductInvent . '",status = "' . $revProductStatus . '",sync_details = "' . $revSyncDetails . '",last_synced="' . $this -> getCurrentDate('Y-m-d H:i:s') . '" where product_id =' . $revProductId);
-        } else {
-          $writeConn -> query('update ' . $table . ' set title = "' . $revProductName . '", product_sku = "' . $revProductSku . '",inventory = "' . $revProductInvent . '",status = "' . $revProductStatus . '",sync_details = "' . $revSyncDetails . '",last_synced="' . $this -> getCurrentDate('Y-m-d H:i:s') . '" where product_id =' . $revProductId);
-        }
-      }
-    } catch (Exception $e) {
-      $excp = 'Message: ' . $e -> getMessage();
-      Mage::log($excp);
-    }
-
-    return;
-  }
 
     protected function _getCurlResource($url, $options_array = array())
     {
@@ -204,11 +216,6 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
 
         return $curlResource;
     }
-
-  function getCurrentDate($format) {
-    $dateTime = new DateTime(null, new DateTimeZone('UTC'));
-    return $dateTime -> format($format);
-  }
 
     protected function _setHttpBasicAuthOnCurlRequestIfSandbox($curl)
     {

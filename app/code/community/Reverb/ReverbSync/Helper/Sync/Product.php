@@ -66,12 +66,9 @@ class Reverb_ReverbSync_Helper_Sync_Product extends Mage_Core_Helper_Data
             throw new Exception("This product has been excluded from bring synced");
         }
 
-        $mapperModel = Mage::getModel('reverbSync/Mapper_Product');
-        //map the product
-        $fieldsArray = $mapperModel -> productMapping($product);
+        $listingWrapper = Mage::getModel('reverbSync/Mapper_Product')->getListingWrapper($product);
         //pass the data to create or update the product in Reverb
-        $responseData = Mage::helper('ReverbSync/data') -> createOrUpdateReverbListing($fieldsArray);
-        Mage::helper('ReverbSync/data') -> reverbReports($product_id, $product -> getName(), $product -> getSku(), $stock -> getQty(), $responseData, 1, null);
+        $listingWrapper = Mage::helper('ReverbSync/data') -> createOrUpdateReverbListing($listingWrapper);
     }
 
     protected function _productIsExcludedFromSync($product)

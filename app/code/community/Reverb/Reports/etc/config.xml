@@ -39,6 +39,18 @@
                 </entities>
             </reverb_reports_resource>
         </models>
+
+        <events>
+            <reverb_listing_synced>
+                <observers>
+                    <record_listing_report>
+                        <type>singleton</type>
+                        <class>reverb_reports/observer</class>
+                        <method>recordListingReport</method>
+                    </record_listing_report>
+                </observers>
+            </reverb_listing_synced>
+        </events>
     </global>
     <adminhtml>
         <layout>
