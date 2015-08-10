@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<config>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <catalog>
+                        <children>
+                            <reverb_sync translate="title" module="ReverbSync">
+                                <title>Reverb Bulk Sync</title>
+                            </reverb_sync>
+                        </children>
+                    </catalog>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+    <menu>
+        <catalog translate="title" module="ReverbSync">
+            <children>
+                <reverb_sync translate="title" module="ReverbSync">
+                    <title>Reverb Bulk Sync</title>
+                    <action>reverbSync/adminhtml_sync/index</action>
+                    <sort_order>0</sort_order>
+                </reverb_sync>
+            </children>
+        </catalog>
+    </menu>
+</config>
