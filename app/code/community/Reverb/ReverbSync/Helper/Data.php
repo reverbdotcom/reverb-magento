@@ -1,13 +1,37 @@
 <?php
 
-class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract {
+class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
+{
+    /**
+     * $fieldsArray should eventually be a model
+     *
+     * @param $fieldsArray
+     */
+    public function createOrUpdateReverbListing($fieldsArray)
+    {
+        $magento_sku = $fieldsArray['sku'];
+        $reverb_listing_url = $this->findReverbListingUrlByMagentoSku($magento_sku);
+        if ($reverb_listing_url)
+        {
+            return $this->updateObject($fieldsArray, $reverb_listing_url);
+        }
 
-    public function createObject($fieldsArray, $entityType) {
+        return $this->createObject($fieldsArray);
+    }
+
+    /**
+     * @param $fieldsArray
+     * @param $entityType - Being passed in as 'listings'
+     * @return mixed
+     * @throws Exception
+     */
+    public function createObject($fieldsArray)
+    {
         $revUrl = Mage::getStoreConfig('ReverbSync/extension/revUrl');
-        $url = $revUrl . "/api/$entityType";
+        $url = $revUrl . "/api/listings";
         $content = json_encode($fieldsArray);
         $curl = curl_init($url);
-        $this->_setHttpBasicAuthOnCurlRequest($curl);
+        $this->_setHttpBasicAuthOnCurlRequestIfSandbox($curl);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
         curl_setopt($curl, CURLOPT_HEADER, false);
@@ -37,51 +61,105 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract {
                 throw new Exception($response['message']);
             }
 
-        } else {
-
-            foreach ($response as $each_member) {
-                if (is_array($each_member)) {
-                    while (list($key, $value) = each($each_member)) {
-                        if ($key == '_links' && is_array($value)) {
-                            $revUrl = $value['web']['href'];
-                            return $revUrl;
-                        }
-                    }
-                }
-            }
         }
 
+        $listing_response = isset($response['listing']) ? $response['listing'] : array();
+        $web_url = $this->_getWebUrlFromListingResponseArray($listing_response);
+
+        return $web_url;
     }
 
-  //function to update the product in reverb
-  public function updateObject($fieldsArray, $entityType, $revProductId) {
+    /**
+     * /api/my/listings?sku=#{CGI.escape(sku)}&
+     *
+     * Returns self listing link if returned, null otherwise
+     *
+     * @param $magento_sku
+     * @return string|null
+     * @throws Exception
+     */
+    public function findReverbListingUrlByMagentoSku($magento_sku)
+    {
+        $revUrl = Mage::getStoreConfig('ReverbSync/extension/revUrl');
+        $escaped_sku = urlencode($magento_sku);
+        $url = $revUrl . "/api/my/listings?state=all&sku=" . $escaped_sku;
+        // The Varien Curl Adapter isn't great, could be refactored via extending a subclass
+        $curlResource = $this->_getCurlResource($url);
+        $curlResource->connect($url);
+        $json_response = $curlResource->read();
+        $status = $curlResource->getInfo(CURLINFO_HTTP_CODE);
+        $curlResource->close();
 
-    $revUrl = Mage::getStoreConfig('ReverbSync/extension/revUrl');
-    $url = $revUrl . "/api/$entityType/$revProductId";
-    $content = json_encode($fieldsArray);
+        $response = json_decode($json_response, true);
 
-    $curl = curl_init($url);
-      $this->_setHttpBasicAuthOnCurlRequest($curl);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
-    curl_setopt($curl, CURLOPT_HEADER, false);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        if (is_null($response))
+        {
+            $response = array();
+            $response['message'] = 'The response could not be decoded as a json.';
+        }
 
-      $x_auth_token = Mage::getStoreConfig('ReverbSync/extension/api_token');
+        if ($status != 200) {
+            //throw new Exception(curl_error($curl));
+            if (isset($response['errors'])) {
+                throw new Exception($response['message'] . $response['errors'][key($response['errors'])][0]);
+            } else {
+                throw new Exception($response['message']);
+            }
 
-    curl_setopt($curl, CURLOPT_HTTPHEADER, array("X-Auth-Token: $x_auth_token", "Content-type: application/hal+json"));
-    curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
-    curl_setopt($curl, CURLOPT_POSTFIELDS, $content);
-    $updateStatus = curl_exec($curl);
-    $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-    curl_close($curl);
-    if ($status != 200) {
-      $updateStatus = json_decode($updateStatus, true);
-      throw new Exception($updateStatus['message']);
-    } else {
-      return;
+        }
+
+        $listings_array = isset($response['listings']) ? ($response['listings']) : array();
+        $listing_array = is_array($listings_array) ? reset($listings_array) : array();
+        $self_links_href = $this->_getUpdatePutLinksHrefFromListingResponseArray($listing_array);
+
+        return $self_links_href;
     }
-  }
+
+    protected function _getWebUrlFromListingResponseArray(array $listing_response)
+    {
+        return isset($listing_response['_links']['web']['href'])
+            ? $listing_response['_links']['web']['href'] : null;
+    }
+
+    protected function _getUpdatePutLinksHrefFromListingResponseArray(array $listing_response)
+    {
+        return isset($listing_response['_links']['self']['href'])
+                ? $listing_response['_links']['self']['href'] : null;
+    }
+
+    public function updateObject($fieldsArray, $url_to_put)
+    {
+        $content = json_encode($fieldsArray);
+        $revUrl = Mage::getStoreConfig('ReverbSync/extension/revUrl');
+        $revUrlToPut  = $revUrl . $url_to_put;
+
+
+        $curl = curl_init($revUrlToPut);
+        $this->_setHttpBasicAuthOnCurlRequestIfSandbox($curl);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($curl, CURLOPT_HEADER, false);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+
+        $x_auth_token = Mage::getStoreConfig('ReverbSync/extension/api_token');
+
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array("X-Auth-Token: $x_auth_token", "Content-type: application/hal+json"));
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $content);
+        $updateStatus = curl_exec($curl);
+        $response = json_decode($updateStatus, true);
+        $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        curl_close($curl);
+        if ($status != 200) {
+            $updateStatus = json_decode($updateStatus, true);
+            throw new Exception($updateStatus['message']);
+        }
+
+        $listing_response = isset($response['listing']) ? $response['listing'] : array();
+        $web_url = $this->_getWebUrlFromListingResponseArray($listing_response);
+
+        return $web_url;
+    }
 
   public function reverbReports($revProductId, $revProductName, $revProductSku, $revProductInvent, $revProductUrl, $revProductStatus, $revSyncDetails) {
 
@@ -108,15 +186,50 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract {
     return;
   }
 
+    protected function _getCurlResource($url, $options_array = array())
+    {
+        $curlResource = new Varien_Http_Adapter_Curl();
+        $options_array[CURLOPT_SSL_VERIFYHOST] = 0;
+        $options_array[CURLOPT_SSL_VERIFYPEER] = 0;
+        $options_array[CURLOPT_HEADER] = 0;
+        $options_array[CURLOPT_RETURNTRANSFER] = 1;
+
+        $x_auth_token = Mage::getStoreConfig('ReverbSync/extension/api_token');
+        $options_array[CURLOPT_HTTPHEADER] = array("X-Auth-Token: $x_auth_token", "Content-type: application/hal+json");
+        $options_array = $this->_setHttpBasicAuthOnOptionsArrayIfSandbox($options_array);
+
+        $options_array[CURLOPT_URL] = $url;
+
+        $curlResource->setOptions($options_array);
+
+        return $curlResource;
+    }
+
   function getCurrentDate($format) {
     $dateTime = new DateTime(null, new DateTimeZone('UTC'));
     return $dateTime -> format($format);
   }
 
-    protected function _setHttpBasicAuthOnCurlRequest($curl)
+    protected function _setHttpBasicAuthOnCurlRequestIfSandbox($curl)
     {
         // HTTP Basic auth credentials hard-coded for the moment, intended to be moved to system.xml config fields
-        curl_setopt($curl, CURLOPT_USERPWD, "hacktest:h4ckt3st");
+        $sandbox_x_auth_token = Mage::getStoreConfig('ReverbSync/extension/sandbox_http_basic_auth_token');
+        if (!empty($sandbox_x_auth_token))
+        {
+            curl_setopt($curl, CURLOPT_USERPWD, $sandbox_x_auth_token);
+        }
+    }
+
+    protected function _setHttpBasicAuthOnOptionsArrayIfSandbox($options_array)
+    {
+        // HTTP Basic auth credentials hard-coded for the moment, intended to be moved to system.xml config fields
+        $sandbox_x_auth_token = Mage::getStoreConfig('ReverbSync/extension/sandbox_http_basic_auth_token');
+        if (!empty($sandbox_x_auth_token))
+        {
+            $options_array[CURLOPT_USERPWD] = $sandbox_x_auth_token;
+        }
+
+        return $options_array;
     }
 
 }

@@ -62,6 +62,14 @@
                             <show_in_store>1</show_in_store>
                             <validate>input-text required-entry</validate>
                         </api_token>
+                        <sandbox_http_basic_auth_token translate="label">
+                            <label>Sandbox HTTP Basic Auth Token:</label>
+                            <frontend_type>password</frontend_type>
+                            <sort_order>8</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </sandbox_http_basic_auth_token>
 						<revEmailId translate="label">
 							<label>Email*:</label>
 							<frontend_type>text</frontend_type>

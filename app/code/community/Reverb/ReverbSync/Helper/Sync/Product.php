@@ -69,8 +69,8 @@ class Reverb_ReverbSync_Helper_Sync_Product extends Mage_Core_Helper_Data
         $mapperModel = Mage::getModel('reverbSync/Mapper_Product');
         //map the product
         $fieldsArray = $mapperModel -> productMapping($product);
-        //pass the data to create the product in Reverb
-        $responseData = Mage::helper('ReverbSync/data') -> createObject($fieldsArray, 'listings');
+        //pass the data to create or update the product in Reverb
+        $responseData = Mage::helper('ReverbSync/data') -> createOrUpdateReverbListing($fieldsArray);
         Mage::helper('ReverbSync/data') -> reverbReports($product_id, $product -> getName(), $product -> getSku(), $stock -> getQty(), $responseData, 1, null);
     }
 
