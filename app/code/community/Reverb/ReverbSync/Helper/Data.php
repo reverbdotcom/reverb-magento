@@ -49,7 +49,6 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         $url = $revUrl . "/api/listings";
         $content = json_encode($fieldsArray);
         $curl = curl_init($url);
-        $this->_setHttpBasicAuthOnCurlRequestIfSandbox($curl);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
         curl_setopt($curl, CURLOPT_HEADER, false);
@@ -162,7 +161,6 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
 
 
         $curl = curl_init($revUrlToPut);
-        $this->_setHttpBasicAuthOnCurlRequestIfSandbox($curl);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
         curl_setopt($curl, CURLOPT_HEADER, false);
@@ -196,8 +194,6 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         return $web_url;
     }
 
-
-
     protected function _getCurlResource($url, $options_array = array())
     {
         $curlResource = new Varien_Http_Adapter_Curl();
@@ -208,7 +204,6 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
 
         $x_auth_token = Mage::getStoreConfig('ReverbSync/extension/api_token');
         $options_array[CURLOPT_HTTPHEADER] = array("X-Auth-Token: $x_auth_token", "Content-type: application/hal+json");
-        $options_array = $this->_setHttpBasicAuthOnOptionsArrayIfSandbox($options_array);
 
         $options_array[CURLOPT_URL] = $url;
 
@@ -216,27 +211,4 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
 
         return $curlResource;
     }
-
-    protected function _setHttpBasicAuthOnCurlRequestIfSandbox($curl)
-    {
-        // HTTP Basic auth credentials hard-coded for the moment, intended to be moved to system.xml config fields
-        $sandbox_x_auth_token = Mage::getStoreConfig('ReverbSync/extension/sandbox_http_basic_auth_token');
-        if (!empty($sandbox_x_auth_token))
-        {
-            curl_setopt($curl, CURLOPT_USERPWD, $sandbox_x_auth_token);
-        }
-    }
-
-    protected function _setHttpBasicAuthOnOptionsArrayIfSandbox($options_array)
-    {
-        // HTTP Basic auth credentials hard-coded for the moment, intended to be moved to system.xml config fields
-        $sandbox_x_auth_token = Mage::getStoreConfig('ReverbSync/extension/sandbox_http_basic_auth_token');
-        if (!empty($sandbox_x_auth_token))
-        {
-            $options_array[CURLOPT_USERPWD] = $sandbox_x_auth_token;
-        }
-
-        return $options_array;
-    }
-
 }
