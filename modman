@@ -1,0 +1,7 @@
+app/etc/modules/Reverb_Reports.xml                                                  app/etc/modules/Reverb_Reports.xml
+app/etc/modules/Reverb_ReverbSync.xml                                               app/etc/modules/Reverb_ReverbSync.xml
+app/design/adminhtml/default/default/layout/reverb_reports.xml                      app/design/adminhtml/default/default/layout/reverb_reports.xml
+app/design/adminhtml/default/default/layout/ReverbSync.xml                          app/design/adminhtml/default/default/layout/ReverbSync.xml
+app/design/adminhtml/default/default/template/ReverbSync/product/revproduct.phtml   app/design/adminhtml/default/default/template/ReverbSync/product/revproduct.phtml
+app/design/frontend/base/default/template/ReverbSync                                app/design/frontend/base/default/template/ReverbSync
+app/code/community/Reverb                                                           app/code/community/Reverb
