@@ -88,7 +88,7 @@ class Reverb_ReverbSync_Helper_Sync_Product extends Mage_Core_Helper_Data
         $isEnabled = Mage::getStoreConfig('ReverbSync/extensionOption_group/module_select');
         if (!$isEnabled)
         {
-            throw new Exception(self::MODULE_NOT_ENABLED);
+            throw new Reverb_ReverbSync_Model_Exception_Deactivated(self::MODULE_NOT_ENABLED);
         }
 
         return true;

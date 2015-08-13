@@ -7,7 +7,14 @@ class Reverb_ReverbSync_Model_Observer
     {
         $productSyncHelper = Mage::helper('ReverbSync/sync_product');
         $product_id = $observer->getProduct()->getId();
-        $productSyncHelper->executeIndividualProductDataSync($product_id);
+        try
+        {
+            $productSyncHelper->executeIndividualProductDataSync($product_id);
+        }
+        catch(Reverb_ReverbSync_Model_Exception_Deactivated $e)
+        {
+            // If the module is deactivated, don't do anything
+        }
     }
 
     // funtion to get the product quantity placed through order
