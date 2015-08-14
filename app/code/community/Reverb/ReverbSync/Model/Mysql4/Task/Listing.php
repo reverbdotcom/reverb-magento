@@ -35,6 +35,13 @@ class Reverb_ReverbSync_Model_Mysql4_Task_Listing extends Mage_Core_Model_Mysql4
         return $number_of_created_rows;
     }
 
+    public function deleteAllListingSyncTasks()
+    {
+        $where_condition_array = array('code=?' => 'listing_sync');
+        $rows_deleted = $this->_getWriteAdapter()->delete($this->getMainTable(), $where_condition_array);
+        return $rows_deleted;
+    }
+
     protected function _getInsertColumnsArray()
     {
         return array('code', 'status', 'object', 'method', 'serialized_arguments_object');

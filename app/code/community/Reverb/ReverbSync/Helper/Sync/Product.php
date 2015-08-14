@@ -81,6 +81,12 @@ class Reverb_ReverbSync_Helper_Sync_Product extends Mage_Core_Helper_Data
         $listingWrapper = Mage::helper('ReverbSync/data') -> createOrUpdateReverbListing($listingWrapper);
     }
 
+    public function deleteAllListingSyncTasks()
+    {
+        $resourceSingleton = Mage::getResourceSingleton('reverbSync/task_listing');
+        return $resourceSingleton->deleteAllListingSyncTasks();
+    }
+
     protected function _productIsExcludedFromSync($product)
     {
         $revSync = $product -> getRevSync();

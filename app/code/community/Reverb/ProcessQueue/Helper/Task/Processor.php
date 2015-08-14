@@ -144,6 +144,32 @@ class Reverb_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
         return $processQueueTaskCollection;
     }
 
+    public function getCompletedAndAllQueueTasks($code = null)
+    {
+        $allProcessQueueTaskCollection = Mage::getModel('reverb_process_queue/task')
+                                            ->getCollection();
+
+        if (!empty($code))
+        {
+            $allProcessQueueTaskCollection->addCodeFilter($code);
+        }
+
+        $all_process_queue_tasks = $allProcessQueueTaskCollection->getItems();
+
+        $completedTasksCollection = Mage::getModel('reverb_process_queue/task')
+                                        ->getCollection()
+                                        ->addStatusFilter(Reverb_ProcessQueue_Model_Task::STATUS_COMPLETE);
+
+        if (!empty($code))
+        {
+            $completedTasksCollection->addCodeFilter($code);
+        }
+
+        $completed_queue_tasks = $completedTasksCollection->getItems();
+
+        return array($completed_queue_tasks, $all_process_queue_tasks);
+    }
+
     public function updateLastExecutedAtToCurrentTime(Reverb_ProcessQueue_Model_Mysql4_Task_Collection $processQueueTaskCollection)
     {
         $task_objects_array = $processQueueTaskCollection->getItems();

@@ -28,6 +28,12 @@ class Reverb_ProcessQueue_Model_Mysql4_Task_Collection extends Mage_Core_Model_M
         return $this;
     }
 
+    public function addStatusFilter($status)
+    {
+        $this->addFieldToFilter('status', $status);
+        return $this;
+    }
+
     public function sortByLeastRecentlyExecuted()
     {
         $this->getSelect()->order('last_executed_at ' . Zend_Db_Select::SQL_ASC);
