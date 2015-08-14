@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Reverb_ProcessQueue>
+            <version>0.0.1</version>
+        </Reverb_ProcessQueue>
+    </modules>
+
+    <global>
+        <models>
+            <reverb_process_queue>
+                <class>Reverb_ProcessQueue_Model</class>
+                <resourceModel>reverb_process_queue_mysql4</resourceModel>
+            </reverb_process_queue>
+            <reverb_process_queue_mysql4>
+                <class>Reverb_ProcessQueue_Model_Mysql4</class>
+                <entities>
+                    <task>
+                        <table>reverb_process_queue_task</table>
+                    </task>
+                </entities>
+            </reverb_process_queue_mysql4>
+        </models>
+
+        <helpers>
+            <reverb_process_queue>
+                <class>Reverb_ProcessQueue_Helper</class>
+            </reverb_process_queue>
+        </helpers>
+
+        <blocks>
+            <reverb_process_queue>
+                <class>Reverb_ProcessQueue_Block</class>
+            </reverb_process_queue>
+        </blocks>
+
+        <resources>
+            <reverb_process_queue_setup>
+                <setup>
+                    <module>Reverb_ProcessQueue</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </reverb_process_queue_setup>
+        </resources>
+    </global>
+
+    <crontab>
+        <jobs>
+            <reverb_process_queue_process_tasks>
+                <schedule>
+                    <cron_expr>* * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>reverb_process_queue/cron::processQueueTasks</model>
+                </run>
+            </reverb_process_queue_process_tasks>
+        </jobs>
+    </crontab>
+</config>
