@@ -4,6 +4,7 @@ class Reverb_ReverbSync_Adminhtml_SyncController extends Mage_Adminhtml_Controll
 {
     const BULK_SYNC_EXCEPTION = 'An uncaught exception occurred while executing the Reverb Bulk Product Sync via the admin panel: %s';
     const SUCCESS_BULK_SYNC_COMPLETED = 'Reverb Bulk product sync process completed.';
+    const SUCCESS_BULK_SYNC_QUEUED_UP = '%s products have been queued to be synced with Reverb';
 
     protected $_adminHelper = null;
 
@@ -11,7 +12,7 @@ class Reverb_ReverbSync_Adminhtml_SyncController extends Mage_Adminhtml_Controll
     {
         try
         {
-            Mage::helper('ReverbSync/sync_product')->executeBulkProductDataSync();
+            $number_of_syncs_queued_up = Mage::helper('ReverbSync/sync_product')->queueUpBulkProductDataSync();
         }
         catch(Reverb_ReverbSync_Model_Exception_Redirect $redirectException)
         {
@@ -27,8 +28,7 @@ class Reverb_ReverbSync_Adminhtml_SyncController extends Mage_Adminhtml_Controll
             $this->_getAdminHelper()->throwRedirectException($error_message, 'reverbSync/adminhtml_sync/index');
         }
 
-
-        $success_message = sprintf(self::SUCCESS_BULK_SYNC_COMPLETED);
+        $success_message = sprintf(self::SUCCESS_BULK_SYNC_QUEUED_UP, $number_of_syncs_queued_up);
         Mage::getSingleton('adminhtml/session')->addSuccess($this->__($success_message));
         $this->_redirect('reverbSync/adminhtml_sync/index');
     }

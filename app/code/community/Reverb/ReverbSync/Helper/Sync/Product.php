@@ -7,6 +7,16 @@ class Reverb_ReverbSync_Helper_Sync_Product extends Mage_Core_Helper_Data
 
     protected $_reverbAdminHelper = null;
 
+    public function queueUpBulkProductDataSync()
+    {
+        // We want this to throw an exception to the calling block if module is not enabled
+        $this->_verifyModuleIsEnabled();
+
+        $product_ids_in_system = $this->getReverbSyncEligibleProductIds();
+
+        return Mage::helper('ReverbSync/task_processor')->queueListingsSyncByProductIds($product_ids_in_system);
+    }
+
     public function executeBulkProductDataSync()
     {
         $errors_array = array();

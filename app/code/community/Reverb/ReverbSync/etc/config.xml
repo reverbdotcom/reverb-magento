@@ -9,7 +9,12 @@
         <models>
             <reverbSync>
                 <class>Reverb_ReverbSync_Model</class>
+                <resourceModel>reverb_process_queue_mysql4</resourceModel>
             </reverbSync>
+
+            <reverb_process_queue_mysql4>
+                <class>Reverb_ReverbSync_Model_Mysql4</class>
+            </reverb_process_queue_mysql4>
         </models>   
         <resources>
             <reverbsync_setup>
