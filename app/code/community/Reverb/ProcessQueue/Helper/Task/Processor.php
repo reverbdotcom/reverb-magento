@@ -25,6 +25,10 @@ class Reverb_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
     {
         $processQueueTaskCollection = $this->getQueueTasksForProcessing($code);
 
+        // Update the last_executed_at value for these task rows so that the next cron iteration will pick up a different
+        //  set of BATCH_SIZE rows from the call to $this->getQueueTasksForProcessing($code); above
+        $this->updateLastExecutedAtToCurrentTime($processQueueTaskCollection);
+
         foreach ($processQueueTaskCollection as $processQueueTaskObject)
         {
             $this->processQueueTask($processQueueTaskObject);
@@ -138,6 +142,18 @@ class Reverb_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
         }
 
         return $processQueueTaskCollection;
+    }
+
+    public function updateLastExecutedAtToCurrentTime(Reverb_ProcessQueue_Model_Mysql4_Task_Collection $processQueueTaskCollection)
+    {
+        $task_objects_array = $processQueueTaskCollection->getItems();
+        $task_ids = array();
+        foreach ($task_objects_array as $taskObject)
+        {
+            $task_ids[] = $taskObject->getTaskId();
+        }
+        $rows_updated = $processQueueTaskCollection->getResource()->updateLastExecutedAtToCurrentTime($task_ids);
+        return $rows_updated;
     }
 
     protected function _logError($error_message)

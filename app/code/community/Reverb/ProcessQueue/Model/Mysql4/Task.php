@@ -96,4 +96,13 @@ class Reverb_ProcessQueue_Model_Mysql4_Task extends Mage_Core_Model_Mysql4_Abstr
         $rows_updated = $this->_getWriteAdapter()->update($this->getMainTable(), $update_bind_array, $where_conditions_array);
         return $rows_updated;
     }
+
+    public function updateLastExecutedAtToCurrentTime(array $task_ids)
+    {
+        $current_gmt_datetime = Mage::getSingleton('core/date')->gmtDate();
+        $update_bind_array = array('last_executed_at' => $current_gmt_datetime);
+        $where_conditions_array = array('task_id IN (?)' => $task_ids);
+        $rows_updated = $this->_getWriteAdapter()->update($this->getMainTable(), $update_bind_array, $where_conditions_array);
+        return $rows_updated;
+    }
 }
