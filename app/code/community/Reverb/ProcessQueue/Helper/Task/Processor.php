@@ -11,13 +11,15 @@ class Reverb_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
     const EXCEPTION_SELECT_FOR_UPDATE = 'An uncaught exception occurred while attempting to select queue task with id %s for update: %s';
     const ERROR_FAILED_TO_SELECT_FOR_UPDATE = 'Failed to select queue task with id %s for update';
     const EXCEPTION_EXECUTING_TASK = 'An uncaught exception occurred while executing task for queue task object with id %s: %s';
-    const EXCEPTION_SET_TASK_AS_COMPLETE = 'An exception occurred while attempting to set task with id %s as complete: %s';
+    const EXCEPTION_ACTING_ON_TASK_RESULT = 'An exception occurred while acting on the task result for task with id %s: %s';
     const EXCEPTION_COMMITTING_TRANSACTION = 'An uncaught exception occurred when attempting to commit the transaction for process queue object with id %s: %s';
 
     protected $_moduleName = 'reverb_process_queue';
     protected $_logModel = null;
 
-    // TODO IMPLEMENT BATCH SIZE
+    // TODO Refactor this
+    protected $_batch_size = 50;
+
     // TODO Create separate database connection for queue task resource Singleton
     public function processQueueTasks($code = null)
     {
@@ -29,6 +31,17 @@ class Reverb_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
         }
     }
 
+    /**
+     * Executes the following:
+     *  - Attempts to update task object's row as processing
+     *  - If successful, Begins a database transaction
+     *  - Attempts to select that row for update
+     *  - If successful, attempts to execute method callback defined in row, returning a result object
+     *  - Updates the task object based on the resulting object
+     *  - Commits the database transaction
+     *
+     * @param Reverb_ProcessQueue_Model_Task_Interface $processQueueTaskObject
+     */
     public function processQueueTask(Reverb_ProcessQueue_Model_Task_Interface $processQueueTaskObject)
     {
         try
@@ -73,7 +86,7 @@ class Reverb_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
 
         try
         {
-            $processQueueTaskObject->executeTask();
+            $taskExecutionResult = $processQueueTaskObject->executeTask();
         }
         catch(Exception $e)
         {
@@ -86,14 +99,14 @@ class Reverb_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
 
         try
         {
-            $processQueueTaskObject->setTaskAsCompleted();
+            $processQueueTaskObject->actOnTaskResult($taskExecutionResult);
         }
         catch(Exception $e)
         {
             // At this point, we would assume that the task has been performed successfully since executeTask() did not
             //  throw any exceptions. As such, log the exception but commit the transaction. Even if this leaves a row
             //  in the PROCESSING state, it's better than leaving parts of the database out of sync with external resources
-            $error_message = $this->__(self::EXCEPTION_SET_TASK_AS_COMPLETE, $processQueueTaskObject->getId(), $e->getMessage());
+            $error_message = $this->__(self::EXCEPTION_ACTING_ON_TASK_RESULT, $processQueueTaskObject->getId(), $e->getMessage());
             $this->_logError($error_message);
         }
 
@@ -116,7 +129,8 @@ class Reverb_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
         $processQueueTaskCollection = Mage::getModel('reverb_process_queue/task')
                                         ->getCollection()
                                         ->addOpenForProcessingFilter()
-                                        ->sortByLeastRecentlyExecuted();
+                                        ->sortByLeastRecentlyExecuted()
+                                        ->setPageSize($this->_batch_size);
 
         if (!empty($code))
         {

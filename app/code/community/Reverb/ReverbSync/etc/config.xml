@@ -9,12 +9,12 @@
         <models>
             <reverbSync>
                 <class>Reverb_ReverbSync_Model</class>
-                <resourceModel>reverb_process_queue_mysql4</resourceModel>
+                <resourceModel>reverb_sync_queue_mysql4</resourceModel>
             </reverbSync>
 
-            <reverb_process_queue_mysql4>
+            <reverb_sync_queue_mysql4>
                 <class>Reverb_ReverbSync_Model_Mysql4</class>
-            </reverb_process_queue_mysql4>
+            </reverb_sync_queue_mysql4>
         </models>   
         <resources>
             <reverbsync_setup>
@@ -125,4 +125,18 @@
 
         </routers>
     </admin>
+
+
+    <crontab>
+        <jobs>
+            <reverb_process_queue_process_tasks>
+                <schedule>
+                    <cron_expr>* * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>reverbSync/cron::processListingSyncQueueTasks</model>
+                </run>
+            </reverb_process_queue_process_tasks>
+        </jobs>
+    </crontab>
 </config>

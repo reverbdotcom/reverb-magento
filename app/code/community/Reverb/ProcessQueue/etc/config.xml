@@ -45,17 +45,4 @@
             </reverb_process_queue_setup>
         </resources>
     </global>
-
-    <crontab>
-        <jobs>
-            <reverb_process_queue_process_tasks>
-                <schedule>
-                    <cron_expr>* * * * *</cron_expr>
-                </schedule>
-                <run>
-                    <model>reverb_process_queue/cron::processQueueTasks</model>
-                </run>
-            </reverb_process_queue_process_tasks>
-        </jobs>
-    </crontab>
 </config>

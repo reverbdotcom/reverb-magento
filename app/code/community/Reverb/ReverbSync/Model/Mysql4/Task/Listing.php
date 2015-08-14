@@ -6,7 +6,7 @@
 
 class Reverb_ReverbSync_Model_Mysql4_Task_Listing extends Mage_Core_Model_Mysql4_Abstract
 {
-    const SERIALIZED_ARGUMENTS_OBJECT = 'O:13:"Varien_Object":7:{s:8:"*_data";a:1:{s:10:"product_id";s:14:"##PRODUCT_ID##";}s:18:"*_hasDataChanges";b:1;s:12:"*_origData";N;s:15:"*_idFieldName";N;s:13:"*_isDeleted";b:0;s:16:"*_oldFieldsMap";a:0:{}s:17:"*_syncFieldsMap";a:0:{}}';
+    const SERIALIZED_ARGUMENTS_OBJECT = 'O:8:"stdClass":1:{s:10:"product_id";i:##PRODUCT_ID##;}';
 
     public function _construct()
     {
@@ -45,7 +45,7 @@ class Reverb_ReverbSync_Model_Mysql4_Task_Listing extends Mage_Core_Model_Mysql4
         return array(
             'code' => 'listing_sync',
             'status' => Reverb_ProcessQueue_Model_Task::STATUS_PENDING,
-            'object' => 'ReverbSync/sync_product',
+            'object' => 'reverbSync/sync_product',
             'method' => 'executeQueuedIndividualProductDataSync'
         );
     }
