@@ -18,7 +18,7 @@ class Reverb_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
     protected $_logModel = null;
 
     // TODO Refactor this
-    protected $_batch_size = 50;
+    protected $_batch_size = 1000;
 
     // TODO Create separate database connection for queue task resource Singleton
     public function processQueueTasks($code = null)

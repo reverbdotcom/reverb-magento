@@ -131,7 +131,7 @@
         <jobs>
             <reverb_process_queue_process_tasks>
                 <schedule>
-                    <cron_expr>* * * * *</cron_expr>
+                    <cron_expr>*/2 * * * *</cron_expr>
                 </schedule>
                 <run>
                     <model>reverbSync/cron::processListingSyncQueueTasks</model>

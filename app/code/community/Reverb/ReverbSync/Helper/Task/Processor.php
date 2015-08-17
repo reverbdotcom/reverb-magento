@@ -6,7 +6,7 @@
 
 class Reverb_ReverbSync_Helper_Task_Processor extends Mage_Core_Helper_Data
 {
-    const BATCH_SIZE = 500;
+    const BATCH_SIZE = 1000;
 
     protected $_listingsSyncProcessQueueResource = null;
 
