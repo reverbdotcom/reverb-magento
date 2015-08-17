@@ -66,7 +66,6 @@ class Reverb_ReverbSync_Helper_Sync_Product extends Mage_Core_Helper_Data
         $this->_verifyModuleIsEnabled();
         //load the product
         $product = Mage::getModel('catalog/product') -> load($product_id);
-        $stock = Mage::getModel('cataloginventory/stock_item') -> loadByProduct($product);
         $productType = $product -> getTypeID();
         if ($productType != 'simple') {
             throw new Exception("Only simple products can be synced.");
