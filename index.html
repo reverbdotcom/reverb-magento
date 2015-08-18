@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Magento : ">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Magento</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/reverbdotcom/magento">View on GitHub</a>
+
+          <h1 id="project_title">Magento</h1>
+          <h2 id="project_tagline"></h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/reverbdotcom/magento/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/reverbdotcom/magento/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a id="reverb-magento-sample-integration" class="anchor" href="#reverb-magento-sample-integration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Reverb Magento Sample Integration</h1>
+
+<p>This is a demo application for integrating with Reverb's API. It is not to be
+considered a fully functional app.</p>
+
+<p>Since there are many different magento versions and installations out there, we
+hope that by providing this sample integration, shops can customize it as
+needed.</p>
+
+<h2>
+<a id="whats-working" class="anchor" href="#whats-working" aria-hidden="true"><span class="octicon octicon-link"></span></a>What's working</h2>
+
+<p>Currently this extension syncs inventory from Magento to Reverb based on SKU.
+It will also create new listings on Reverb if the SKU is not found.</p>
+
+<p>The result of the sync is logged to a sync log available from the settings screen.</p>
+
+<p>Only simple products are synced. Configurable products are not synced.</p>
+
+<h2>
+<a id="whats-not-working" class="anchor" href="#whats-not-working" aria-hidden="true"><span class="octicon octicon-link"></span></a>What's not working</h2>
+
+<ul>
+<li>Syncing configurable products</li>
+<li>Syncing images from magento to Reverb</li>
+<li>Syncing inventory (decrements/increments) from Reverb to Magneto <a href="https://reverb.com/page/api#webhooks">using webhooks</a>
+</li>
+<li>Order syncing from Reverb to Magento</li>
+<li>Category mapping - from Magento categories to Reverb categories</li>
+</ul>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<div class="highlight highlight-bash"><pre><span class="pl-c"># Copy everything from the app folder into your magento app</span>
+cp -R app/<span class="pl-k">*</span> /path/to/magento/htdocs/app/
+<span class="pl-c"># Clear your cache</span>
+rm -rf /path/to/magento/htdocs/var/cache</pre></div>
+
+<h2>
+<a id="contributing" class="anchor" href="#contributing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contributing</h2>
+
+<ol>
+<li>Fork it</li>
+<li>Create your feature branch (<code>git checkout -b my-new-feature</code>)</li>
+<li>Commit your changes (<code>git commit -am 'Add some feature'</code>)</li>
+<li>Push to the branch (<code>git push origin my-new-feature</code>)</li>
+<li>Create new Pull Request</li>
+</ol>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>LICENSE</h2>
+
+<p>Copyright 2015 Reverb.com, LLC</p>
+
+<p>Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at</p>
+
+<p><a href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></p>
+
+<p>Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Magento maintained by <a href="https://github.com/reverbdotcom">reverbdotcom</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
