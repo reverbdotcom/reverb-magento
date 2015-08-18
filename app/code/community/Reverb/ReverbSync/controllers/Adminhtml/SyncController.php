@@ -14,6 +14,7 @@ class Reverb_ReverbSync_Adminhtml_SyncController extends Mage_Adminhtml_Controll
     {
         try
         {
+            Mage::helper('ReverbSync/sync_product')->deleteAllListingSyncTasks();
             $number_of_syncs_queued_up = Mage::helper('ReverbSync/sync_product')->queueUpBulkProductDataSync();
         }
         catch(Reverb_ReverbSync_Model_Exception_Redirect $redirectException)
@@ -103,7 +104,7 @@ class Reverb_ReverbSync_Adminhtml_SyncController extends Mage_Adminhtml_Controll
     public function areProductSyncsPending()
     {
         $outstandingListingSyncTasksCollection = Mage::helper('reverb_process_queue/task_processor')
-                                                    ->getQueueTasksForProcessing('listing_sync');
+                                                    ->getQueueTasksForProgressScreen('listing_sync');
         $outstanding_tasks_array = $outstandingListingSyncTasksCollection->getItems();
 
         return (!empty($outstanding_tasks_array));
