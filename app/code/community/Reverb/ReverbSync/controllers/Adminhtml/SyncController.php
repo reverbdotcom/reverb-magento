@@ -76,6 +76,23 @@ class Reverb_ReverbSync_Adminhtml_SyncController extends Mage_Adminhtml_Controll
             ->renderLayout();
     }
 
+    protected function _addBreadcrumb($label = null, $title = null, $link=null)
+    {
+        if (is_null($label))
+        {
+            $module_groupname = $this->getModuleHelperGroupname();
+            $module_description = $this->getControllerDescription();
+            $label = Mage::helper($module_groupname)->__($module_description);
+        }
+        if (is_null($title))
+        {
+            $module_groupname = $this->getModuleHelperGroupname();
+            $module_description = $this->getControllerDescription();
+            $title = Mage::helper($module_groupname)->__($module_description);
+        }
+        return parent::_addBreadcrumb($label, $title, $link);
+    }
+
     public function getBlockToShow()
     {
         $are_product_syncs_pending = $this->areProductSyncsPending();
