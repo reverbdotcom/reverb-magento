@@ -22,6 +22,16 @@ Only simple products are synced. Configurable products are not synced.
 * Syncing images from magento to Reverb
 * Syncing inventory (decrements/increments) from Reverb to Magneto [using webhooks](https://reverb.com/page/api#webhooks)
 * Order syncing from Reverb to Magento
+* Category mapping - from Magento categories to Reverb categories
+
+## Installation
+
+```bash
+# Copy everything from the app folder into your magento app
+cp -R app/* /path/to/magento/htdocs/app/
+# Clear your cache
+rm -rf /path/to/magento/htdocs/var/cache
+```
 
 ## Contributing
 
