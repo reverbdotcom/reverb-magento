@@ -32,7 +32,7 @@ class Reverb_ReverbSync_Model_Cron
 
     public function getLockFileName()
     {
-        return 'reverb_listing_sync.lock';
+        return 'reverb_listing_sync';
     }
 
     public function getLockFileDirectory()
