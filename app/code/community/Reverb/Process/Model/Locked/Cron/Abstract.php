@@ -4,9 +4,9 @@ abstract class Reverb_Process_Model_Locked_Cron_Abstract
     extends Reverb_Process_Model_Locked_Abstract
     implements Reverb_Process_Model_Locked_Cron_Interface
 {
-    const ERROR_UNABLE_TO_SECURE_LOCK_FILE = 'Unable to secure the lock for cron process %s. The cron will not run.';
+    const ERROR_UNABLE_TO_SECURE_LOCK_FILE = 'Unable to secure a Lock for cron process %s. The cron will not run.';
     const ERROR_EXECUTING_CRON = 'An uncaught exception occurred while executing cron process %s: %s';
-    const ERROR_RELEASING_LOCK = 'An uncaught exception occurred while attempting to release the lock from cron process %s: %s';
+    const ERROR_RELEASING_LOCK = 'An uncaught exception occurred while attempting to release the Lock from cron process %s: %s';
 
     abstract public function executeCron();
 
@@ -20,12 +20,12 @@ abstract class Reverb_Process_Model_Locked_Cron_Abstract
     {
         $thread_count = $this->getParallelThreadCount();
 
-        for($thread_number = 0; $thread_number < $thread_count; $thread_number++)
+        for($thread_number = 1; $thread_number <= $thread_count; $thread_number++)
         {
             $lock_successful = $this->attemptLockForThread($thread_number);
             if ($lock_successful)
             {
-                return $lock_successful;
+                return $thread_number;
             }
         }
 
@@ -34,8 +34,12 @@ abstract class Reverb_Process_Model_Locked_Cron_Abstract
 
     public function attemptCronExecution()
     {
+        $thread_lock_number = $this->attemptLock();
+
         if ($this->attemptLock())
         {
+            Mage::register('reverb_listing_sync_thread_id', $thread_lock_number);
+
             try
             {
                 $this->executeCron();
