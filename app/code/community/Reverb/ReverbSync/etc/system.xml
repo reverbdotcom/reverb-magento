@@ -90,27 +90,36 @@
 					<show_in_website>1</show_in_website>
 					<show_in_store>1</show_in_store>
 					<fields>
+                        <enable_listing_creation translate="label">
+                            <label>Enable Listing Creation*:</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <validate>required-entry</validate>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                        </enable_listing_creation>
+                        <revInvent translate="label">
+                            <label>Has Inventory?*:</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <validate>input-text required-entry</validate>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                        </revInvent>
 						<revCond translate="label">
 							<label>Condition*:</label>
 							<frontend_type>text</frontend_type>
-							<sort_order>1</sort_order>
+							<sort_order>30</sort_order>
 							<show_in_default>1</show_in_default>
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>
 							<validate>input-text required-entry</validate>
 
 						</revCond>
-						<revInvent translate="label">
-							<label>Has Inventory?*:</label>
-							<frontend_type>select</frontend_type>
-							<sort_order>1</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-							<validate>input-text required-entry</validate>
-							<source_model>adminhtml/system_config_source_yesno</source_model>
-
-						</revInvent>
 					</fields>
 				</reverbDefault>
 			</groups>

@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Reverb_ReverbSync>
-            <version>0.1.0</version>
+            <version>0.1.1</version>
         </Reverb_ReverbSync>
     </modules>
     <global>       
@@ -138,4 +138,12 @@
             </reverb_process_queue_process_tasks>
         </jobs>
     </crontab>
+
+    <default>
+        <ReverbSync>
+            <reverbDefault>
+                <enable_listing_creation>0</enable_listing_creation>
+            </reverbDefault>
+        </ReverbSync>
+    </default>
 </config>
