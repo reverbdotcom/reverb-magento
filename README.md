@@ -16,6 +16,17 @@ The result of the sync is logged to a sync log available from the settings scree
 
 Only simple products are synced. Configurable products are not synced.
 
+## Requirements
+
+In order for the cron to successfully process the listings sync in parallel-thread manner, the magento cron needs to be
+declared in the crontab via the following:
+
+php cron.php -mdefault 1
+
+or
+
+/bin/sh /var/www/html/reverb_magento/cron.sh cron.php -mdefault 1 > /dev/null 2>&1 &
+
 ## What's not working
 
 * Syncing configurable products
