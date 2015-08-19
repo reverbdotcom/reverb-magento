@@ -126,7 +126,6 @@
         </routers>
     </admin>
 
-
     <crontab>
         <jobs>
             <reverb_process_queue_process_tasks>
@@ -134,7 +133,7 @@
                     <cron_expr>*/2 * * * *</cron_expr>
                 </schedule>
                 <run>
-                    <model>reverbSync/cron::processListingSyncQueueTasks</model>
+                    <model>reverbSync/cron::attemptCronExecution</model>
                 </run>
             </reverb_process_queue_process_tasks>
         </jobs>
