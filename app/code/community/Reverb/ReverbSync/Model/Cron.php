@@ -5,10 +5,12 @@
  */
 
 class Reverb_ReverbSync_Model_Cron
+    extends Reverb_Process_Model_Locked_File_Cron_Abstract
+    implements Reverb_Process_Model_Locked_File_Cron_Interface
 {
     const CRON_UNCAUGHT_EXCEPTION = 'An uncaught exception occurred while processing the Reverb Listing Sync Process Queue: %s';
 
-    public function processListingSyncQueueTasks()
+    public function executeCron()
     {
         try
         {
@@ -21,5 +23,25 @@ class Reverb_ReverbSync_Model_Cron
             $exceptionToLog = new Exception($error_message);
             Mage::logException($exceptionToLog);
         }
+    }
+
+    public function getParallelThreadCount()
+    {
+        return 4;
+    }
+
+    public function getLockFileName()
+    {
+        return 'reverb_listing_sync';
+    }
+
+    public function getLockFileDirectory()
+    {
+        return Mage::getBaseDir('var') . DS . 'lock' . DS . 'reverb_listing_sync';
+    }
+
+    public function getCronCode()
+    {
+        return 'reverb_listing_sync';
     }
 } 

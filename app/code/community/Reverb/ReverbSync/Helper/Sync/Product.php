@@ -5,7 +5,10 @@ class Reverb_ReverbSync_Helper_Sync_Product extends Mage_Core_Helper_Data
     const MODULE_NOT_ENABLED = 'The Reverb Module is not enabled. Please enable this functionality in System -> Configuration -> Reverb Configuration -> Reverb Extension';
     const UNCAUGHT_EXCEPTION_INDIVIDUAL_PRODUCT_SYNC = 'An uncaught exception occurred while attempting to sync product with id %s with Reverb: %s';
 
+    const LISTING_CREATION_ENABLED_CONFIG_PATH = 'ReverbSync/reverbDefault/enable_listing_creation';
+
     protected $_reverbAdminHelper = null;
+    protected $_listing_creation_is_enabled = null;
 
     public function queueUpBulkProductDataSync()
     {
@@ -68,11 +71,11 @@ class Reverb_ReverbSync_Helper_Sync_Product extends Mage_Core_Helper_Data
         $product = Mage::getModel('catalog/product') -> load($product_id);
         $productType = $product -> getTypeID();
         if ($productType != 'simple') {
-            throw new Exception("Only simple products can be synced.");
+            throw new Reverb_ReverbSync_Model_Exception_Product_Excluded("Only simple products can be synced.");
         }
         if ($this->_productIsExcludedFromSync($product))
         {
-            throw new Exception("This product has been excluded from bring synced");
+            throw new Reverb_ReverbSync_Model_Exception_Product_Excluded("This product has been listed as being excluded from the Reverb Listing Sync Process");
         }
 
         $listingWrapper = Mage::getModel('reverbSync/Mapper_Product')->getListingWrapper($product);
@@ -95,7 +98,18 @@ class Reverb_ReverbSync_Helper_Sync_Product extends Mage_Core_Helper_Data
             return false;
         }
 
-        return ($revSync === 0);
+        return (empty($revSync));
+    }
+
+    public function isListingCreationEnabled()
+    {
+        if (is_null($this->_listing_creation_is_enabled))
+        {
+            $listing_creation_enabled = Mage::getStoreConfig(self::LISTING_CREATION_ENABLED_CONFIG_PATH);
+            $this->_listing_creation_is_enabled = (!empty($listing_creation_enabled));
+        }
+
+        return $this->_listing_creation_is_enabled;
     }
 
     protected function _verifyModuleIsEnabled()

@@ -7,6 +7,8 @@
 
 class Reverb_ProcessQueue_Model_Mysql4_Task_Collection extends Mage_Core_Model_Mysql4_Collection_Abstract
 {
+    const DEFAULT_MINUTES_IN_PAST_THRESHOLD = 120;
+
     protected function _construct()
     {
         $this->_init('reverb_process_queue/task');
@@ -19,6 +21,16 @@ class Reverb_ProcessQueue_Model_Mysql4_Task_Collection extends Mage_Core_Model_M
         $open_for_processing_states = array($pending_status, $error_status);
 
         $this->addFieldToFilter('status', array('in' => $open_for_processing_states));
+        return $this;
+    }
+
+    public function addLastExecutedAtThreshold($minutes_in_past = self::DEFAULT_MINUTES_IN_PAST_THRESHOLD)
+    {
+        $current_gmt_timestamp = Mage::getSingleton('core/date')->gmtTimestamp();
+        $second_in_past = $minutes_in_past * 60;
+        $last_executed_at_threshold = $current_gmt_timestamp - $second_in_past;
+
+        $this->addFieldToFilter('last_executed_at', array('lt' => $last_executed_at_threshold));
         return $this;
     }
 

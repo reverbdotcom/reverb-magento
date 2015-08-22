@@ -14,6 +14,7 @@ class Reverb_ReverbSync_Adminhtml_SyncController extends Mage_Adminhtml_Controll
     {
         try
         {
+            Mage::helper('ReverbSync/sync_product')->deleteAllListingSyncTasks();
             $number_of_syncs_queued_up = Mage::helper('ReverbSync/sync_product')->queueUpBulkProductDataSync();
         }
         catch(Reverb_ReverbSync_Model_Exception_Redirect $redirectException)
@@ -76,6 +77,23 @@ class Reverb_ReverbSync_Adminhtml_SyncController extends Mage_Adminhtml_Controll
             ->renderLayout();
     }
 
+    protected function _addBreadcrumb($label = null, $title = null, $link=null)
+    {
+        if (is_null($label))
+        {
+            $module_groupname = $this->getModuleHelperGroupname();
+            $module_description = $this->getControllerDescription();
+            $label = Mage::helper($module_groupname)->__($module_description);
+        }
+        if (is_null($title))
+        {
+            $module_groupname = $this->getModuleHelperGroupname();
+            $module_description = $this->getControllerDescription();
+            $title = Mage::helper($module_groupname)->__($module_description);
+        }
+        return parent::_addBreadcrumb($label, $title, $link);
+    }
+
     public function getBlockToShow()
     {
         $are_product_syncs_pending = $this->areProductSyncsPending();
@@ -86,7 +104,7 @@ class Reverb_ReverbSync_Adminhtml_SyncController extends Mage_Adminhtml_Controll
     public function areProductSyncsPending()
     {
         $outstandingListingSyncTasksCollection = Mage::helper('reverb_process_queue/task_processor')
-                                                    ->getQueueTasksForProcessing('listing_sync');
+                                                    ->getQueueTasksForProgressScreen('listing_sync');
         $outstanding_tasks_array = $outstandingListingSyncTasksCollection->getItems();
 
         return (!empty($outstanding_tasks_array));

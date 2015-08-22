@@ -18,7 +18,7 @@ class Reverb_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
     protected $_logModel = null;
 
     // TODO Refactor this
-    protected $_batch_size = 1000;
+    protected $_batch_size = 2500;
 
     // TODO Create separate database connection for queue task resource Singleton
     public function processQueueTasks($code = null)
@@ -129,6 +129,22 @@ class Reverb_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
     }
 
     public function getQueueTasksForProcessing($code = null)
+    {
+        $processQueueTaskCollection = Mage::getModel('reverb_process_queue/task')
+                                        ->getCollection()
+                                        ->addOpenForProcessingFilter()
+                                        ->sortByLeastRecentlyExecuted()
+                                        ->setPageSize($this->_batch_size);
+
+        if (!empty($code))
+        {
+            $processQueueTaskCollection->addCodeFilter($code);
+        }
+
+        return $processQueueTaskCollection;
+    }
+
+    public function getQueueTasksForProgressScreen($code = null)
     {
         $processQueueTaskCollection = Mage::getModel('reverb_process_queue/task')
                                         ->getCollection()

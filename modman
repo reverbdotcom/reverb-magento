@@ -1,5 +1,7 @@
+app/etc/modules/Reverb_Io.xml                                                       app/etc/modules/Reverb_Io.xml
 app/etc/modules/Reverb_Reports.xml                                                  app/etc/modules/Reverb_Reports.xml
 app/etc/modules/Reverb_ReverbSync.xml                                               app/etc/modules/Reverb_ReverbSync.xml
+app/etc/modules/Reverb_Process.xml                                                  app/etc/modules/Reverb_Process.xml
 app/etc/modules/Reverb_ProcessQueue.xml                                             app/etc/modules/Reverb_ProcessQueue.xml
 app/design/adminhtml/default/default/layout/reverb_reports.xml                      app/design/adminhtml/default/default/layout/reverb_reports.xml
 app/design/adminhtml/default/default/layout/ReverbSync.xml                          app/design/adminhtml/default/default/layout/ReverbSync.xml

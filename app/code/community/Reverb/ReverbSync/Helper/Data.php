@@ -2,6 +2,11 @@
 
 class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
 {
+    const ERROR_LISTING_CREATION_IS_NOT_ENABLED = 'Reverb listing creation has not been enabled.';
+
+    const LISTING_STATUS_ERROR = 0;
+    const LISTING_STATUS_SUCCESS = 1;
+
     /**
      * $fieldsArray should eventually be a model
      *
@@ -25,10 +30,16 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
 
             $listingWrapper->setReverbWebUrl($reverb_web_url);
         }
+        catch(Reverb_ReverbSync_Model_Exception_Status_Error $e)
+        {
+            // Log Exception on reports row
+            $listingWrapper->setSyncDetails($e->getMessage());
+            $listingWrapper->setStatus(self::LISTING_STATUS_ERROR);
+        }
         catch(Exception $e)
         {
             // Log Exception on reports row
-            $listingWrapper->setErrorMessage($e->getMessage());
+            $listingWrapper->setSyncDetails($e->getMessage());
         }
 
         Mage::dispatchEvent('reverb_listing_synced', array('reverb_listing' => $listingWrapper));
@@ -44,6 +55,13 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function createObject($listingWrapper)
     {
+        // Ensure that listing creation is enabled
+        $listing_creation_is_enabled = Mage::helper('ReverbSync/sync_product')->isListingCreationEnabled();
+        if (!$listing_creation_is_enabled)
+        {
+            throw new Reverb_ReverbSync_Model_Exception_Status_Error(self::ERROR_LISTING_CREATION_IS_NOT_ENABLED);
+        }
+
         $fieldsArray = $listingWrapper->getApiCallContentData();
         $revUrl = Mage::getStoreConfig('ReverbSync/extension/revUrl');
         $url = $revUrl . "/api/listings";
@@ -72,7 +90,7 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
 
         if ($status != 201)
         {
-            $listingWrapper->setStatus(0);
+            $listingWrapper->setStatus(self::LISTING_STATUS_ERROR);
             //throw new Exception(curl_error($curl));
             if (isset($response['errors'])) {
                 $errors_messaging = $response['message'] . $response['errors'][key($response['errors'])][0];
@@ -86,7 +104,7 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
 
         }
 
-        $listingWrapper->setStatus(1);
+        $listingWrapper->setStatus(self::LISTING_STATUS_SUCCESS);
         $listingWrapper->setSyncDetails(null);
         $listing_response = isset($response['listing']) ? $response['listing'] : array();
         $web_url = $this->_getWebUrlFromListingResponseArray($listing_response);
@@ -111,7 +129,9 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         // The Varien Curl Adapter isn't great, could be refactored via extending a subclass
         $curlResource = $this->_getCurlResource($url);
         $curlResource->connect($url);
+        //Execute the API call
         $json_response = $curlResource->read();
+
         $status = $curlResource->getInfo(CURLINFO_HTTP_CODE);
         $curlResource->close();
 
@@ -171,7 +191,9 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         curl_setopt($curl, CURLOPT_HTTPHEADER, array("X-Auth-Token: $x_auth_token", "Content-type: application/hal+json"));
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
         curl_setopt($curl, CURLOPT_POSTFIELDS, $content);
+        // Execute the API call
         $updateStatus = curl_exec($curl);
+
         $response = json_decode($updateStatus, true);
         $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         curl_close($curl);
@@ -181,13 +203,13 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
 
             $error_message = $updateStatus['message'];
             $listingWrapper->setSyncDetails($error_message);
-            $listingWrapper->setStatus(0);
+            $listingWrapper->setStatus(self::LISTING_STATUS_ERROR);
 
             throw new Exception($error_message);
         }
 
         $listingWrapper->setSyncDetails(null);
-        $listingWrapper->setStatus(1);
+        $listingWrapper->setStatus(self::LISTING_STATUS_SUCCESS);
         $listing_response = isset($response['listing']) ? $response['listing'] : array();
         $web_url = $this->_getWebUrlFromListingResponseArray($listing_response);
 

@@ -11,10 +11,15 @@ class Reverb_ReverbSync_Model_Observer
         {
             $productSyncHelper->executeIndividualProductDataSync($product_id);
         }
+        catch(Reverb_ReverbSync_Model_Exception_Product_Excluded $e)
+        {
+            // If the product has been listed as being excluded from the sync, don't prevent product save
+        }
         catch(Reverb_ReverbSync_Model_Exception_Deactivated $e)
         {
-            // If the module is deactivated, don't do anything
+            // If the module is deactivated, don't prevent product save
         }
+        // Any other Exception is understood to prevent product save
     }
 
     // funtion to get the product quantity placed through order

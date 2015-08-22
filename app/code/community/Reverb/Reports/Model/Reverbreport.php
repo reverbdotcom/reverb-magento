@@ -50,6 +50,7 @@ class Reverb_Reports_Model_Reverbreport extends Mage_Core_Model_Abstract
         //      product_id,title,product_sku ,inventory,rev_url,status,sync_details,last_synced
         $magentoProduct = $listingWrapper->getMagentoProduct();
         $data_to_add_on_object[self::PRODUCT_ID_FIELD] = $magentoProduct->getId();
+        $data_to_add_on_object[self::PRODUCT_SKU_FIELD] = $magentoProduct->getSku();
 
         $api_call_content_data_array = $listingWrapper->getApiCallContentData();
         foreach ($this->_api_content_fields_to_set as $field)

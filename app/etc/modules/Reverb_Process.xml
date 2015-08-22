@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Reverb_Process>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Reverb_Io/>
+            </depends>
+        </Reverb_Process>
+    </modules>
+</config>
