@@ -9,7 +9,7 @@ class Reverb_ReverbSync_Model_Mysql4_Task_Order extends Reverb_ReverbSync_Model_
     const ORDER_CREATION_OBJECT = 'reverbSync/sync_order';
     const ORDER_CREATION_METHOD = 'createReverbOrderInMagento';
 
-    protected $_task_code = 'order_retrieval';
+    protected $_task_code = 'order_creation';
 
     public function _construct()
     {

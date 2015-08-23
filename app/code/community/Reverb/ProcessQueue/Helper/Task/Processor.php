@@ -15,6 +15,7 @@ class Reverb_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
     const EXCEPTION_COMMITTING_TRANSACTION = 'An uncaught exception occurred when attempting to commit the transaction for process queue object with id %s: %s';
 
     protected $_moduleName = 'reverb_process_queue';
+    protected $_task_model_classname = 'reverb_process_queue/task';
     protected $_logModel = null;
 
     // TODO Refactor this
@@ -130,8 +131,7 @@ class Reverb_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
 
     public function getQueueTasksForProcessing($code = null)
     {
-        $processQueueTaskCollection = Mage::getModel('reverb_process_queue/task')
-                                        ->getCollection()
+        $processQueueTaskCollection = $this->_getTaskCollectionModel()
                                         ->addOpenForProcessingFilter()
                                         ->sortByLeastRecentlyExecuted()
                                         ->setPageSize($this->_batch_size);
@@ -146,8 +146,7 @@ class Reverb_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
 
     public function getQueueTasksForProgressScreen($code = null)
     {
-        $processQueueTaskCollection = Mage::getModel('reverb_process_queue/task')
-                                        ->getCollection()
+        $processQueueTaskCollection = $this->_getTaskCollectionModel()
                                         ->addOpenForProcessingFilter()
                                         ->sortByLeastRecentlyExecuted()
                                         ->setPageSize($this->_batch_size);
@@ -162,8 +161,7 @@ class Reverb_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
 
     public function getCompletedAndAllQueueTasks($code = null)
     {
-        $allProcessQueueTaskCollection = Mage::getModel('reverb_process_queue/task')
-                                            ->getCollection();
+        $allProcessQueueTaskCollection = $this->_getTaskCollectionModel();
 
         if (!empty($code))
         {
@@ -172,9 +170,8 @@ class Reverb_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
 
         $all_process_queue_tasks = $allProcessQueueTaskCollection->getItems();
 
-        $completedTasksCollection = Mage::getModel('reverb_process_queue/task')
-                                        ->getCollection()
-                                        ->addStatusFilter(Reverb_ProcessQueue_Model_Task::STATUS_COMPLETE);
+        $completedTasksCollection = $this->_getTaskCollectionModel()
+                                            ->addStatusFilter(Reverb_ProcessQueue_Model_Task::STATUS_COMPLETE);
 
         if (!empty($code))
         {
@@ -196,6 +193,11 @@ class Reverb_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
         }
         $rows_updated = $processQueueTaskCollection->getResource()->updateLastExecutedAtToCurrentTime($task_ids);
         return $rows_updated;
+    }
+
+    protected function _getTaskCollectionModel()
+    {
+        return Mage::getModel($this->_task_model_classname)->getCollection();
     }
 
     protected function _logError($error_message)
