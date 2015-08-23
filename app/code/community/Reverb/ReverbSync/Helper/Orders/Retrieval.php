@@ -4,12 +4,14 @@
  * Created: 8/22/15
  */
 
-class Reverb_ReverbSync_Helper_Orders_Retrieval extends Mage_Core_Helper_Abstract
+class Reverb_ReverbSync_Helper_Orders_Retrieval extends Reverb_ReverbSync_Helper_Data
 {
     const EXCEPTION_QUEUE_MAGENTO_ORDER_CREATION = "An exception occurred while attempting to queue Magento order creation for Reverb order: %s.\nThe json_encoded order data object was: %s";
     const ORDER_NUMBER_EMPTY = 'An attempt was made to create a Reverb order in Magento without specifying a valid Reverb order number. This order can not be synced.';
     const EXCEPTION_QUEUE_ORDER_CREATION = 'An exception occurred while trying to queue order creation for Reverb order with number %s: %s';
     const ERROR_NO_ORDER_CREATION_QUEUE_ROWS_INSERTED = 'No order creation queue rows were inserted for Reverb order with number %s';
+
+    const ORDERS_RETRIEVAL_URL_TEMPLATE = 'api/my/orders/selling/all?created_start_date=%s&created_end_date=%s';
 
     protected $_moduleName = 'ReverbSync';
 
@@ -69,16 +71,27 @@ class Reverb_ReverbSync_Helper_Orders_Retrieval extends Mage_Core_Helper_Abstrac
         return true;
     }
 
-    /**
-     * MUST Actually implement this API call
-     *
-     */
     protected function _retrieveOrdersJsonFromReverb()
     {
-        $test_file_path = Mage::getBaseDir('var') . DS . 'test' . DS . 'orders_api_call.txt';
-        $raw_response = file_get_contents($test_file_path);
+        $base_url = $this->_getBaseReverbUrl();
 
-        $json_decoded_response = json_decode($raw_response);
+        $current_gmt_timestamp = Mage::getSingleton('core/date')->gmtTimestamp();
+        $one_day_ago_timestamp = $current_gmt_timestamp - (60 * 60 * 24);
+        $current_gmt_datetime = Mage::getSingleton('core/date')->date('c', $current_gmt_timestamp);
+        $one_day_ago_gmt_datetime = Mage::getSingleton('core/date')->date('c', $one_day_ago_timestamp);
+
+        $api_url_path = sprintf(self::ORDERS_RETRIEVAL_URL_TEMPLATE, $one_day_ago_gmt_datetime, $current_gmt_datetime);
+        $api_url_path = str_replace('+', '-', $api_url_path);
+
+        $api_url = $base_url . $api_url_path;
+
+        $curlResource = $this->_getCurlResource($api_url);
+        $curlResource->connect($api_url);
+
+        //Execute the API call
+        $json_response = $curlResource->read();
+
+        $json_decoded_response = json_decode($json_response);
 
         return $json_decoded_response;
     }
