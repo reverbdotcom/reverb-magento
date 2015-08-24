@@ -143,6 +143,7 @@
         <ReverbSync>
             <reverbDefault>
                 <enable_listing_creation>0</enable_listing_creation>
+                <revCond>Brand New</revCond>
             </reverbDefault>
         </ReverbSync>
     </default>
