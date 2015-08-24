@@ -76,7 +76,7 @@ class Reverb_ReverbSync_Helper_Orders_Retrieval extends Reverb_ReverbSync_Helper
         $base_url = $this->_getBaseReverbUrl();
 
         $current_gmt_timestamp = Mage::getSingleton('core/date')->gmtTimestamp();
-        $one_day_ago_timestamp = $current_gmt_timestamp - (60 * 60 * 24);
+        $one_day_ago_timestamp = $current_gmt_timestamp - (60 * 60 * 24 * 100);
         $current_gmt_datetime = Mage::getSingleton('core/date')->date('c', $current_gmt_timestamp);
         $one_day_ago_gmt_datetime = Mage::getSingleton('core/date')->date('c', $one_day_ago_timestamp);
 
