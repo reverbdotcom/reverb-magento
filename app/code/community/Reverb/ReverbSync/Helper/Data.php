@@ -4,6 +4,8 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
 {
     const ERROR_LISTING_CREATION_IS_NOT_ENABLED = 'Reverb listing creation has not been enabled.';
 
+    const API_CALL_LOG_TEMPLATE = "\n%s\n%s\n%s\n";
+
     const LISTING_STATUS_ERROR = 0;
     const LISTING_STATUS_SUCCESS = 1;
 
@@ -78,6 +80,9 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         curl_setopt($curl, CURLOPT_POST, true);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $content);
         $json_response = curl_exec($curl);
+
+        $this->_logApiCall($content, $json_response, 'createObject');
+
         $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         curl_close($curl);
         $response = json_decode($json_response, true);
@@ -125,12 +130,15 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
     {
         $revUrl = Mage::getStoreConfig('ReverbSync/extension/revUrl');
         $escaped_sku = urlencode($magento_sku);
-        $url = $revUrl . "/api/my/listings?state=all&sku=" . $escaped_sku;
+        $params = "state=all&sku=" . $escaped_sku;
+        $url = $revUrl . "/api/my/listings?" . $params;
         // The Varien Curl Adapter isn't great, could be refactored via extending a subclass
         $curlResource = $this->_getCurlResource($url);
         $curlResource->connect($url);
         //Execute the API call
         $json_response = $curlResource->read();
+
+        $this->_logApiCall($params, $json_response, 'findReverbListingUrlByMagentoSku');
 
         $status = $curlResource->getInfo(CURLINFO_HTTP_CODE);
         $curlResource->close();
@@ -194,6 +202,8 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         // Execute the API call
         $updateStatus = curl_exec($curl);
 
+        $this->_logApiCall($content, $updateStatus, 'updateObject');
+
         $response = json_decode($updateStatus, true);
         $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         curl_close($curl);
@@ -232,5 +242,12 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         $curlResource->setOptions($options_array);
 
         return $curlResource;
+    }
+
+    protected function _logApiCall($request, $response, $api_request)
+    {
+        $message = sprintf(self::API_CALL_LOG_TEMPLATE, $api_request, $request, $response);
+        $file = $api_request . '.log';
+        Mage::log($message, null, $file);
     }
 }
