@@ -38,8 +38,6 @@ abstract class Reverb_Process_Model_Locked_Cron_Abstract
 
         if ($this->attemptLock())
         {
-            Mage::register('reverb_listing_sync_thread_id', $thread_lock_number);
-
             try
             {
                 $this->executeCron();
