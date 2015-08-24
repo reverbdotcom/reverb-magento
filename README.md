@@ -34,9 +34,9 @@ The cron is used to process the listing syncing queue. To see what's in your cro
 
 or
 
-    * * * * *  /bin/sh /path/to/magento/htdocs/cron.sh cron.php -mdefault 1 > /dev/null 2>&1 &
+    * * * * *  /bin/sh /path/to/magento/htdocs/cron.sh cron.php -mdefault 1 > /path/to/magento/htdocs/var/log/cron.log 2>&1 &
 
-If your crontab does not contain either of these lines, please use `crontab -e` to edit it and copy the first line in there (not both). 
+If your crontab does not contain either of these lines, please use `crontab -e` to edit it and copy the second line (`cron.sh`) into your crontab.
 
 
 ## Installation: Part 3 - Configuration
@@ -59,6 +59,13 @@ To view sync status, visit Reports->Reverb Report
 ## Notes on Bulk Sync
 
 The bulk sync uses multiple threads (runs in parallel). It takes some time to spin up, so it may appear that nothing is happening for approximately 1 minute until your cron runs and starts picking up the jobs.
+
+## Troubleshooting
+
+### Bulk sync doesn't work
+
+1. First, check the cron log in /path/to/magento/htdocs/var/log/cron.log
+2. If you are running a Bitnami Magento instance, you may want to look at thei
 
 ## What's working
 
