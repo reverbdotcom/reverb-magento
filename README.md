@@ -11,22 +11,10 @@ needed.
 
 Currently this extension syncs inventory from Magento to Reverb based on SKU.
 It will also create new listings on Reverb if the SKU is not found.
-
+i
 The result of the sync is logged to a sync log available from the settings screen.
 
 Only simple products are synced. Configurable products are not synced.
-
-## Requirements
-
-In order for the cron to successfully process the listings sync in parallel-thread manner, the magento cron needs to be declared in the crontab via the following:
-
-    * * * * * php /path/to/magento/cron.php -mdefault 1
-
-or
-
-    * * * * *  /bin/sh /path/to/magento/cron.sh cron.php -mdefault 1 > /dev/null 2>&1 &
-
-Only one of these should be included in the crontab, not both. Also the schedule can be set to be less frequent than every minute if desired, but this would prevent the Reverb listing sync parallel execution threads from being started every other minute, which is the time defined in the config.xml file. It is recommended that if the Magento crontab schedule defined above is less often than every minute, the Reverb listing sync crontab job should have its schedule set to occur half as often as the Magento crontab; this will prevent the Reverb listing sync from blocking out other cron functionality once a Bulk Product Sync is triggered.
 
 ## What's not working
 
@@ -36,7 +24,7 @@ Only one of these should be included in the crontab, not both. Also the schedule
 * Order syncing from Reverb to Magento
 * Category mapping - from Magento categories to Reverb categories
 
-## Installation
+## Installation: Part 1 - Install the App
 
 ```bash
 # Copy everything from the app folder into your magento app
@@ -44,6 +32,21 @@ cp -R app/* /path/to/magento/htdocs/app/
 # Clear your cache
 rm -rf /path/to/magento/htdocs/var/cache
 ```
+
+## Installation: Part 2 - Install the Cron
+
+The cron is used to process the listing syncing queue. To see what's in your crontab, run `crontab -l`. Please ensure that your crontab contains one of the following lines:
+
+    * * * * * php /path/to/magento/cron.php -mdefault 1
+
+or
+
+    * * * * *  /bin/sh /path/to/magento/cron.sh cron.php -mdefault 1 > /dev/null 2>&1 &
+
+If your crontab does not contain either of these lines, please use `crontab -e` to edit it and copy the first line in there (not both). 
+
+Only one of these should be included in the crontab, not both. Also the schedule can be set to be less frequent than every minute if desired, but this would prevent the Reverb listing sync parallel execution threads from being started every other minute, which is the time defined in the config.xml file. It is recommended that if the Magento crontab schedule defined above is less often than every minute, the Reverb listing sync crontab job should have its schedule set to occur half as often as the Magento crontab; this will prevent the Reverb listing sync from blocking out other cron functionality once a Bulk Product Sync is triggered.
+
 
 ## Contributing
 
