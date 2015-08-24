@@ -33,7 +33,7 @@ class Reverb_ReverbSync_Adminhtml_SyncController extends Mage_Adminhtml_Controll
 
         $success_message = $this->__(self::SUCCESS_BULK_SYNC_QUEUED_UP, $number_of_syncs_queued_up);
         $this->_getAdminHelper()->addAdminSuccessMessage($success_message);
-        $this->_redirect('reverbSync/adminhtml_sync/index');
+        $this->_redirect('adminhtml/reports_reverbreport/index');
     }
 
     public function stopBulkSyncAction()
@@ -58,7 +58,7 @@ class Reverb_ReverbSync_Adminhtml_SyncController extends Mage_Adminhtml_Controll
 
         $success_message = $this->__(self::SUCCESS_STOPPED_LISTING_SYNCS);
         $this->_getAdminHelper()->addAdminSuccessMessage($success_message);
-        $this->_redirect('reverbSync/adminhtml_sync/index');
+        $this->_redirect('adminhtml/reports_reverbreport/index');
     }
 
     public function indexAction()
