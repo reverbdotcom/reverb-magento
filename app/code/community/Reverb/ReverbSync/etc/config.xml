@@ -144,6 +144,7 @@
             <reverbDefault>
                 <enable_listing_creation>0</enable_listing_creation>
                 <revCond>Brand New</revCond>
+                <revInvent>1</revInvent>
             </reverbDefault>
         </ReverbSync>
     </default>
