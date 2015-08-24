@@ -39,6 +39,13 @@ or
 If your crontab does not contain either of these lines, please use `crontab -e` to edit it and copy the first line in there (not both). 
 
 
+## Installation: Part 3 - Configuration
+
+* In Magento Admin, go to System -> Configuration -> Reverb Configuration
+* Put in your API Key (grab it from (https://reverb.com/my/account/settings)[https://reverb.com/my/account/settings])
+* Select Yes for Enable Reverb Module to turn on the sync
+* If you also want to create drafts for skus that don't exist on Reverb, select "Enable Listing Creation" in the Reverb Default section.
+
 ## What's working
 
 Currently this extension syncs inventory from Magento to Reverb based on SKU.
