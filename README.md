@@ -7,11 +7,23 @@ Since there are many different magento versions and installations out there, we 
 
 ## Installation: Part 1 - Install the App
 
+Please follow the instructions below to download and install the app. This assumes you have shell access to your server. If you have only FTP access, please download and unzip the app into /path/to/magento/htodcs/app
+
 ```bash
+# Where your magento lives. This is the only part you have to manually modify.
+export MAGENTO_PATH=/path/to/magento
+
+# Download the release
+cd /tmp && wget https://github.com/reverbdotcom/magento/archive/0.2.0.tar.gz
+
+# Unzip the release
+tar zxvf 0.2.0.tar.gz
+
 # Copy everything from the app folder into your magento app
-cp -R app/* /path/to/magento/htdocs/app/
+rsync -avzp magento-0.2.0/app/* $MAGENTO_PATH/htdocs/app/
+
 # Clear your cache
-rm -rf /path/to/magento/htdocs/var/cache
+rm -rf $MAGENTO_PATH/htdocs/var/cache
 ```
 
 ## Installation: Part 2 - Install the Cron
