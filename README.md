@@ -14,13 +14,13 @@ Please follow the instructions below to download and install the app. This assum
 export MAGENTO_PATH=/path/to/magento
 
 # Download the release
-cd /tmp && wget https://github.com/reverbdotcom/magento/archive/0.2.0.tar.gz
+cd /tmp && wget https://github.com/reverbdotcom/magento/archive/0.2.2.tar.gz
 
 # Unzip the release
-tar zxvf 0.2.0.tar.gz
+tar zxvf 0.2.2.tar.gz
 
 # Copy everything from the app folder into your magento app
-rsync -avzp magento-0.2.0/app/* $MAGENTO_PATH/htdocs/app/
+rsync -avzp magento-0.2.2/app/* $MAGENTO_PATH/htdocs/app/
 
 # Clear your cache
 rm -rf $MAGENTO_PATH/htdocs/var/cache
@@ -50,7 +50,7 @@ If your crontab does not contain either of these lines, please use `crontab -e` 
 
 The sync to Reverb can be triggered in two ways:
 
-1. When you Save any Product in Magento, it will automaticaly sync to Reverb (if you have the sync settings enabled).
+1. When you Save any Product in Magento, it will automaticaly sync to Reverb. Make sure you set "Sync to Reverb" to "Yes" on the bottom of the product page, and enable the Reverb Module in your global settings (see Part 3 of installation).
 
 2. Bulk Sync. Visit Catalog->Reverb Bulk Sync, and press the "Bulk Product Sync" button in the upper right. The page will update with progress over time. Please note that very large catalogs (thousands of skus) may take an hour or more to fully sync.
 
