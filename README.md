@@ -65,7 +65,8 @@ The bulk sync uses multiple threads (runs in parallel). It takes some time to sp
 ### Bulk sync doesn't work
 
 1. First, check the cron log in /path/to/magento/htdocs/var/log/cron.log
-2. If you are running a Bitnami Magento instance, you may want to look at thei
+2. Enable logging (System->Configuration->Advanced->Developer->Log Settings
+3. Let the cron run again (wait a minute), then check logs `tail -f /path/to/magento/htdocs/var/log/*`
 
 ## What's working
 
