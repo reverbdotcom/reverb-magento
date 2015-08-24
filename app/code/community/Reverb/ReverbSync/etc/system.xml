@@ -55,7 +55,7 @@
               <validate>input-text required-entry</validate>
             </revUrl>
             <api_token translate="label">
-              <label>API Token*:</label>
+              <label>API Token (from bottom of https://reverb.com/my/account/settings)*:</label>
               <frontend_type>password</frontend_type>
               <sort_order>5</sort_order>
               <show_in_default>1</show_in_default>
@@ -63,24 +63,6 @@
               <show_in_store>1</show_in_store>
               <validate>input-text required-entry</validate>
             </api_token>
-            <revEmailId translate="label">
-              <label>Email*:</label>
-              <frontend_type>text</frontend_type>
-              <sort_order>10</sort_order>
-              <show_in_default>1</show_in_default>
-              <show_in_website>1</show_in_website>
-              <show_in_store>1</show_in_store>
-              <validate>validate-email required-entry</validate>
-            </revEmailId>
-            <revPassword translate="label">
-              <label>Password*:</label>
-              <frontend_type>password</frontend_type>
-              <sort_order>20</sort_order>
-              <show_in_default>1</show_in_default>
-              <show_in_website>1</show_in_website>
-              <show_in_store>1</show_in_store>
-              <validate>input-text required-entry</validate>
-            </revPassword>
           </fields>
         </extension>
 
