@@ -145,6 +145,7 @@
                 <enable_listing_creation>0</enable_listing_creation>
                 <revCond>Brand New</revCond>
                 <revInvent>1</revInvent>
+                <revUrl>https://reverb.com</revUrl>
             </reverbDefault>
         </ReverbSync>
     </default>
