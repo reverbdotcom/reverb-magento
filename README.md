@@ -30,11 +30,11 @@ rm -rf $MAGENTO_PATH/htdocs/var/cache
 
 The cron is used to process the listing syncing queue. To see what's in your crontab, run `crontab -l`. Please ensure that your crontab contains one of the following lines:
 
-    * * * * * php /path/to/magento/htdocs/cron.php -mdefault 1
+    * * * * * /bin/sh -c "php /path/to/magento/htdocs/cron.php -mdefault 1 > /path/to/magento/htdocs/var/log/cron.log"
 
 or
 
-    * * * * *  /bin/sh /path/to/magento/htdocs/cron.sh cron.php -mdefault 1 > /path/to/magento/htdocs/var/log/cron.log 2>&1 &
+    * * * * *  /bin/sh -c "/path/to/magento/htdocs/cron.sh cron.php -mdefault 1 > /path/to/magento/htdocs/var/log/cron.log 2>&1"
 
 If your crontab does not contain either of these lines, please use `crontab -e` to edit it and copy the second line (`cron.sh`) into your crontab.
 
