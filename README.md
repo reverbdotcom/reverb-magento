@@ -52,6 +52,10 @@ The sync to Reverb can be triggered in two ways:
 1. When you Save any Product in Magento, it will automaticaly sync to Reverb (if you have the sync settings enabled).
 2. Bulk Sync. Visit Catalog->Reverb Bulk Sync, and press the "Bulk Product Sync" button in the upper right. The page will update with progress over time. Please note that very large catalogs (thousands of skus) may take an hour or more to fully sync.
 
+## Notes on Bulk Sync
+
+The bulk sync uses multiple threads (runs in parallel). It takes some time to spin up, so it may appear that nothing is happening for approximately 1 minute until your cron runs and starts picking up the jobs.
+
 ## What's working
 
 Currently this extension syncs inventory from Magento to Reverb based on SKU.
