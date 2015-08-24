@@ -18,21 +18,15 @@ Only simple products are synced. Configurable products are not synced.
 
 ## Requirements
 
-In order for the cron to successfully process the listings sync in parallel-thread manner, the magento cron needs to be
-declared in the crontab via the following:
+In order for the cron to successfully process the listings sync in parallel-thread manner, the magento cron needs to be declared in the crontab via the following:
 
-* * * * * php /path/to/magento/cron.php -mdefault 1
+    * * * * * php /path/to/magento/cron.php -mdefault 1
 
 or
 
-* * * * *  /bin/sh /path/to/magento/cron.sh cron.php -mdefault 1 > /dev/null 2>&1 &
+    * * * * *  /bin/sh /path/to/magento/cron.sh cron.php -mdefault 1 > /dev/null 2>&1 &
 
-Only one of these should be included in the crontab, not both. Also the schedule can be set to be less frequent than
-every minute if desired, but this would prevent the Reverb listing sync parallel execution threads from being started
-every other minute, which is the time defined in the config.xml file. It is recommended that if the Magento crontab
-schedule defined above is less often than every minute, the Reverb listing sync crontab job should have its schedule set
-to occur half as often as the Magento crontab; this will prevent the Reverb listing sync from blocking out other
-cron functionality once a Bulk Product Sync is triggered.
+Only one of these should be included in the crontab, not both. Also the schedule can be set to be less frequent than every minute if desired, but this would prevent the Reverb listing sync parallel execution threads from being started every other minute, which is the time defined in the config.xml file. It is recommended that if the Magento crontab schedule defined above is less often than every minute, the Reverb listing sync crontab job should have its schedule set to occur half as often as the Magento crontab; this will prevent the Reverb listing sync from blocking out other cron functionality once a Bulk Product Sync is triggered.
 
 ## What's not working
 
