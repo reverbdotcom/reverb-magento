@@ -112,6 +112,7 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         $listingWrapper->setStatus(self::LISTING_STATUS_SUCCESS);
         $listingWrapper->setSyncDetails(null);
         $listing_response = isset($response['listing']) ? $response['listing'] : array();
+        $listing_response = is_array($listing_response) ? $listing_response : array();
         $web_url = $this->_getWebUrlFromListingResponseArray($listing_response);
 
         return $web_url;
@@ -163,6 +164,7 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
 
         $listings_array = isset($response['listings']) ? ($response['listings']) : array();
         $listing_array = is_array($listings_array) ? reset($listings_array) : array();
+        $listing_array = is_array($listing_array) ? $listing_array : array();
         $self_links_href = $this->_getUpdatePutLinksHrefFromListingResponseArray($listing_array);
 
         return $self_links_href;
@@ -221,6 +223,7 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         $listingWrapper->setSyncDetails(null);
         $listingWrapper->setStatus(self::LISTING_STATUS_SUCCESS);
         $listing_response = isset($response['listing']) ? $response['listing'] : array();
+        $listing_response = is_array($listing_response) ? $listing_response : array();
         $web_url = $this->_getWebUrlFromListingResponseArray($listing_response);
 
         return $web_url;
