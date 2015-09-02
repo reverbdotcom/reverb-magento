@@ -90,7 +90,7 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         if (is_null($response))
         {
             $response = array();
-            $response['message'] = 'The response could not be decoded as a json.';
+            $response['message'] = '[Error ' . $status . '] Unexpected response from Reverb while creating listing';
         }
 
         if ($status != 201)
@@ -148,7 +148,7 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         if (is_null($response))
         {
             $response = array();
-            $response['message'] = 'The response could not be decoded as a json.';
+            $response['message'] = '[Error ' . $status . '] Unexpected response from Reverb while searching for listing';
         }
 
         if ($status != 200) {
