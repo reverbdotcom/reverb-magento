@@ -5,7 +5,7 @@ class Reverb_ReverbSync_Block_Adminhtml_Index extends Mage_Adminhtml_Block_Widge
     public function __construct()
     {
         $this->_headerText = "Sync Products With Reverb";
-        $block_module_groupname = $this->getAction()->getModuleBlockGroupname();
+        $block_module_groupname = "ReverbSync";
 
         $this->_objectId = 'reverb_product_sync_container';
         $this->setTemplate('widget/form/container.phtml');

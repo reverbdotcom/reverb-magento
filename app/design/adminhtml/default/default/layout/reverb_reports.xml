@@ -4,11 +4,8 @@
   <adminhtml_reports_reverbreport_index>
     <reference name="menu">
       <action method="setActive">
-        <menupath>reverb_reports/reverbreport</menupath>
+        <menupath>catalog/reverb_sync</menupath>
       </action>
-    </reference>
-    <reference name="content">
-      <block type="reverb_reports/adminhtml_reverbreport" name="reverbreport" />
     </reference>
   </adminhtml_reports_reverbreport_index>
   <adminhtml_reports_reverbreport_grid>

@@ -21,7 +21,7 @@
             <children>
                 <reverb_sync translate="title" module="ReverbSync">
                     <title>Reverb Bulk Sync</title>
-                    <action>reverbSync/adminhtml_sync/index</action>
+                    <action>adminhtml/reports_reverbreport</action>
                     <sort_order>0</sort_order>
                 </reverb_sync>
             </children>

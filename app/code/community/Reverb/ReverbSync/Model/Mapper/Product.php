@@ -13,7 +13,33 @@ class Reverb_ReverbSync_Model_Mapper_Product
     protected $_has_inventory = null;
 
     //function to Map the Mgento and Reverb attributes
-    public function getListingWrapper($product)
+    public function getUpdateListingWrapper($product)
+    {
+        $reverbListingWrapper = Mage::getModel('reverbSync/wrapper_listing');
+        $stock = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product);
+        $qty = $stock->getQty();
+        $price = $product->getPrice();
+        $name = $product->getName();
+        $sku = $product->getSku();
+        $condition = $this->_getCondition();
+        $hasInventory = $this->_getHasInventory();
+
+        $fieldsArray = array(
+                'title'=> $name,
+                'sku'=> $sku,
+                'condition' => $condition,
+                "has_inventory"=>$hasInventory,
+                "inventory"=>$qty,
+                "price"=>$price
+               );
+
+        $reverbListingWrapper->setApiCallContentData($fieldsArray);
+        $reverbListingWrapper->setMagentoProduct($product);
+
+        return $reverbListingWrapper;
+    }
+
+    public function getCreateListingWrapper($product)
     {
         $reverbListingWrapper = Mage::getModel('reverbSync/wrapper_listing');
         $stock = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product);
@@ -26,14 +52,14 @@ class Reverb_ReverbSync_Model_Mapper_Product
         $hasInventory = $this->_getHasInventory();
 
         $fieldsArray = array(
-                'title'=> $name,
-                'sku'=> $sku,
-                'description'=>$description,
-                'condition' => $condition,
-                "has_inventory"=>$hasInventory,
-                "inventory"=>$qty,
-                "price"=>$price
-               );
+            'title'=> $name,
+            'sku'=> $sku,
+            'description'=>$description,
+            'condition' => $condition,
+            "has_inventory"=>$hasInventory,
+            "inventory"=>$qty,
+            "price"=>$price
+        );
 
         $reverbListingWrapper->setApiCallContentData($fieldsArray);
         $reverbListingWrapper->setMagentoProduct($product);

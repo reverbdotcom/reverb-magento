@@ -4,6 +4,8 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
 {
     const ERROR_LISTING_CREATION_IS_NOT_ENABLED = 'Reverb listing creation has not been enabled.';
 
+    const API_CALL_LOG_TEMPLATE = "\n%s\n%s\n%s\n";
+
     const LISTING_STATUS_ERROR = 0;
     const LISTING_STATUS_SUCCESS = 1;
 
@@ -12,20 +14,26 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
      *
      * @param $listingWrapper
      */
-    public function createOrUpdateReverbListing($listingWrapper)
+    public function createOrUpdateReverbListing($product, $do_not_allow_creation = false)
     {
         try
         {
-            $api_call_content_data_array = $listingWrapper->getApiCallContentData();
-            $magento_sku = $api_call_content_data_array['sku'];
+            $magento_sku = $product->getSku();
             $reverb_listing_url = $this->findReverbListingUrlByMagentoSku($magento_sku);
             if ($reverb_listing_url)
             {
+                $listingWrapper = Mage::getModel('reverbSync/Mapper_Product')->getUpdateListingWrapper($product);
                 $reverb_web_url = $this->updateObject($listingWrapper, $reverb_listing_url);
+            }
+            else if(!$do_not_allow_creation)
+            {
+                $listingWrapper = Mage::getModel('reverbSync/Mapper_Product')->getCreateListingWrapper($product);
+                $reverb_web_url = $this->createObject($listingWrapper);
             }
             else
             {
-                $reverb_web_url = $this->createObject($listingWrapper);
+                // On order placement, only listing update should be allowed, not creation
+                return false;
             }
 
             $listingWrapper->setReverbWebUrl($reverb_web_url);
@@ -78,6 +86,9 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         curl_setopt($curl, CURLOPT_POST, true);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $content);
         $json_response = curl_exec($curl);
+
+        $this->_logApiCall($content, $json_response, 'createObject');
+
         $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         curl_close($curl);
         $response = json_decode($json_response, true);
@@ -125,12 +136,15 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
     {
         $revUrl = $this->_getBaseReverbUrl();
         $escaped_sku = urlencode($magento_sku);
-        $url = $revUrl . "api/my/listings?state=all&sku=" . $escaped_sku;
+        $params = "state=all&sku=" . $escaped_sku;
+        $url = $revUrl . "/api/my/listings?" . $params;
         // The Varien Curl Adapter isn't great, could be refactored via extending a subclass
         $curlResource = $this->_getCurlResource($url);
         $curlResource->connect($url);
         //Execute the API call
         $json_response = $curlResource->read();
+
+        $this->_logApiCall($params, $json_response, 'findReverbListingUrlByMagentoSku');
 
         $status = $curlResource->getInfo(CURLINFO_HTTP_CODE);
         $curlResource->close();
@@ -154,6 +168,12 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         }
 
         $listings_array = isset($response['listings']) ? ($response['listings']) : array();
+        if (empty($listings_array))
+        {
+            // If no listings were returned, return null
+            return null;
+        }
+        // The listing we are looking for should be the first element in the $listings_array (index 0)
         $listing_array = is_array($listings_array) ? reset($listings_array) : array();
         $self_links_href = $this->_getUpdatePutLinksHrefFromListingResponseArray($listing_array);
 
@@ -193,6 +213,8 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         curl_setopt($curl, CURLOPT_POSTFIELDS, $content);
         // Execute the API call
         $updateStatus = curl_exec($curl);
+
+        $this->_logApiCall($content, $updateStatus, 'updateObject');
 
         $response = json_decode($updateStatus, true);
         $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
@@ -237,5 +259,12 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         $curlResource->setOptions($options_array);
 
         return $curlResource;
+    }
+
+    protected function _logApiCall($request, $response, $api_request)
+    {
+        $message = sprintf(self::API_CALL_LOG_TEMPLATE, $api_request, $request, $response);
+        $file = $api_request . '.log';
+        Mage::log($message, null, $file);
     }
 }

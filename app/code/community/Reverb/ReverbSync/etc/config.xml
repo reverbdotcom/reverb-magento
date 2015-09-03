@@ -5,145 +5,149 @@
             <version>0.1.2</version>
         </Reverb_ReverbSync>
     </modules>
-    <global>       
+    <global>
         <models>
             <reverbSync>
                 <class>Reverb_ReverbSync_Model</class>
                 <resourceModel>reverb_sync_queue_mysql4</resourceModel>
             </reverbSync>
+      <reverb_sync_queue_mysql4>
+        <class>Reverb_ReverbSync_Model_Mysql4</class>
+      </reverb_sync_queue_mysql4>
+    </models>
+    <resources>
+      <reverbsync_setup>
+        <setup>
+          <module>Reverb_ReverbSync</module>
+        </setup>
+        <connection>
+          <use>core_setup</use>
+        </connection>
+      </reverbsync_setup>
+      <reverbsync_write>
+        <connection>
+          <use>core_write</use>
+        </connection>
+      </reverbsync_write>
+      <reverbsync_read>
+        <connection>
+          <use>core_read</use>
+        </connection>
+      </reverbsync_read>
+    </resources>
+    <models>
+      <ReverbSync_adminhtml>
+        <class>Reverb_ReverbSync_Adminhtml_Model</class>
+      </ReverbSync_adminhtml>
+    </models>
+    <helpers>
+      <ReverbSync>
+        <class>Reverb_ReverbSync_Helper</class>
+      </ReverbSync>
+    </helpers>
+    <events>
+      <catalog_product_save_after>
+        <observers>
+          <Reverb_ReverbSync>
+            <type>singleton</type>
+            <class>Reverb_ReverbSync_Model_Observer</class>
+            <method>productSave</method>
+          </Reverb_ReverbSync>
+        </observers>
+      </catalog_product_save_after>
+      <sales_order_place_after>
+        <observers>
+          <Reverb_ReverbSync>
+            <type>singleton</type>
+            <class>Reverb_ReverbSync_Model_Observer</class>
+            <method>orderSave</method>
+          </Reverb_ReverbSync>
+        </observers>
+      </sales_order_place_after>
 
-            <reverb_sync_queue_mysql4>
-                <class>Reverb_ReverbSync_Model_Mysql4</class>
-            </reverb_sync_queue_mysql4>
-        </models>   
-        <resources>
-            <reverbsync_setup>
-                <setup>
-                    <module>Reverb_ReverbSync</module>
-                </setup>
-                <connection>
-                    <use>core_setup</use>
-                </connection>
-            </reverbsync_setup>
-            <reverbsync_write>
-                <connection>
-                    <use>core_write</use>
-                </connection>
-            </reverbsync_write>
-            <reverbsync_read>
-                <connection>
-                    <use>core_read</use>
-                </connection>
-            </reverbsync_read>
-        </resources> 
-        <models>
-            <ReverbSync_adminhtml>
-                <class>Reverb_ReverbSync_Adminhtml_Model</class>
-            </ReverbSync_adminhtml>
-        </models>       
-        <helpers>
-            <ReverbSync>
-                <class>Reverb_ReverbSync_Helper</class>
-            </ReverbSync>  
-        </helpers>        
-        <events>
-            <catalog_product_save_after>
-                <observers>
-                    <Reverb_ReverbSync>
-                        <type>singleton</type>
-                        <class>Reverb_ReverbSync_Model_Observer</class>
-                        <method>productSave</method>
-                    </Reverb_ReverbSync>
-                </observers>
-            </catalog_product_save_after>  
-             <sales_order_place_after>
-                <observers>
-                    <Reverb_ReverbSync>
-                        <type>singleton</type>
-                        <class>Reverb_ReverbSync_Model_Observer</class>
-                        <method>orderSave</method>
-                    </Reverb_ReverbSync>
-                </observers>            	
-            </sales_order_place_after> 
-                       
-        </events>  
-		<blocks>
-		   <ReverbSync>
-                <class>Reverb_ReverbSync_Block</class>
-            </ReverbSync>  
-     </blocks>
-    </global>
-    <adminhtml>
-        <layout>
-            <updates>
-                <ReverbSync>
-                    <file>ReverbSync.xml</file>
-                </ReverbSync>
-            </updates>
-        </layout>
-        <acl>
-            <resources>
-                <all>
-                    <title>Allow Everything</title>
-                </all>
-                <admin>
-                    <children>
-                        <system>
-                            <children>
-                                <config>
-                                    <children>
-                                        <ReverbSync>
-                                            <title>Reverb Sync</title>
-                                        </ReverbSync>
-                                    </children>
-                                </config>
-                            </children>
-                        </system>
-                    </children>
-                </admin>
-            </resources>
-        </acl>
-    </adminhtml>
-
-      <admin>
-        <routers>
-            <adminhtml>
-                <args>
-                    <modules>
-                        <Reverb_ReverbSync_Adminhtml before="Mage_Adminhtml">Reverb_ReverbSync_Adminhtml</Reverb_ReverbSync_Adminhtml>
-                    </modules>
-                </args>
-            </adminhtml>
-
-                <reverb_sync>
-                    <use>admin</use>
-                    <args>
-                        <module>Reverb_ReverbSync</module>
-                        <frontName>reverbSync</frontName>
-                    </args>
-                </reverb_sync>
-
-        </routers>
-    </admin>
-
-    <crontab>
-        <jobs>
-            <reverb_process_queue_process_tasks>
-                <schedule>
-                    <cron_expr>*/2 * * * *</cron_expr>
-                </schedule>
-                <run>
-                    <model>reverbSync/cron::attemptCronExecution</model>
-                </run>
-            </reverb_process_queue_process_tasks>
-        </jobs>
-    </crontab>
-
-    <default>
+    </events>
+    <blocks>
+      <ReverbSync>
+        <class>Reverb_ReverbSync_Block</class>
+      </ReverbSync>
+    </blocks>
+  </global>
+  <adminhtml>
+    <layout>
+      <updates>
         <ReverbSync>
-            <reverbDefault>
-                <enable_listing_creation>0</enable_listing_creation>
-            </reverbDefault>
+          <file>ReverbSync.xml</file>
         </ReverbSync>
-    </default>
+      </updates>
+    </layout>
+    <acl>
+      <resources>
+        <all>
+          <title>Allow Everything</title>
+        </all>
+        <admin>
+          <children>
+            <system>
+              <children>
+                <config>
+                  <children>
+                    <ReverbSync>
+                      <title>Reverb Sync</title>
+                    </ReverbSync>
+                  </children>
+                </config>
+              </children>
+            </system>
+          </children>
+        </admin>
+      </resources>
+    </acl>
+  </adminhtml>
+
+  <admin>
+    <routers>
+      <adminhtml>
+        <args>
+          <modules>
+            <Reverb_ReverbSync_Adminhtml before="Mage_Adminhtml">Reverb_ReverbSync_Adminhtml</Reverb_ReverbSync_Adminhtml>
+          </modules>
+        </args>
+      </adminhtml>
+
+      <reverb_sync>
+        <use>admin</use>
+        <args>
+          <module>Reverb_ReverbSync</module>
+          <frontName>reverbSync</frontName>
+        </args>
+      </reverb_sync>
+
+    </routers>
+  </admin>
+
+  <crontab>
+    <jobs>
+      <reverb_process_queue_process_tasks>
+        <schedule>
+          <cron_expr>*/2 * * * *</cron_expr>
+        </schedule>
+        <run>
+          <model>reverbSync/cron::attemptCronExecution</model>
+        </run>
+      </reverb_process_queue_process_tasks>
+    </jobs>
+  </crontab>
+
+  <default>
+    <ReverbSync>
+      <reverbDefault>
+        <enable_listing_creation>0</enable_listing_creation>
+        <revCond>Brand New</revCond>
+        <revInvent>1</revInvent>
+      </reverbDefault>
+      <extension>
+        <revUrl>https://reverb.com</revUrl>
+      </extension>
+    </ReverbSync>
+  </default>
 </config>

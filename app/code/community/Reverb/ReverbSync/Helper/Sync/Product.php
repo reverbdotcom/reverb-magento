@@ -63,13 +63,13 @@ class Reverb_ReverbSync_Helper_Sync_Product extends Mage_Core_Helper_Data
      * @param $product_id
      * @throws Exception
      */
-    public function executeIndividualProductDataSync($product_id)
+    public function executeIndividualProductDataSync($product_id, $do_not_allow_creation = false)
     {
         // We want this to throw an exception to the calling block if module is not enabled
         $this->_verifyModuleIsEnabled();
         //load the product
-        $product = Mage::getModel('catalog/product') -> load($product_id);
-        $productType = $product -> getTypeID();
+        $product = Mage::getModel('catalog/product')->load($product_id);
+        $productType = $product->getTypeID();
         if ($productType != 'simple') {
             throw new Reverb_ReverbSync_Model_Exception_Product_Excluded("Only simple products can be synced.");
         }
@@ -78,9 +78,8 @@ class Reverb_ReverbSync_Helper_Sync_Product extends Mage_Core_Helper_Data
             throw new Reverb_ReverbSync_Model_Exception_Product_Excluded("This product has been listed as being excluded from the Reverb Listing Sync Process");
         }
 
-        $listingWrapper = Mage::getModel('reverbSync/Mapper_Product')->getListingWrapper($product);
         //pass the data to create or update the product in Reverb
-        $listingWrapper = Mage::helper('ReverbSync/data') -> createOrUpdateReverbListing($listingWrapper);
+        $listingWrapper = Mage::helper('ReverbSync/data') -> createOrUpdateReverbListing($product, $do_not_allow_creation);
     }
 
     public function deleteAllListingSyncTasks()
