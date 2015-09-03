@@ -14,7 +14,7 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
      *
      * @param $listingWrapper
      */
-    public function createOrUpdateReverbListing($product)
+    public function createOrUpdateReverbListing($product, $do_not_allow_creation = false)
     {
         try
         {
@@ -25,10 +25,15 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
                 $listingWrapper = Mage::getModel('reverbSync/Mapper_Product')->getUpdateListingWrapper($product);
                 $reverb_web_url = $this->updateObject($listingWrapper, $reverb_listing_url);
             }
-            else
+            else if(!$do_not_allow_creation)
             {
                 $listingWrapper = Mage::getModel('reverbSync/Mapper_Product')->getCreateListingWrapper($product);
                 $reverb_web_url = $this->createObject($listingWrapper);
+            }
+            else
+            {
+                // On order placement, only listing update should be allowed, not creation
+                return false;
             }
 
             $listingWrapper->setReverbWebUrl($reverb_web_url);

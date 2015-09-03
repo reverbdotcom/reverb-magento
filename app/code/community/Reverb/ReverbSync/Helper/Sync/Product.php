@@ -63,7 +63,7 @@ class Reverb_ReverbSync_Helper_Sync_Product extends Mage_Core_Helper_Data
      * @param $product_id
      * @throws Exception
      */
-    public function executeIndividualProductDataSync($product_id)
+    public function executeIndividualProductDataSync($product_id, $do_not_allow_creation = false)
     {
         // We want this to throw an exception to the calling block if module is not enabled
         $this->_verifyModuleIsEnabled();
@@ -79,7 +79,7 @@ class Reverb_ReverbSync_Helper_Sync_Product extends Mage_Core_Helper_Data
         }
 
         //pass the data to create or update the product in Reverb
-        $listingWrapper = Mage::helper('ReverbSync/data') -> createOrUpdateReverbListing($product);
+        $listingWrapper = Mage::helper('ReverbSync/data') -> createOrUpdateReverbListing($product, $do_not_allow_creation);
     }
 
     public function deleteAllListingSyncTasks()

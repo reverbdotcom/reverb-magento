@@ -22,7 +22,7 @@ class Reverb_ReverbSync_Model_Observer
         // Any other Exception is understood to prevent product save
     }
 
-    // funtion to get the product quantity placed through order
+    // function to get the product quantity placed through order
     public function orderSave($observer)
     {
         try
@@ -35,7 +35,7 @@ class Reverb_ReverbSync_Model_Observer
                 try
                 {
                     $product_id = $item->getProductId();
-                    $productSyncHelper->executeIndividualProductDataSync($product_id);
+                    $productSyncHelper->executeIndividualProductDataSync($product_id, true);
                 }
                 catch(Exception $e)
                 {
