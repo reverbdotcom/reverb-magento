@@ -14,19 +14,20 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
      *
      * @param $listingWrapper
      */
-    public function createOrUpdateReverbListing($listingWrapper)
+    public function createOrUpdateReverbListing($product)
     {
         try
         {
-            $api_call_content_data_array = $listingWrapper->getApiCallContentData();
-            $magento_sku = $api_call_content_data_array['sku'];
+            $magento_sku = $product->getSku();
             $reverb_listing_url = $this->findReverbListingUrlByMagentoSku($magento_sku);
             if ($reverb_listing_url)
             {
+                $listingWrapper = Mage::getModel('reverbSync/Mapper_Product')->getUpdateListingWrapper($product);
                 $reverb_web_url = $this->updateObject($listingWrapper, $reverb_listing_url);
             }
             else
             {
+                $listingWrapper = Mage::getModel('reverbSync/Mapper_Product')->getCreateListingWrapper($product);
                 $reverb_web_url = $this->createObject($listingWrapper);
             }
 
