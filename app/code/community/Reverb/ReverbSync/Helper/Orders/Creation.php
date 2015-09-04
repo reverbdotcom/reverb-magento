@@ -88,15 +88,22 @@ class Reverb_ReverbSync_Helper_Orders_Creation extends Reverb_ReverbSync_Helper_
         $amountTaxObject = $reverbOrderObject->amount_tax;
         if (!is_object($amountTaxObject))
         {
-            $error_message = $this->__(self::ERROR_AMOUNT_TAX_MISSING);
-            throw new Exception($error_message);
-        }
+            // As of 2015/09/04 if there is no amount_tax object present we should assume tax is $0.00 as opposed to
+            // throwing an error
+            //$error_message = $this->__(self::ERROR_AMOUNT_TAX_MISSING);
+            //throw new Exception($error_message);
 
-        $tax_amount = $amountTaxObject->amount;
-        if (empty($tax_amount))
-        {
             $tax_amount = "0.00";
         }
+        else
+        {
+            $tax_amount = $amountTaxObject->amount;
+            if (empty($tax_amount))
+            {
+                $tax_amount = "0.00";
+            }
+        }
+
         $totalBaseTax = floatval($tax_amount);
 
         $quoteItem = $quoteToBuild->getItemsCollection()->getFirstItem();
