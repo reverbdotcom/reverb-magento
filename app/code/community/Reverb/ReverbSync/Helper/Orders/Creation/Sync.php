@@ -15,11 +15,9 @@
  *  Reverb_ReverbSync_Helper_Orders_Creation_Payment both end up setting the order in the same registry key, as they
  *  should be operating on the same order object
  */
-class Reverb_ReverbSync_Helper_Orders_Creation_Sync extends Mage_Core_Helper_Abstract
+class Reverb_ReverbSync_Helper_Orders_Creation_Sync extends Reverb_ReverbSync_Helper_Orders_Creation_Helper
 {
     const ORDER_BEING_SYNCED_REGISTRY_KEY = 'current_reverb_sync_order';
-
-    protected $_moduleName = 'ReverbSync';
 
     protected function _setOrderBeingSyncedInRegistry($reverbOrderObject)
     {

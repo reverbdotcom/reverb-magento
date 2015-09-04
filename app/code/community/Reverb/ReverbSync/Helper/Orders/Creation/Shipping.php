@@ -40,28 +40,23 @@ class Reverb_ReverbSync_Helper_Orders_Creation_Shipping extends Reverb_ReverbSyn
                     ->setIsAjaxRequest(false);
         $addressForm->setEntity($shippingQuoteAddress);
         $addressErrors = $addressForm->validateData($shippingQuoteAddress->getData());
-
-
-
-
-        // TODO!!! TEST THIS
         if ($addressErrors !== true)
         {
             $address_errors_message = implode(', ', $addressErrors);
             $serialized_data_array = serialize($shippingQuoteAddress->getData());
-            $error_message = sprintf(Reverb_ReverbSync_Helper_Orders_Creation::ERROR_VALIDATING_QUOTE_ADDRESS,
+            $error_message = sprintf(Reverb_ReverbSync_Helper_Orders_Creation_Address::ERROR_VALIDATING_QUOTE_ADDRESS,
                                         $serialized_data_array, $address_errors_message);
             throw new Exception($error_message);
         }
 
         $shippingQuoteAddress->implodeStreetAddress();
         $shippingQuoteAddress->setCollectShippingRates(true);
-
-        if (($address_validation = $shippingQuoteAddress->validate()) !== true)
+        if (($address_validation_errors_array = $shippingQuoteAddress->validate()) !== true)
         {
             $serialized_data_array = serialize($shippingQuoteAddress->getData());
-            $error_message = sprintf(Reverb_ReverbSync_Helper_Orders_Creation::ERROR_VALIDATING_QUOTE_ADDRESS,
-                                        $serialized_data_array, $address_validation);
+            $address_errors_message = implode(', ', $address_validation_errors_array);
+            $error_message = sprintf(Reverb_ReverbSync_Helper_Orders_Creation_Address::ERROR_VALIDATING_QUOTE_ADDRESS,
+                                        $serialized_data_array, $address_errors_message);
             throw new Exception($error_message);
         }
 
