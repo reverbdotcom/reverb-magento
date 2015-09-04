@@ -31,6 +31,4 @@ interface Reverb_ProcessQueue_Model_Task_Result_Interface
      *      an object of type Reverb_ProcessQueue_Model_Task_Result
      */
     public function setMethodCallbackResult($methodCallbackResult);
-
-    // TODO Implement recording of task execution status
 }
