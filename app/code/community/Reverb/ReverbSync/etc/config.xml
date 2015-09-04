@@ -136,6 +136,28 @@
         </run>
       </reverb_process_queue_process_tasks>
     </jobs>
+
+    <events>
+      <should_reverb_shipping_be_allowed>
+          <observers>
+              <check_for_syncing_reverb_order>
+                  <type>singleton</type>
+                  <class>reverbSync/observer_orders</class>
+                  <method>checkForSyncingReverbOrderForShipping</method>
+              </check_for_syncing_reverb_order>
+          </observers>
+      </should_reverb_shipping_be_allowed>
+
+        <should_reverb_payment_be_allowed>
+            <observers>
+                <check_for_syncing_reverb_order>
+                    <type>singleton</type>
+                    <class>reverbSync/observer_orders</class>
+                    <method>checkForSyncingReverbOrderForPayment</method>
+                </check_for_syncing_reverb_order>
+            </observers>
+        </should_reverb_payment_be_allowed>
+    </events>
   </crontab>
 
   <default>

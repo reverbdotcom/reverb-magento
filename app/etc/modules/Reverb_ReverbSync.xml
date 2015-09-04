@@ -6,6 +6,8 @@
             <codePool>community</codePool>
             <depends>
                 <Reverb_ProcessQueue/>
+                <Reverb_Payment/>
+                <Reverb_Shipping/>
             </depends>
         </Reverb_ReverbSync>
     </modules>

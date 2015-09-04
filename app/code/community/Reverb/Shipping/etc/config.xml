@@ -40,4 +40,17 @@
             </reverb_shipping_setup>
         </resources>
     </global>
+
+    <default>
+        <carriers>
+            <reverbshipping>
+                <active>1</active>
+                <sallowspecific>0</sallowspecific>
+                <model>reverb_shipping/carrier_reverb</model>
+                <name>Reverb Shipping</name>
+                <title>Reverb Shipping</title>
+                <specificerrmsg>This shipping method is currently unavailable. If you would like to ship using this shipping method, please contact us.</specificerrmsg>
+            </reverbshipping>
+        </carriers>
+    </default>
 </config>

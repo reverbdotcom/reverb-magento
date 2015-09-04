@@ -40,4 +40,19 @@
             </reverb_payment_setup>
         </resources>
     </global>
+
+    <default>
+        <payment>
+            <reverbpayment>
+                <active>1</active>
+                <model>reverb_payment/method_reverb</model>
+                <order_status>processing</order_status>
+                <payment_action>authorize_capture</payment_action>
+                <title>Payment Occurred In Reverb System</title>
+                <allowspecific>0</allowspecific>
+                <sort_order>1</sort_order>
+                <group>offline</group>
+            </reverbpayment>
+        </payment>
+    </default>
 </config>
