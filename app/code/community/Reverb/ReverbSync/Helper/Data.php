@@ -90,6 +90,7 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         $curlResource->close();
         // Log the response
         $this->_logApiCall($content, $post_response_as_json, 'createObject');
+        $curlResource->logRequest();
         // Decode the json response
         $response = json_decode($post_response_as_json, true);
 
@@ -146,6 +147,7 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         $curlResource->close();
         // Log the response
         $this->_logApiCall($params, $json_response, 'findReverbListingUrlByMagentoSku');
+        $curlResource->logRequest();
 
         $response = json_decode($json_response, true);
 
@@ -205,6 +207,7 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         $curlResource->close();
         // Log the response
         $this->_logApiCall($content, $put_response_as_json, 'updateObject');
+        $curlResource->logRequest();
 
         $response = json_decode($put_response_as_json, true);
 

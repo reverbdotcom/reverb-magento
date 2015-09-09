@@ -88,6 +88,7 @@ class Reverb_ReverbSync_Helper_Orders_Retrieval extends Reverb_ReverbSync_Helper
         $curlResource = $this->_getCurlResource($api_url);
         //Execute the API call
         $json_response = $curlResource->read();
+        $curlResource->logRequest();
 
         $json_decoded_response = json_decode($json_response);
 
