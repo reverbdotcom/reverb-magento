@@ -46,7 +46,7 @@
           <show_in_store>1</show_in_store>
           <fields>
             <revUrl translate="label">
-              <label>Reverb Sync Destination*:</label>
+              <label>Reverb Sync Destination</label>
               <frontend_type>select</frontend_type>
               <sort_order>1</sort_order>
               <show_in_default>1</show_in_default>
@@ -56,7 +56,8 @@
               <source_model>reverbSync/source_revurl</source_model>
             </revUrl>
             <api_token translate="label">
-              <label>API Token (from bottom of https://reverb.com/my/account/settings)*:</label>
+              <label>API Token</label>
+              <comment>From bottom of https://reverb.com/my/account/settings:</comment>
               <frontend_type>password</frontend_type>
               <sort_order>5</sort_order>
               <show_in_default>1</show_in_default>
@@ -77,7 +78,7 @@
 
           <fields>
             <enable_listing_creation translate="label">
-              <label>Enable Listing Creation*:</label>
+              <label>Enable Listing Creation</label>
               <frontend_type>select</frontend_type>
               <sort_order>10</sort_order>
               <show_in_default>1</show_in_default>
@@ -88,7 +89,8 @@
             </enable_listing_creation>
 
             <revInvent translate="label">
-              <label>Inventory Tracking (if no, all inventory will be set to 1)?*:</label>
+              <label>Inventory Tracking</label>
+              <comment>If no, all inventory will be set to 1</comment>
               <frontend_type>select</frontend_type>
               <sort_order>20</sort_order>
               <show_in_default>1</show_in_default>
@@ -99,7 +101,8 @@
             </revInvent>
 
             <revCond translate="label">
-              <label>Condition*:</label>
+              <label>Default Item Condition</label>
+              <comment>Brand New, Excellent, Very good, Good, Fair, Poor, Non functioning</comment>
               <frontend_type>text</frontend_type>
               <sort_order>30</sort_order>
               <show_in_default>1</show_in_default>
