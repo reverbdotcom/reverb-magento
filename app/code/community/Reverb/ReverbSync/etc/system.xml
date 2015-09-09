@@ -88,7 +88,7 @@
             </enable_listing_creation>
 
             <revInvent translate="label">
-              <label>Has Inventory?*:</label>
+              <label>Inventory Tracking (if no, all inventory will be set to 1)?*:</label>
               <frontend_type>select</frontend_type>
               <sort_order>20</sort_order>
               <show_in_default>1</show_in_default>
