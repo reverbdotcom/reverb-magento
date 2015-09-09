@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Reverb_Payment>
+            <version>0.0.1</version>
+        </Reverb_Payment>
+    </modules>
+
+    <global>
+        <models>
+            <reverb_payment>
+                <class>Reverb_Payment_Model</class>
+                <resourceModel>reverb_payment_mysql4</resourceModel>
+            </reverb_payment>
+            <reverb_payment_mysql4>
+                <class>Reverb_Payment_Model_Mysql4</class>
+            </reverb_payment_mysql4>
+        </models>
+
+        <helpers>
+            <reverb_payment>
+                <class>Reverb_Payment_Helper</class>
+            </reverb_payment>
+        </helpers>
+
+        <blocks>
+            <reverb_payment>
+                <class>Reverb_Payment_Block</class>
+            </reverb_payment>
+        </blocks>
+
+        <resources>
+            <reverb_payment_setup>
+                <setup>
+                    <module>Reverb_Payment</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </reverb_payment_setup>
+        </resources>
+    </global>
+
+    <default>
+        <payment>
+            <reverbpayment>
+                <active>1</active>
+                <model>reverb_payment/method_reverb</model>
+                <order_status>processing</order_status>
+                <payment_action>authorize_capture</payment_action>
+                <title>Payment Occurred In Reverb System</title>
+                <allowspecific>0</allowspecific>
+                <sort_order>1</sort_order>
+                <group>offline</group>
+            </reverbpayment>
+        </payment>
+    </default>
+</config>

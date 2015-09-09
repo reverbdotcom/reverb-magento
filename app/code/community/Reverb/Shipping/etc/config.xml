@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Reverb_Shipping>
+            <version>0.0.1</version>
+        </Reverb_Shipping>
+    </modules>
+
+    <global>
+        <models>
+            <reverb_shipping>
+                <class>Reverb_Shipping_Model</class>
+                <resourceModel>reverb_shipping_mysql4</resourceModel>
+            </reverb_shipping>
+            <reverb_shipping_mysql4>
+                <class>Reverb_Shipping_Model_Mysql4</class>
+            </reverb_shipping_mysql4>
+        </models>
+
+        <helpers>
+            <reverb_shipping>
+                <class>Reverb_Shipping_Helper</class>
+            </reverb_shipping>
+        </helpers>
+
+        <blocks>
+            <reverb_shipping>
+                <class>Reverb_Shipping_Block</class>
+            </reverb_shipping>
+        </blocks>
+
+        <resources>
+            <reverb_shipping_setup>
+                <setup>
+                    <module>Reverb_Shipping</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </reverb_shipping_setup>
+        </resources>
+    </global>
+
+    <default>
+        <carriers>
+            <reverbshipping>
+                <active>1</active>
+                <sallowspecific>0</sallowspecific>
+                <model>reverb_shipping/carrier_reverb</model>
+                <name>Reverb Shipping</name>
+                <title>Reverb Shipping</title>
+                <specificerrmsg>This shipping method is currently unavailable. If you would like to ship using this shipping method, please contact us.</specificerrmsg>
+            </reverbshipping>
+        </carriers>
+    </default>
+</config>

@@ -134,7 +134,7 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function findReverbListingUrlByMagentoSku($magento_sku)
     {
-        $revUrl = Mage::getStoreConfig('ReverbSync/extension/revUrl');
+        $revUrl = $this->_getBaseReverbUrl();
         $escaped_sku = urlencode($magento_sku);
         $params = "state=all&sku=" . $escaped_sku;
         $url = $revUrl . "/api/my/listings?" . $params;
@@ -236,6 +236,11 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         $web_url = $this->_getWebUrlFromListingResponseArray($listing_response);
 
         return $web_url;
+    }
+
+    protected function _getBaseReverbUrl()
+    {
+        return Mage::getStoreConfig('ReverbSync/extension/revUrl');
     }
 
     protected function _getCurlResource($url, $options_array = array())

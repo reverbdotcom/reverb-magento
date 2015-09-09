@@ -1,14 +1,12 @@
 <?xml version="1.0"?>
 <config>
     <modules>
-        <Reverb_ReverbSync>
+        <Reverb_Shipping>
             <active>true</active>
             <codePool>community</codePool>
             <depends>
-                <Reverb_ProcessQueue/>
-                <Reverb_Payment/>
-                <Reverb_Shipping/>
+                <Mage_Shipping/>
             </depends>
-        </Reverb_ReverbSync>
+        </Reverb_Shipping>
     </modules>
 </config>
