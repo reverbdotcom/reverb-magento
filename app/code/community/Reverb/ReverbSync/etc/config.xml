@@ -168,7 +168,7 @@
         <revInvent>1</revInvent>
       </reverbDefault>
       <extension>
-        <revUrl>https://reverb.com</revUrl>
+        <revUrl>https://sandbox.reverb.com</revUrl>
       </extension>
     </ReverbSync>
   </default>
