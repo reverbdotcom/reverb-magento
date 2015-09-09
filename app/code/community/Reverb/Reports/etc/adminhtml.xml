@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 
 <config>
+
     <acl>
         <resources>
             <admin>
@@ -29,6 +30,7 @@
             </admin>
         </resources>
     </acl>
+    <!-- 9/9/2015 - Removing Reverb Reports from the Reports Menu dropdown
     <menu>
         <report translate="title" module="reverb_reports">
             <children>
@@ -40,4 +42,5 @@
             </children>
         </report>
     </menu>
+    -->
 </config>
