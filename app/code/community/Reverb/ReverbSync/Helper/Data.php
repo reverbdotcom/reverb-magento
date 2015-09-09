@@ -16,6 +16,10 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function createOrUpdateReverbListing($product, $do_not_allow_creation = false)
     {
+        // Create empty wrapper in the event an exception is thrown
+        $listingWrapper = Mage::getModel('reverbSync/wrapper_listing');
+        $listingWrapper->setMagentoProduct($product);
+
         try
         {
             $magento_sku = $product->getSku();
@@ -38,6 +42,7 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
 
             $listingWrapper->setReverbWebUrl($reverb_web_url);
         }
+        // Defining specific catch block for Reverb_ReverbSync_Model_Exception_Status_Error for future customization
         catch(Reverb_ReverbSync_Model_Exception_Status_Error $e)
         {
             // Log Exception on reports row
@@ -48,6 +53,7 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         {
             // Log Exception on reports row
             $listingWrapper->setSyncDetails($e->getMessage());
+            $listingWrapper->setStatus(self::LISTING_STATUS_ERROR);
         }
 
         Mage::dispatchEvent('reverb_listing_synced', array('reverb_listing' => $listingWrapper));
