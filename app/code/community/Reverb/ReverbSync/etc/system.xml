@@ -113,6 +113,29 @@
 
           </fields>
         </reverbDefault>
+
+        <orders_sync translate="label">
+            <label>Order Sync</label>
+            <frontend_type>text</frontend_type>
+            <sort_order>200</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+
+            <fields>
+                <enabled translate="label">
+                    <label>Enable Order Sync</label>
+                    <comment>This setting affects both order creation and update</comment>
+                    <frontend_type>select</frontend_type>
+                    <sort_order>30</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <source_model>adminhtml/system_config_source_yesno</source_model>
+                    <validate>input-text required-entry</validate>
+                </enabled>
+            </fields>
+        </orders_sync>
       </groups>
     </ReverbSync>
   </sections>

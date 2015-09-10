@@ -161,7 +161,8 @@ class Reverb_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
 
     public function getCompletedAndAllQueueTasks($code = null)
     {
-        $allProcessQueueTaskCollection = $this->_getTaskCollectionModel();
+        $allProcessQueueTaskCollection = $this->_getTaskCollectionModel()
+                                                ->setOrder('last_executed_at', Zend_Db_Select::SQL_DESC);;
 
         if (!empty($code))
         {
@@ -171,7 +172,8 @@ class Reverb_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
         $all_process_queue_tasks = $allProcessQueueTaskCollection->getItems();
 
         $completedTasksCollection = $this->_getTaskCollectionModel()
-                                            ->addStatusFilter(Reverb_ProcessQueue_Model_Task::STATUS_COMPLETE);
+                                            ->addStatusFilter(Reverb_ProcessQueue_Model_Task::STATUS_COMPLETE)
+                                            ->setOrder('last_executed_at', Zend_Db_Select::SQL_DESC);
 
         if (!empty($code))
         {

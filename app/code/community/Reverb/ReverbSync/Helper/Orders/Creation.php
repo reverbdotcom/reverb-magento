@@ -13,6 +13,13 @@ class Reverb_ReverbSync_Helper_Orders_Creation extends Reverb_ReverbSync_Helper_
 
     public function createMagentoOrder(stdClass $reverbOrderObject)
     {
+        // Including this check here just to ensure that orders aren't synced if the setting is disabled
+        if (!Mage::helper('ReverbSync/orders_sync')->isOrderSyncEnabled())
+        {
+            $exception_message = Mage::helper('ReverbSync/orders_sync')->getOrderSyncIsDisabledMessage();
+            throw new Reverb_ReverbSync_Model_Exception_Deactivated_Order_Sync($exception_message);
+        }
+
         $quoteToBuild = Mage::getModel('sales/quote');
 
         $productToAddToQuote = $this->_getProductToAddToQuote($reverbOrderObject);

@@ -41,7 +41,7 @@ extends Mage_Adminhtml_Controller_Action {
     public function getBlockToShow()
     {
         $are_product_syncs_pending = $this->areProductSyncsPending();
-        $index_block = $are_product_syncs_pending ? '/adminhtml_index_syncing' : '/adminhtml_index';
+        $index_block = $are_product_syncs_pending ? '/adminhtml_listings_index_syncing' : '/adminhtml_listings_index';
         return "ReverbSync" . $index_block;
     }
 

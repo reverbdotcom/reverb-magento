@@ -16,10 +16,17 @@ class Reverb_ReverbSync_Helper_Orders_Retrieval extends Reverb_ReverbSync_Helper
     protected $_moduleName = 'ReverbSync';
 
     protected $_logModel = null;
-    protected $orderTaskResourceSingleton = null;
+    protected $_orderTaskResourceSingleton = null;
+    protected $_orderSyncHelper = null;
 
     public function queueReverbOrderCreations()
     {
+        if (!$this->_getOrderSyncHelper()->isOrderSyncEnabled())
+        {
+            $this->_getOrderSyncHelper()->logOrderSyncDisabledMessage();
+            return false;
+        }
+
         $reverb_orders_json = $this->_retrieveOrdersJsonFromReverb();
 
         $orders_array = $reverb_orders_json->orders;
@@ -101,17 +108,27 @@ class Reverb_ReverbSync_Helper_Orders_Retrieval extends Reverb_ReverbSync_Helper
 
     protected function _getOrderTaskResourceSingleton()
     {
-        if (is_null($this->orderTaskResourceSingleton))
+        if (is_null($this->_orderTaskResourceSingleton))
         {
-            $this->orderTaskResourceSingleton = Mage::getResourceSingleton('reverbSync/task_order');
+            $this->_orderTaskResourceSingleton = Mage::getResourceSingleton('reverbSync/task_order');
         }
 
-        return $this->orderTaskResourceSingleton;
+        return $this->_orderTaskResourceSingleton;
     }
 
     protected function _logError($error_message)
     {
         $this->_getLogModel()->logOrderSyncError($error_message);
+    }
+
+    protected function _getOrderSyncHelper()
+    {
+        if (is_null($this->_orderSyncHelper))
+        {
+            $this->_orderSyncHelper = Mage::helper('ReverbSync/orders_sync');
+        }
+
+        return $this->_orderSyncHelper;
     }
 
     protected function _getLogModel()

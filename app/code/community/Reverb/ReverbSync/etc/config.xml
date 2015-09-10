@@ -102,6 +102,29 @@
         </admin>
       </resources>
     </acl>
+
+    <events>
+        <should_reverb_shipping_be_allowed>
+            <observers>
+                <check_for_syncing_reverb_order>
+                    <type>singleton</type>
+                    <class>reverbSync/observer_orders</class>
+                    <method>checkForSyncingReverbOrderForShipping</method>
+                </check_for_syncing_reverb_order>
+            </observers>
+        </should_reverb_shipping_be_allowed>
+
+        <should_reverb_payment_be_allowed>
+            <observers>
+                <check_for_syncing_reverb_order>
+                    <type>singleton</type>
+                    <class>reverbSync/observer_orders</class>
+                    <method>checkForSyncingReverbOrderForPayment</method>
+                </check_for_syncing_reverb_order>
+            </observers>
+        </should_reverb_payment_be_allowed>
+    </events>
+
   </adminhtml>
 
   <admin>
@@ -125,17 +148,26 @@
     </routers>
   </admin>
 
-  <crontab>
-    <jobs>
-      <reverb_process_queue_process_tasks>
-        <schedule>
-          <cron_expr>*/2 * * * *</cron_expr>
-        </schedule>
-        <run>
-          <model>reverbSync/cron::attemptCronExecution</model>
-        </run>
-      </reverb_process_queue_process_tasks>
-    </jobs>
+    <crontab>
+        <jobs>
+            <reverb_process_queued_listing_sync_tasks>
+                <schedule>
+                    <cron_expr>*/2 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>reverbSync/cron_listings_sync::attemptCronExecution</model>
+                </run>
+            </reverb_process_queued_listing_sync_tasks>
+
+            <reverb_sync_orders>
+                <schedule>
+                    <cron_expr>*/5 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>reverbSync/cron_orders_sync::executeOrderRetrievalAndProcessing</model>
+                </run>
+            </reverb_sync_orders>
+        </jobs>
 
     <events>
       <should_reverb_shipping_be_allowed>
@@ -158,7 +190,7 @@
             </observers>
         </should_reverb_payment_be_allowed>
     </events>
-  </crontab>
+    </crontab>
 
   <default>
     <ReverbSync>
@@ -170,6 +202,9 @@
       <extension>
         <revUrl>https://sandbox.reverb.com</revUrl>
       </extension>
+        <orders_sync>
+            <enabled>0</enabled>
+        </orders_sync>
     </ReverbSync>
   </default>
 </config>

@@ -1,6 +1,6 @@
 <?php
 
-class Reverb_ReverbSync_Block_Adminhtml_Index_Syncing extends Mage_Adminhtml_Block_Widget_Container
+class Reverb_ReverbSync_Block_Adminhtml_Listings_Index_Syncing extends Mage_Adminhtml_Block_Widget_Container
 {
     const HEADER_TEXT_TEMPLATE = '%s of %s product listings have completed syncing with Reverb';
 
@@ -10,7 +10,7 @@ class Reverb_ReverbSync_Block_Adminhtml_Index_Syncing extends Mage_Adminhtml_Blo
         $block_module_groupname = "ReverbSync";
 
         $this->_objectId = 'reverb_stop_product_sync_container';
-        $this->setTemplate('widget/form/container.phtml');
+        $this->setTemplate('widget/view/container.phtml');
 
         parent::__construct();
 

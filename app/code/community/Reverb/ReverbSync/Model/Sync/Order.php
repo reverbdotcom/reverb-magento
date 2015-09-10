@@ -13,6 +13,13 @@ class Reverb_ReverbSync_Model_Sync_Order extends Reverb_ProcessQueue_Model_Task
 
     public function createReverbOrderInMagento(stdClass $argumentsObject)
     {
+        if (!Mage::helper('ReverbSync/orders_sync')->isOrderSyncEnabled())
+        {
+            $error_message = Mage::helper('ReverbSync/orders_sync')->getOrderSyncIsDisabledMessage();
+            Mage::getModel('reverbSync/log')->logOrderSyncError($error_message);
+            return $this->_returnAbortCallbackResult($error_message);
+        }
+
         $reverb_order_number = $argumentsObject->order_number;
 
         // Ensure that this order was not already created
@@ -29,6 +36,12 @@ class Reverb_ReverbSync_Model_Sync_Order extends Reverb_ProcessQueue_Model_Task
         try
         {
             $this->_getOrderCreationHelper()->createMagentoOrder($argumentsObject);
+        }
+        catch(Reverb_ReverbSync_Model_Exception_Deactivated_Order_Sync $e)
+        {
+            $error_message = $e->getMessage();
+            Mage::getModel('reverbSync/log')->logOrderSyncError($error_message);
+            return $this->_returnAbortCallbackResult($error_message);
         }
         catch(Exception $e)
         {
