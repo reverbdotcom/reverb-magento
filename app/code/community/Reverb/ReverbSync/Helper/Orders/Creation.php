@@ -48,6 +48,14 @@ class Reverb_ReverbSync_Helper_Orders_Creation extends Reverb_ReverbSync_Helper_
 
         $reverb_order_number = $reverbOrderObject->order_number;
         $order->setReverbOrderId($reverb_order_number);
+
+        $reverb_order_status = $reverbOrderObject->status;
+        if (empty($reverb_order_status))
+        {
+            $reverb_order_status = 'created';
+        }
+        $order->setReverbOrderStatus($reverb_order_status);
+
         $order->save();
 
         $this->_getShippingHelper()->unsetOrderBeingSynced();
