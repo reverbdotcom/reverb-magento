@@ -2,13 +2,17 @@
 
 class Reverb_ReverbSync_Block_Adminhtml_Listings_Index extends Mage_Adminhtml_Block_Widget_Container
 {
+    const LAST_EXECUTED_AT_TEMPLATE = '<h3>The last Reverb Listing Sync was executed at %s</h3>';
+
+    protected $_view_html = '';
+
     public function __construct()
     {
-        $this->_headerText = "Sync Products With Reverb";
+        $this->_setHeaderText();
         $block_module_groupname = "ReverbSync";
 
         $this->_objectId = 'reverb_product_sync_container';
-        $this->setTemplate('widget/form/container.phtml');
+        $this->setTemplate('widget/view/container.phtml');
 
         parent::__construct();
 
@@ -43,5 +47,25 @@ class Reverb_ReverbSync_Block_Adminhtml_Listings_Index extends Mage_Adminhtml_Bl
                 )
             );
         }
+    }
+
+    protected function _setHeaderText()
+    {
+        $this->_headerText = "Sync Products With Reverb";
+
+        list($completed_queue_tasks, $all_process_queue_tasks) =
+            Mage::helper('reverb_process_queue/task_processor')->getCompletedAndAllQueueTasks('listing_sync');
+
+        $mostRecentExecutedTask = reset($all_process_queue_tasks);
+        $gmt_most_recent_executed_at_date = $mostRecentExecutedTask->getLastExecutedAt();
+        $locale_most_recent_executed_at_date = Mage::getSingleton('core/date')
+                                                    ->date(null, $gmt_most_recent_executed_at_date);
+        $last_sync_message = sprintf(self::LAST_EXECUTED_AT_TEMPLATE, $locale_most_recent_executed_at_date);
+        $this->_view_html = $last_sync_message;
+    }
+
+    public function getViewHtml()
+    {
+        return $this->_view_html;
     }
 }
