@@ -5,11 +5,18 @@
         <resources>
             <admin>
                 <children>
+                    <sales>
+                        <children>
+                            <reverb_orders_sync translate="title" module="ReverbSync">
+                                <title>Reverb Orders Sync</title>
+                            </reverb_orders_sync>
+                        </children>
+                    </sales>
                     <catalog>
                         <children>
-                            <reverb_sync translate="title" module="ReverbSync">
-                                <title>Reverb Bulk Sync</title>
-                            </reverb_sync>
+                            <reverb_listings_sync translate="title" module="ReverbSync">
+                                <title>Reverb Bulk Listings Sync</title>
+                            </reverb_listings_sync>
                         </children>
                     </catalog>
                 </children>
@@ -17,13 +24,22 @@
         </resources>
     </acl>
     <menu>
+        <sales translate="title" module="ReverbSync">
+            <children>
+                <reverb_orders_sync translate="title" module="ReverbSync">
+                    <title>Reverb Orders Sync</title>
+                    <action>adminhtml/orders_sync</action>
+                    <sort_order>15</sort_order>
+                </reverb_orders_sync>
+            </children>
+        </sales>
         <catalog translate="title" module="ReverbSync">
             <children>
-                <reverb_sync translate="title" module="ReverbSync">
-                    <title>Reverb Bulk Sync</title>
+                <reverb_listings_sync translate="title" module="ReverbSync">
+                    <title>Reverb Bulk Listings Sync</title>
                     <action>adminhtml/reports_reverbreport</action>
-                    <sort_order>0</sort_order>
-                </reverb_sync>
+                    <sort_order>5</sort_order>
+                </reverb_listings_sync>
             </children>
         </catalog>
     </menu>
