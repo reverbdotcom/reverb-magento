@@ -10,7 +10,7 @@ class Reverb_ReverbSync_Adminhtml_Orders_SyncController extends Reverb_ReverbSyn
     {
         try
         {
-            Mage::helper('ReverbSync/orders_retrieval')->queueReverbOrderCreations();
+            Mage::helper('ReverbSync/orders_retrieval_creation')->queueReverbOrderSyncActions();
 
             Mage::helper('ReverbSync/orders_creation_task_processor')->processQueueTasks('order_creation');
         }

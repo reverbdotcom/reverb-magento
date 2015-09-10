@@ -16,7 +16,7 @@ class Reverb_ReverbSync_Model_Mysql4_Task_Order extends Reverb_ReverbSync_Model_
         $this->_init('reverb_process_queue/task_unique','task_id');
     }
 
-    public function queueOrderCreationByReverbOrderDataObject($orderDataObject)
+    public function queueOrderCreationByReverbOrderDataObject(stdClass $orderDataObject)
     {
         $order_number = $orderDataObject->order_number;
 
