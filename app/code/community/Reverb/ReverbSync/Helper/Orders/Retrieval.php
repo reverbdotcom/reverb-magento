@@ -11,7 +11,7 @@ class Reverb_ReverbSync_Helper_Orders_Retrieval extends Reverb_ReverbSync_Helper
     const EXCEPTION_QUEUE_ORDER_CREATION = 'An exception occurred while trying to queue order creation for Reverb order with number %s: %s';
     const ERROR_NO_ORDER_CREATION_QUEUE_ROWS_INSERTED = 'No order creation queue rows were inserted for Reverb order with number %s';
 
-    const ORDERS_RETRIEVAL_URL_TEMPLATE = 'api/my/orders/selling/all?created_start_date=%s&created_end_date=%s';
+    const ORDERS_RETRIEVAL_URL_TEMPLATE = '/api/my/orders/selling/all?created_start_date=%s&created_end_date=%s';
 
     protected $_moduleName = 'ReverbSync';
 
