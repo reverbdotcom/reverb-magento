@@ -4,7 +4,7 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
 {
     const ERROR_LISTING_CREATION_IS_NOT_ENABLED = 'Reverb listing creation has not been enabled.';
 
-    const API_CALL_LOG_TEMPLATE = "\n%s\n%s\n%s\n";
+    const API_CALL_LOG_TEMPLATE = "\n%s\n%s\n%s\n%s\n";
 
     const LISTING_STATUS_ERROR = 0;
     const LISTING_STATUS_SUCCESS = 1;
@@ -89,7 +89,7 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         // Close the CURL Resource
         $curlResource->close();
         // Log the response
-        $this->_logApiCall($content, $post_response_as_json, 'createObject');
+        $this->_logApiCall($content, $post_response_as_json, 'createObject', $status);
         $curlResource->logRequest();
         // Decode the json response
         $response = json_decode($post_response_as_json, true);
@@ -146,7 +146,7 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         // Close the CURL Resource
         $curlResource->close();
         // Log the response
-        $this->_logApiCall($params, $json_response, 'findReverbListingUrlByMagentoSku');
+        $this->_logApiCall($params, $json_response, 'findReverbListingUrlByMagentoSku', $status);
         $curlResource->logRequest();
 
         $response = json_decode($json_response, true);
@@ -206,7 +206,7 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         // Close the CURL Resource
         $curlResource->close();
         // Log the response
-        $this->_logApiCall($content, $put_response_as_json, 'updateObject');
+        $this->_logApiCall($content, $put_response_as_json, 'updateObject', $status);
         $curlResource->logRequest();
 
         $response = json_decode($put_response_as_json, true);
@@ -257,9 +257,9 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         return $curlResource;
     }
 
-    protected function _logApiCall($request, $response, $api_request)
+    protected function _logApiCall($request, $response, $api_request, $status)
     {
-        $message = sprintf(self::API_CALL_LOG_TEMPLATE, $api_request, $request, $response);
+        $message = sprintf(self::API_CALL_LOG_TEMPLATE, $api_request, $request, $status, $response);
         $file = 'reverb_' . $api_request . '.log';
         Mage::log($message, null, $file);
     }
