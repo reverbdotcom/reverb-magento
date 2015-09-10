@@ -4,7 +4,7 @@
  * Created: 8/14/15
  */
 
-class Reverb_ReverbSync_Model_Cron
+class Reverb_ReverbSync_Model_Cron_Listings_Sync
     extends Reverb_Process_Model_Locked_File_Cron_Abstract
     implements Reverb_Process_Model_Locked_File_Cron_Interface
 {

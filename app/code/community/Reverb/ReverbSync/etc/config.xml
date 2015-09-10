@@ -125,17 +125,26 @@
     </routers>
   </admin>
 
-  <crontab>
-    <jobs>
-      <reverb_process_queue_process_tasks>
-        <schedule>
-          <cron_expr>*/2 * * * *</cron_expr>
-        </schedule>
-        <run>
-          <model>reverbSync/cron::attemptCronExecution</model>
-        </run>
-      </reverb_process_queue_process_tasks>
-    </jobs>
+    <crontab>
+        <jobs>
+            <reverb_process_queued_listing_sync_tasks>
+                <schedule>
+                    <cron_expr>*/2 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>reverbSync/cron_listings_sync::attemptCronExecution</model>
+                </run>
+            </reverb_process_queued_listing_sync_tasks>
+
+            <reverb_sync_orders>
+                <schedule>
+                    <cron_expr>*/5 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>reverbSync/cron_orders_sync::executeOrderRetrievalAndProcessing</model>
+                </run>
+            </reverb_sync_orders>
+        </jobs>
 
     <events>
       <should_reverb_shipping_be_allowed>
@@ -158,7 +167,7 @@
             </observers>
         </should_reverb_payment_be_allowed>
     </events>
-  </crontab>
+    </crontab>
 
   <default>
     <ReverbSync>
