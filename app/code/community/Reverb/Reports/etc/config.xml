@@ -79,6 +79,14 @@
                     </modules>
                 </args>
             </adminhtml>
+
+            <reverb_reports>
+                <use>admin</use>
+                <args>
+                    <module>Reverb_Reports</module>
+                    <frontName>reverbReports</frontName>
+                </args>
+            </reverb_reports>
         </routers>
     </admin>
 </config>

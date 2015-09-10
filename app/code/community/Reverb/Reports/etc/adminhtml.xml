@@ -36,7 +36,7 @@
             <children>
                 <reverbreport translate="title" module="reverb_reports">
                     <title>Reverb Report</title>
-                    <action>adminhtml/reports_reverbreport</action>
+                    <action>reverbReports/adminhtml_reports_reverbreport</action>
                     <sort_order>0</sort_order>
                 </reverbreport>
             </children>

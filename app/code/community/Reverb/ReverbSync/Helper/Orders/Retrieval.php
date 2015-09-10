@@ -27,9 +27,19 @@ class Reverb_ReverbSync_Helper_Orders_Retrieval extends Reverb_ReverbSync_Helper
             return false;
         }
 
-        $reverb_orders_json = $this->_retrieveOrdersJsonFromReverb();
+        $reverbOrdersJsonObject = $this->_retrieveOrdersJsonFromReverb();
 
-        $orders_array = $reverb_orders_json->orders;
+        if (!is_object($reverbOrdersJsonObject))
+        {
+            return false;
+        }
+
+        $orders_array = $reverbOrdersJsonObject->orders;
+
+        if (!is_array($orders_array))
+        {
+            return false;
+        }
 
         foreach ($orders_array as $orderDataObject)
         {

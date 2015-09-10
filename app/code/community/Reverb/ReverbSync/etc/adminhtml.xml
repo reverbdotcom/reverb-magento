@@ -28,7 +28,7 @@
             <children>
                 <reverb_orders_sync translate="title" module="ReverbSync">
                     <title>Reverb Orders Sync</title>
-                    <action>adminhtml/orders_sync</action>
+                    <action>reverbSync/adminhtml_orders_sync</action>
                     <sort_order>15</sort_order>
                 </reverb_orders_sync>
             </children>
@@ -37,7 +37,7 @@
             <children>
                 <reverb_listings_sync translate="title" module="ReverbSync">
                     <title>Reverb Bulk Listings Sync</title>
-                    <action>adminhtml/reports_reverbreport</action>
+                    <action>reverbReports/adminhtml_reports_reverbreport</action>
                     <sort_order>5</sort_order>
                 </reverb_listings_sync>
             </children>
