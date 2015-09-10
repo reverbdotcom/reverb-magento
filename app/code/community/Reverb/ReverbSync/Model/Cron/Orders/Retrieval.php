@@ -14,6 +14,12 @@ class Reverb_ReverbSync_Model_Cron_Orders_Retrieval
     {
         try
         {
+            if (!Mage::helper('ReverbSync/orders_sync')->isOrderSyncEnabled())
+            {
+                Mage::helper('ReverbSync/orders_sync')->logOrderSyncDisabledMessage();
+                return false;
+            }
+
             Mage::helper('ReverbSync/orders_retrieval')->queueReverbOrderCreations();
         }
         catch(Exception $e)

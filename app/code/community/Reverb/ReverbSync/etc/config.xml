@@ -170,6 +170,9 @@
       <extension>
         <revUrl>https://sandbox.reverb.com</revUrl>
       </extension>
+        <orders_sync>
+            <enabled>0</enabled>
+        </orders_sync>
     </ReverbSync>
   </default>
 </config>

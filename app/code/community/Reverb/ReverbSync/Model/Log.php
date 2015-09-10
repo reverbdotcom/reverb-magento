@@ -10,14 +10,14 @@ class Reverb_ReverbSync_Model_Log
 
     public function logOrderSyncError($error_message)
     {
-        $this->logSyncError($error_message, 'orders_sync');
+        $this->logSyncError($error_message, 'orders');
     }
 
     public function logSyncError($error_message, $sync_process = null)
     {
         if (is_null($sync_process))
         {
-            $sync_process = 'orders_sync';
+            $sync_process = 'orders';
         }
 
         $log_file = self::LOG_FILE_PREFIX . '_' . $sync_process . '.log';
