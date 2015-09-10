@@ -68,6 +68,11 @@ class Reverb_ReverbSync_Block_Adminhtml_Orders_Index extends Mage_Adminhtml_Bloc
         if ($outstanding_tasks_remaining == 0)
         {
             $mostRecentTask = reset($all_process_queue_tasks);
+            if (!is_object($mostRecentTask))
+            {
+                return;
+            }
+
             $gmt_most_recent_executed_at_date = $mostRecentTask->getLastExecutedAt();
             $locale_most_recent_executed_at_date = Mage::getSingleton('core/date')
                                                     ->date(null, $gmt_most_recent_executed_at_date);

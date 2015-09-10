@@ -57,6 +57,12 @@ class Reverb_ReverbSync_Block_Adminhtml_Listings_Index extends Mage_Adminhtml_Bl
             Mage::helper('reverb_process_queue/task_processor')->getCompletedAndAllQueueTasks('listing_sync');
 
         $mostRecentExecutedTask = reset($all_process_queue_tasks);
+
+        if (!is_object($mostRecentExecutedTask))
+        {
+            return;
+        }
+
         $gmt_most_recent_executed_at_date = $mostRecentExecutedTask->getLastExecutedAt();
         $locale_most_recent_executed_at_date = Mage::getSingleton('core/date')
                                                     ->date(null, $gmt_most_recent_executed_at_date);
