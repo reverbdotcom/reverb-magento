@@ -8,6 +8,11 @@ abstract class Reverb_ReverbSync_Model_Mysql4_Task extends Mage_Core_Model_Mysql
 {
     abstract public function getTaskCode();
 
+    public function _construct()
+    {
+        $this->_init('reverb_process_queue/task','task_id');
+    }
+
     public function deleteAllTasks()
     {
         $task_code = $this->getTaskCode();
