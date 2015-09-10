@@ -80,7 +80,7 @@ class Reverb_ReverbSync_Helper_Orders_Retrieval extends Reverb_ReverbSync_Helper
 
     protected function _retrieveOrdersJsonFromReverb()
     {
-        $base_url = $this->_getBaseReverbUrl();
+        $base_url = $this->_getReverbAPIBaseUrl();
 
         $current_gmt_timestamp = Mage::getSingleton('core/date')->gmtTimestamp();
         $one_day_ago_timestamp = $current_gmt_timestamp - (60 * 60 * 24 * 100);
@@ -93,10 +93,13 @@ class Reverb_ReverbSync_Helper_Orders_Retrieval extends Reverb_ReverbSync_Helper
         $api_url = $base_url . $api_url_path;
 
         $curlResource = $this->_getCurlResource($api_url);
-        $curlResource->connect($api_url);
-
+        $status = $curlResource->getRequestHttpCode();
         //Execute the API call
         $json_response = $curlResource->read();
+        $curlResource->close();
+        // Log the Response
+        $curlResource->logRequest();
+        $this->_logApiCall($api_url_path, $json_response, 'retrieveOrders', $status);
 
         $json_decoded_response = json_decode($json_response);
 
