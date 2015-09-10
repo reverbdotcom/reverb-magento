@@ -8,7 +8,7 @@ class Reverb_ReverbSync_Helper_Orders_Retrieval_Creation
     extends Reverb_ReverbSync_Helper_Orders_Retrieval
 {
     const ORDERS_CREATION_RETRIEVAL_URL_TEMPLATE = '/api/my/orders/selling/all?created_start_date=%s&created_end_date=%s';
-    const HOURS_IN_PAST_FOR_CREATION_QUERY = 24;
+    const MINUTES_IN_PAST_FOR_CREATION_QUERY = 1440;
 
     public function queueOrderActionByReverbOrderDataObject(stdClass $orderDataObject)
     {
@@ -20,9 +20,9 @@ class Reverb_ReverbSync_Helper_Orders_Retrieval_Creation
         return self::ORDERS_CREATION_RETRIEVAL_URL_TEMPLATE;
     }
 
-    protected function _getHoursInPastForAPICall()
+    protected function _getMinutesInPastForAPICall()
     {
-        return self::HOURS_IN_PAST_FOR_CREATION_QUERY;
+        return self::MINUTES_IN_PAST_FOR_CREATION_QUERY;
     }
 
     public function getAPICallDescription()

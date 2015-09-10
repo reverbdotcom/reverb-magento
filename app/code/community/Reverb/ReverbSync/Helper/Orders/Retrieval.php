@@ -23,7 +23,7 @@ abstract class Reverb_ReverbSync_Helper_Orders_Retrieval extends Reverb_ReverbSy
 
     abstract protected function _getAPICallUrlPathTemplate();
 
-    abstract protected function _getHoursInPastForAPICall();
+    abstract protected function _getMinutesInPastForAPICall();
 
     abstract public function getAPICallDescription();
 
@@ -101,10 +101,10 @@ abstract class Reverb_ReverbSync_Helper_Orders_Retrieval extends Reverb_ReverbSy
         $base_url = $this->_getReverbAPIBaseUrl();
 
         $api_call_url_path_template = $this->_getAPICallUrlPathTemplate();
-        $hours_in_past_for_api_call = $this->_getHoursInPastForAPICall();
+        $minutes_in_past_for_api_call = $this->_getMinutesInPastForAPICall();
 
         $current_gmt_timestamp = Mage::getSingleton('core/date')->gmtTimestamp();
-        $past_timestamp = $current_gmt_timestamp - (60 * 60 * 24 * $hours_in_past_for_api_call);
+        $past_timestamp = $current_gmt_timestamp - (60 * $minutes_in_past_for_api_call);
         $current_gmt_datetime = Mage::getSingleton('core/date')->date('c', $current_gmt_timestamp);
         $one_day_ago_gmt_datetime = Mage::getSingleton('core/date')->date('c', $past_timestamp);
 
