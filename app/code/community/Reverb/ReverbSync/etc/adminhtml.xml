@@ -17,6 +17,9 @@
                             <reverb_listings_sync translate="title" module="ReverbSync">
                                 <title>Reverb Bulk Listings Sync</title>
                             </reverb_listings_sync>
+                            <reverb_category_sync translate="title" module="ReverbSync">
+                                <title>Reverb Category Sync</title>
+                            </reverb_category_sync>
                         </children>
                     </catalog>
                 </children>
@@ -40,6 +43,12 @@
                     <action>reverbReports/adminhtml_reports_reverbreport</action>
                     <sort_order>5</sort_order>
                 </reverb_listings_sync>
+
+                <reverb_category_sync translate="title" module="ReverbSync">
+                    <title>Reverb Category Sync</title>
+                    <action>reverbSync/adminhtml_category_sync</action>
+                    <sort_order>15</sort_order>
+                </reverb_category_sync>
             </children>
         </catalog>
     </menu>
