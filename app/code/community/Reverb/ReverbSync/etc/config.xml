@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Reverb_ReverbSync>
-            <version>0.1.2</version>
+            <version>0.1.4</version>
         </Reverb_ReverbSync>
     </modules>
     <global>
@@ -123,6 +123,16 @@
                 </check_for_syncing_reverb_order>
             </observers>
         </should_reverb_payment_be_allowed>
+
+        <controller_action_layout_render_before_adminhtml_sales_order_view>
+            <observers>
+                <update_layout_for_reverb_order>
+                    <type>singleton</type>
+                    <class>reverbSync/observer_orders</class>
+                    <method>updateAdminOrderViewForReverbOrders</method>
+                </update_layout_for_reverb_order>
+            </observers>
+        </controller_action_layout_render_before_adminhtml_sales_order_view>
     </events>
 
   </adminhtml>
@@ -169,27 +179,27 @@
             </reverb_sync_orders>
         </jobs>
 
-    <events>
-      <should_reverb_shipping_be_allowed>
-          <observers>
-              <check_for_syncing_reverb_order>
-                  <type>singleton</type>
-                  <class>reverbSync/observer_orders</class>
-                  <method>checkForSyncingReverbOrderForShipping</method>
-              </check_for_syncing_reverb_order>
-          </observers>
-      </should_reverb_shipping_be_allowed>
+        <events>
+          <should_reverb_shipping_be_allowed>
+              <observers>
+                  <check_for_syncing_reverb_order>
+                      <type>singleton</type>
+                      <class>reverbSync/observer_orders</class>
+                      <method>checkForSyncingReverbOrderForShipping</method>
+                  </check_for_syncing_reverb_order>
+              </observers>
+          </should_reverb_shipping_be_allowed>
 
-        <should_reverb_payment_be_allowed>
-            <observers>
-                <check_for_syncing_reverb_order>
-                    <type>singleton</type>
-                    <class>reverbSync/observer_orders</class>
-                    <method>checkForSyncingReverbOrderForPayment</method>
-                </check_for_syncing_reverb_order>
-            </observers>
-        </should_reverb_payment_be_allowed>
-    </events>
+            <should_reverb_payment_be_allowed>
+                <observers>
+                    <check_for_syncing_reverb_order>
+                        <type>singleton</type>
+                        <class>reverbSync/observer_orders</class>
+                        <method>checkForSyncingReverbOrderForPayment</method>
+                    </check_for_syncing_reverb_order>
+                </observers>
+            </should_reverb_payment_be_allowed>
+        </events>
     </crontab>
 
   <default>

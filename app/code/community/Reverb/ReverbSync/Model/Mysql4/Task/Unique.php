@@ -6,6 +6,11 @@
 
 abstract class Reverb_ReverbSync_Model_Mysql4_Task_Unique extends Reverb_ReverbSync_Model_Mysql4_Task
 {
+    public function _construct()
+    {
+        $this->_init('reverb_process_queue/task_unique','task_id');
+    }
+
     protected function _getInsertColumnsArray()
     {
         return array('code', 'unique_id', 'status', 'object', 'method', 'serialized_arguments_object');

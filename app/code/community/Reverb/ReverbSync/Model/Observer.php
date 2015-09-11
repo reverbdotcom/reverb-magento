@@ -37,6 +37,14 @@ class Reverb_ReverbSync_Model_Observer
                     $product_id = $item->getProductId();
                     $productSyncHelper->executeIndividualProductDataSync($product_id, true);
                 }
+                catch(Reverb_ReverbSync_Model_Exception_Product_Excluded $e)
+                {
+                    // If the product has been listed as being excluded from the sync, don't log an exception
+                }
+                catch(Reverb_ReverbSync_Model_Exception_Deactivated $e)
+                {
+                    // If the module is deactivated, don't log an exception
+                }
                 catch(Exception $e)
                 {
                     Mage::logException($e);

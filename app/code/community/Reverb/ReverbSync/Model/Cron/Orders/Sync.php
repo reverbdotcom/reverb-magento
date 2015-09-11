@@ -10,5 +10,6 @@ class Reverb_ReverbSync_Model_Cron_Orders_Sync
     {
         Mage::getModel('reverbSync/cron_orders_retrieval')->attemptCronExecution();
         Mage::getModel('reverbSync/cron_orders_creation')->attemptCronExecution();
+        Mage::getModel('reverbSync/cron_orders_update')->attemptCronExecution();
     }
 } 

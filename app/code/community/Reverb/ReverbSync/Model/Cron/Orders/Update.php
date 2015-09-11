@@ -1,14 +1,14 @@
 <?php
 /**
  * Author: Sean Dunagan
- * Created: 8/22/15
+ * Created: 9/10/15
  */
 
-class Reverb_ReverbSync_Model_Cron_Orders_Retrieval
+class Reverb_ReverbSync_Model_Cron_Orders_Update
     extends Reverb_Process_Model_Locked_File_Cron_Abstract
     implements Reverb_Process_Model_Locked_File_Cron_Interface
 {
-    const CRON_UNCAUGHT_EXCEPTION = 'An uncaught exception occurred while processing the Reverb Order Sync Process Queue: %s';
+    const CRON_UNCAUGHT_EXCEPTION = 'An uncaught exception occurred while processing the Reverb Order Update Process Queue: %s';
 
     public function executeCron()
     {
@@ -19,8 +19,7 @@ class Reverb_ReverbSync_Model_Cron_Orders_Retrieval
                 return false;
             }
 
-            Mage::helper('ReverbSync/orders_retrieval_creation')->queueReverbOrderSyncActions();
-            Mage::helper('ReverbSync/orders_retrieval_update')->queueReverbOrderSyncActions();
+            Mage::helper('reverb_process_queue/task_processor')->processQueueTasks('order_update');
         }
         catch(Exception $e)
         {
@@ -31,11 +30,6 @@ class Reverb_ReverbSync_Model_Cron_Orders_Retrieval
         }
     }
 
-    /**
-     * We only want one thread to be retrieving orders via the Reverb API
-     *
-     * @return int
-     */
     public function getParallelThreadCount()
     {
         return 1;
@@ -43,16 +37,16 @@ class Reverb_ReverbSync_Model_Cron_Orders_Retrieval
 
     public function getLockFileName()
     {
-        return 'reverb_order_retrieval';
+        return 'reverb_order_update';
     }
 
     public function getLockFileDirectory()
     {
-        return Mage::getBaseDir('var') . DS . 'lock' . DS . 'reverb_order_retrieval';
+        return Mage::getBaseDir('var') . DS . 'lock' . DS . 'reverb_order_update';
     }
 
     public function getCronCode()
     {
-        return 'reverb_order_retrieval';
+        return 'reverb_order_update';
     }
 }

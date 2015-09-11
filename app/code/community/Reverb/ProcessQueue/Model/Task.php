@@ -61,6 +61,7 @@ class Reverb_ProcessQueue_Model_Task
         if (!($methodCallbackResult instanceof Reverb_ProcessQueue_Model_Task_Result_Interface))
         {
             $methodCallbackResultToReturn = Mage::getModel('reverb_process_queue/task_result');
+            // Treat whatever was returned by the callback as the resulting message
             $methodCallbackResultToReturn->setMethodCallbackResult($methodCallbackResult);
             // Assume completion
             $methodCallbackResultToReturn->setTaskStatus(Reverb_ProcessQueue_Model_Task::STATUS_COMPLETE);
