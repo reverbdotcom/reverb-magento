@@ -86,11 +86,11 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         $curlResource = $this->_getCurlResource($url);
         $post_response_as_json = $curlResource->executePostRequest($content);
         $status = $curlResource->getRequestHttpCode();
+        $curlResource->logRequest();
         // Close the CURL Resource
         $curlResource->close();
         // Log the response
         $this->_logApiCall($content, $post_response_as_json, 'createObject', $status);
-        $curlResource->logRequest();
         // Decode the json response
         $response = json_decode($post_response_as_json, true);
 
@@ -143,11 +143,11 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         $curlResource = $this->_getCurlResource($url);
         $json_response = $curlResource->read();
         $status = $curlResource->getRequestHttpCode();
+        $curlResource->logRequest();
         // Close the CURL Resource
         $curlResource->close();
         // Log the response
         $this->_logApiCall($params, $json_response, 'findReverbListingUrlByMagentoSku', $status);
-        $curlResource->logRequest();
 
         $response = json_decode($json_response, true);
 
@@ -203,11 +203,11 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         $curlResource = $this->_getCurlResource($rev_url_to_put);
         $put_response_as_json = $curlResource->executePutRequest($content);
         $status = $curlResource->getRequestHttpCode();
+        $curlResource->logRequest();
         // Close the CURL Resource
         $curlResource->close();
         // Log the response
         $this->_logApiCall($content, $put_response_as_json, 'updateObject', $status);
-        $curlResource->logRequest();
 
         $response = json_decode($put_response_as_json, true);
 
