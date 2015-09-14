@@ -6,7 +6,7 @@
 
 class Reverb_ReverbSync_Model_Adapter_Curl extends Varien_Http_Adapter_Curl
 {
-    const REQUEST_LOG_TEMPLATE = "\ncurl -%s %s %s %s";
+    const REQUEST_LOG_TEMPLATE = "\ncurl -X%s %s %s %s";
     const AUTH_TOKEN_HEADER_TEMPLATE = '-H "%s"';
     const POST_DATA_ARGUMENT_TEMPLATE = '--data %s';
 
