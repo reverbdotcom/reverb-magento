@@ -117,9 +117,9 @@ abstract class Reverb_ReverbSync_Helper_Orders_Retrieval extends Reverb_ReverbSy
         //Execute the API call
         $json_response = $curlResource->read();
         $status = $curlResource->getRequestHttpCode();
-        $curlResource->close();
         // Log the Response
         $curlResource->logRequest();
+        $curlResource->close();
         $this->_logApiCall($api_url_path, $json_response, $this->getAPICallDescription(), $status);
 
         $json_decoded_response = json_decode($json_response);

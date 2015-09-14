@@ -9,6 +9,7 @@ class Reverb_ReverbSync_Model_Adapter_Curl extends Varien_Http_Adapter_Curl
     const REQUEST_LOG_TEMPLATE = "\ncurl -X%s %s %s %s";
     const AUTH_TOKEN_HEADER_TEMPLATE = '-H "%s"';
     const POST_DATA_ARGUMENT_TEMPLATE = '--data %s';
+    const POST_ERROR_LOG_TEMPLATE = 'The following error occurred with the post above: %s';
 
     const REQUEST_LOG_FILE = 'reverb_curl_requests.log';
 
@@ -85,6 +86,18 @@ class Reverb_ReverbSync_Model_Adapter_Curl extends Varien_Http_Adapter_Curl
 
         $string_to_log = sprintf(self::REQUEST_LOG_TEMPLATE, $http_method_log, $x_auth_token_header_to_log, $url_to_log, $body_to_log);
         Mage::log($string_to_log, null, self::REQUEST_LOG_FILE);
+
+        $status = $this->getRequestHttpCode();
+
+        $status = 0;
+
+        $status_as_int = intval($status);
+        if ($status_as_int == 0)
+        {
+            $curl_error = curl_errno($this->_getResource());
+            $error_string_to_log = sprintf(self::POST_ERROR_LOG_TEMPLATE, $curl_error);
+            Mage::log($error_string_to_log, null, self::REQUEST_LOG_FILE);
+        }
     }
 
     protected function _getOption($option)
