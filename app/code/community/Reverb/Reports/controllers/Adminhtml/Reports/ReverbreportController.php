@@ -58,6 +58,10 @@ extends Mage_Adminhtml_Controller_Action {
     $this -> loadLayout() -> renderLayout();
   }
 
+    public function ajaxGridAction() {
+        $this -> loadLayout() -> renderLayout();
+    }
+
   protected function _isAllowed() {
     return Mage::getSingleton('admin/session') -> isAllowed('reverb_reports/reverbreport');
   }
