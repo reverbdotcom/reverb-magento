@@ -50,4 +50,17 @@ class Reverb_ProcessQueue_Model_Source_Task_Status
         }
         return $_options;
     }
+
+    public function getLabelByOptionValue($option_value)
+    {
+        foreach ($this->getAllOptions() as $option)
+        {
+            $value = $option['value'];
+            if($value == $option_value)
+            {
+                return $option['label'];
+            }
+        }
+        return '';
+    }
 } 
