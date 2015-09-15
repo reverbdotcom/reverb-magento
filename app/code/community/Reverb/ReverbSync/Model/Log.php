@@ -8,6 +8,14 @@ class Reverb_ReverbSync_Model_Log
 {
     const LOG_FILE_PREFIX = 'reverb_sync';
 
+    public function setSessionErrorIfAdminIsLoggedIn($error_message)
+    {
+        if (Mage::helper('reverb_base')->isAdminLoggedIn())
+        {
+            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('ReverbSync')->__($error_message));
+        }
+    }
+
     public function logOrderSyncError($error_message)
     {
         $this->logSyncError($error_message, 'orders');

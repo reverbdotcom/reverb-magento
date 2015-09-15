@@ -1,3 +1,4 @@
+app/etc/modules/Reverb_Base.xml                                                     app/etc/modules/Reverb_Base.xml
 app/etc/modules/Reverb_Io.xml                                                       app/etc/modules/Reverb_Io.xml
 app/etc/modules/Reverb_Payment.xml                                                  app/etc/modules/Reverb_Payment.xml
 app/etc/modules/Reverb_Process.xml                                                  app/etc/modules/Reverb_Process.xml

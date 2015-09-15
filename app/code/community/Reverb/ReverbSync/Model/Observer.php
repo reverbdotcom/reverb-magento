@@ -2,6 +2,8 @@
 
 class Reverb_ReverbSync_Model_Observer
 {
+    protected $_logSingleton = null;
+
     //function to create the product in reverb
     public function productSave($observer)
     {
@@ -14,10 +16,12 @@ class Reverb_ReverbSync_Model_Observer
         catch(Reverb_ReverbSync_Model_Exception_Product_Excluded $e)
         {
             // If the product has been listed as being excluded from the sync, don't prevent product save
+            $this->_getLogSingleton()->setSessionErrorIfAdminIsLoggedIn($e->getMessage());
         }
         catch(Reverb_ReverbSync_Model_Exception_Deactivated $e)
         {
             // If the module is deactivated, don't prevent product save
+            $this->_getLogSingleton()->setSessionErrorIfAdminIsLoggedIn($e->getMessage());
         }
         // Any other Exception is understood to prevent product save
     }
@@ -40,10 +44,12 @@ class Reverb_ReverbSync_Model_Observer
                 catch(Reverb_ReverbSync_Model_Exception_Product_Excluded $e)
                 {
                     // If the product has been listed as being excluded from the sync, don't log an exception
+                    $this->_getLogSingleton()->setSessionErrorIfAdminIsLoggedIn($e->getMessage());
                 }
                 catch(Reverb_ReverbSync_Model_Exception_Deactivated $e)
                 {
                     // If the module is deactivated, don't log an exception
+                    $this->_getLogSingleton()->setSessionErrorIfAdminIsLoggedIn($e->getMessage());
                 }
                 catch(Exception $e)
                 {
@@ -55,5 +61,15 @@ class Reverb_ReverbSync_Model_Observer
         {
             Mage::logException($e);
         }
+    }
+
+    protected function _getLogSingleton()
+    {
+        if (is_null($this->_logSingleton))
+        {
+            $this->_logSingleton = Mage::getSingleton('reverbSync/log');
+        }
+
+        return $this->_logSingleton;
     }
 }
