@@ -2,6 +2,7 @@
 
 class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
 {
+    const MODULE_NOT_ENABLED = 'The Reverb Module is not enabled, so products can not be synced with Reverb. Please enable this functionality in System -> Configuration -> Reverb Configuration -> Reverb Extension';
     const ERROR_LISTING_CREATION_IS_NOT_ENABLED = 'Reverb listing creation has not been enabled.';
 
     const API_CALL_LOG_TEMPLATE = "\n%s\n%s\n%s\n%s\n";
@@ -45,12 +46,16 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         // Defining specific catch block for Reverb_ReverbSync_Model_Exception_Status_Error for future customization
         catch(Reverb_ReverbSync_Model_Exception_Status_Error $e)
         {
+            Mage::getSingleton('reverbSync/log')->setSessionErrorIfAdminIsLoggedIn($e->getMessage());
+
             // Log Exception on reports row
             $listingWrapper->setSyncDetails($e->getMessage());
             $listingWrapper->setStatus(self::LISTING_STATUS_ERROR);
         }
         catch(Exception $e)
         {
+            Mage::getSingleton('reverbSync/log')->setSessionErrorIfAdminIsLoggedIn($e->getMessage());
+
             // Log Exception on reports row
             $listingWrapper->setSyncDetails($e->getMessage());
             $listingWrapper->setStatus(self::LISTING_STATUS_ERROR);
@@ -86,6 +91,8 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         $curlResource = $this->_getCurlResource($url);
         $post_response_as_json = $curlResource->executePostRequest($content);
         $status = $curlResource->getRequestHttpCode();
+        // Need to grab any potential errors before closing the resource
+        $curl_error_message = $curlResource->getCurlErrorMessage();
         $curlResource->logRequest();
         // Close the CURL Resource
         $curlResource->close();
@@ -109,11 +116,15 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
                 $listingWrapper->setSyncDetails($errors_messaging);
                 throw new Exception($errors_messaging);
             } else {
+                if (!empty($curl_error_message))
+                {
+                    $listingWrapper->setSyncDetails($curl_error_message);
+                    throw new Exception($curl_error_message);
+                }
                 $error_message = $response['message'];
                 $listingWrapper->setSyncDetails($error_message);
                 throw new Exception($error_message);
             }
-
         }
 
         $listingWrapper->setStatus(self::LISTING_STATUS_SUCCESS);
@@ -143,6 +154,8 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         $curlResource = $this->_getCurlResource($url);
         $json_response = $curlResource->read();
         $status = $curlResource->getRequestHttpCode();
+        // Need to grab any potential errors before closing the resource
+        $curl_error_message = $curlResource->getCurlErrorMessage();
         $curlResource->logRequest();
         // Close the CURL Resource
         $curlResource->close();
@@ -161,6 +174,10 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
             if (isset($response['errors'])) {
                 throw new Exception($response['message'] . $response['errors'][key($response['errors'])][0]);
             } else {
+                if (!empty($curl_error_message))
+                {
+                    throw new Exception($curl_error_message);
+                }
                 throw new Exception($response['message']);
             }
 
@@ -203,6 +220,8 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         $curlResource = $this->_getCurlResource($rev_url_to_put);
         $put_response_as_json = $curlResource->executePutRequest($content);
         $status = $curlResource->getRequestHttpCode();
+        // Need to grab any potential errors before closing the resource
+        $curl_error_message = $curlResource->getCurlErrorMessage();
         $curlResource->logRequest();
         // Close the CURL Resource
         $curlResource->close();
@@ -213,9 +232,15 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
 
         if ($status != 200)
         {
+            $listingWrapper->setStatus(self::LISTING_STATUS_ERROR);
+            if (!empty($curl_error_message))
+            {
+                $listingWrapper->setSyncDetails($curl_error_message);
+                throw new Exception($curl_error_message);
+            }
+
             $error_message = $response['message'];
             $listingWrapper->setSyncDetails($error_message);
-            $listingWrapper->setStatus(self::LISTING_STATUS_ERROR);
 
             throw new Exception($error_message);
         }
@@ -226,6 +251,17 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         $web_url = $this->_getWebUrlFromListingResponseArray($listing_response);
 
         return $web_url;
+    }
+
+    public function verifyModuleIsEnabled()
+    {
+        $isEnabled = Mage::getStoreConfig('ReverbSync/extensionOption_group/module_select');
+        if (!$isEnabled)
+        {
+            throw new Reverb_ReverbSync_Model_Exception_Deactivated(self::MODULE_NOT_ENABLED);
+        }
+
+        return true;
     }
 
     protected function _getReverbAPIBaseUrl()
@@ -241,7 +277,6 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
     protected function _getCurlResource($url, $options_array = array())
     {
         $curlResource = Mage::getModel('reverbSync/adapter_curl');
-
         $options_array[CURLOPT_SSL_VERIFYHOST] = 0;
         $options_array[CURLOPT_SSL_VERIFYPEER] = 0;
         $options_array[CURLOPT_HEADER] = 0;

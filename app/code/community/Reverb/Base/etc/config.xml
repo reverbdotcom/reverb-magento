@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Reverb_Base>
+            <version>0.0.1</version>
+        </Reverb_Base>
+    </modules>
+
+    <global>
+        <models>
+            <reverb_base>
+                <class>Reverb_Base_Model</class>
+                <resourceModel>reverb_base_mysql4</resourceModel>
+            </reverb_base>
+            <reverb_base_mysql4>
+                <class>Reverb_Base_Model_Mysql4</class>
+            </reverb_base_mysql4>
+        </models>
+
+        <helpers>
+            <reverb_base>
+                <class>Reverb_Base_Helper</class>
+            </reverb_base>
+        </helpers>
+
+        <blocks>
+            <reverb_base>
+                <class>Reverb_Base_Block</class>
+            </reverb_base>
+        </blocks>
+
+        <resources>
+            <reverb_base_setup>
+                <setup>
+                    <module>Reverb_Base</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </reverb_base_setup>
+        </resources>
+    </global>
+</config>

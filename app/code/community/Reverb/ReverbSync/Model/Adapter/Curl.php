@@ -10,13 +10,13 @@ class Reverb_ReverbSync_Model_Adapter_Curl extends Varien_Http_Adapter_Curl
     const AUTH_TOKEN_HEADER_TEMPLATE = '-H "%s"';
     const POST_DATA_ARGUMENT_TEMPLATE = '--data %s';
     const POST_ERROR_LOG_TEMPLATE = 'The following error occurred with the post above: %s';
+    const CURL_ERROR_TEMPLATE = "Curl error number %s occurred with the following error message: %s";
 
     const REQUEST_LOG_FILE = 'reverb_curl_requests.log';
 
     public function read()
     {
         $this->_applyConfig();
-
         return parent::read();
     }
 
@@ -88,16 +88,35 @@ class Reverb_ReverbSync_Model_Adapter_Curl extends Varien_Http_Adapter_Curl
         Mage::log($string_to_log, null, self::REQUEST_LOG_FILE);
 
         $status = $this->getRequestHttpCode();
-
-        $status = 0;
-
         $status_as_int = intval($status);
         if ($status_as_int == 0)
         {
-            $curl_error = curl_errno($this->_getResource());
+            $curl_error = $this->getCurlErrorMessage();
             $error_string_to_log = sprintf(self::POST_ERROR_LOG_TEMPLATE, $curl_error);
             Mage::log($error_string_to_log, null, self::REQUEST_LOG_FILE);
         }
+    }
+
+    public function getCurlErrorMessage()
+    {
+        $curl_error = $this->getCurlError();
+        if (!empty($curl_error))
+        {
+            $curl_error_number = $this->getCurlErrorNumber();
+            return sprintf(self::CURL_ERROR_TEMPLATE, $curl_error_number, $curl_error);
+        }
+
+        return false;
+    }
+
+    public function getCurlError()
+    {
+        return curl_error($this->_getResource());
+    }
+
+    public function getCurlErrorNumber()
+    {
+        return curl_errno($this->_getResource());
     }
 
     protected function _getOption($option)

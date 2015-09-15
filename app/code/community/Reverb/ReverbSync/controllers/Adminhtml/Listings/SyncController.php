@@ -29,12 +29,12 @@ class Reverb_ReverbSync_Adminhtml_Listings_SyncController extends Reverb_ReverbS
         {
             // We don't know what caused this exception. Log it and throw redirect exception
             $error_message = $this->__(self::BULK_SYNC_EXCEPTION, $e->getMessage());
-            $this->_getAdminHelper()->throwRedirectException($error_message, 'reverbSync/adminhtml_sync/index');
+            $this->_getAdminHelper()->throwRedirectException($error_message, 'reverbReports/adminhtml_reports_reverbreport/index');
         }
 
         $success_message = $this->__(self::SUCCESS_BULK_SYNC_QUEUED_UP, $number_of_syncs_queued_up);
         $this->_getAdminHelper()->addAdminSuccessMessage($success_message);
-        $this->_redirect('adminhtml/reports_reverbreport/index');
+        $this->_redirect('reverbReports/adminhtml_reports_reverbreport/index');
     }
 
     public function stopBulkSyncAction()
@@ -54,12 +54,12 @@ class Reverb_ReverbSync_Adminhtml_Listings_SyncController extends Reverb_ReverbS
         {
             // We don't know what caused this exception. Log it and throw redirect exception
             $error_message = $this->__(self::EXCEPTION_STOP_BULK_SYNC, $e->getMessage());
-            $this->_getAdminHelper()->throwRedirectException($error_message, 'reverbSync/adminhtml_sync/index');
+            $this->_getAdminHelper()->throwRedirectException($error_message, 'reverbReports/adminhtml_reports_reverbreport/index');
         }
 
         $success_message = $this->__(self::SUCCESS_STOPPED_LISTING_SYNCS);
         $this->_getAdminHelper()->addAdminSuccessMessage($success_message);
-        $this->_redirect('adminhtml/reports_reverbreport/index');
+        $this->_redirect('reverbReports/adminhtml_reports_reverbreport/index');
     }
 
     public function getBlockToShow()

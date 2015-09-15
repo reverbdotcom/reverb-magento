@@ -96,8 +96,8 @@ class Reverb_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
         catch(Exception $e)
         {
             $taskResourceSingleton->rollBack();
-            $processQueueTaskObject->setTaskAsErrored();
             $error_message = $this->__(self::EXCEPTION_EXECUTING_TASK, $processQueueTaskObject->getId(), $e->getMessage());
+            $processQueueTaskObject->setTaskAsErrored($error_message);
             $this->_logError($error_message);
             return;
         }

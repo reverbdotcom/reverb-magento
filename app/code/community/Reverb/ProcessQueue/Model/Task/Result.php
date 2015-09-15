@@ -8,6 +8,7 @@ class Reverb_ProcessQueue_Model_Task_Result
     implements Reverb_ProcessQueue_Model_Task_Result_Interface
 {
     protected $_task_status = null;
+    protected $_task_status_message = null;
 
     /**
      * To be used when an execution of a callback in Reverb_ProcessQueue_Model_Task::executeTask() does not return
@@ -44,6 +45,17 @@ class Reverb_ProcessQueue_Model_Task_Result
     public function setTaskStatus($task_status)
     {
         $this->_task_status = $task_status;
+        return $this;
+    }
+
+    public function getTaskStatusMessage()
+    {
+        return $this->_task_status_message;
+    }
+
+    public function setTaskStatusMessage($task_status_message)
+    {
+        $this->_task_status_message = $task_status_message;
         return $this;
     }
 }

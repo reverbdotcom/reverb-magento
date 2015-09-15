@@ -7,9 +7,12 @@
                 <children>
                     <sales>
                         <children>
-                            <reverb_orders_sync translate="title" module="ReverbSync">
-                                <title>Reverb Orders Sync</title>
-                            </reverb_orders_sync>
+                            <reverb_order_sync translate="title" module="ReverbSync">
+                                <title>Reverb Order Sync</title>
+                            </reverb_order_sync>
+                            <reverb_order_sync_update translate="title" module="ReverbSync">
+                                <title>Update Reverb Order Sync Task Status</title>
+                            </reverb_order_sync_update>
                         </children>
                     </sales>
                     <catalog>
@@ -26,11 +29,11 @@
     <menu>
         <sales translate="title" module="ReverbSync">
             <children>
-                <reverb_orders_sync translate="title" module="ReverbSync">
-                    <title>Reverb Orders Sync</title>
+                <reverb_order_sync translate="title" module="ReverbSync">
+                    <title>Reverb Order Creation Sync</title>
                     <action>reverbSync/adminhtml_orders_sync</action>
                     <sort_order>15</sort_order>
-                </reverb_orders_sync>
+                </reverb_order_sync>
             </children>
         </sales>
         <catalog translate="title" module="ReverbSync">

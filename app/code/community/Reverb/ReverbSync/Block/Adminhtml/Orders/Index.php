@@ -2,7 +2,7 @@
 
 class Reverb_ReverbSync_Block_Adminhtml_Orders_Index extends Mage_Adminhtml_Block_Widget_Container
 {
-    const HEADER_TEXT_TEMPLATE = '%s of %s Reverb Orders have completed syncing with Magento';
+    const HEADER_TEXT_TEMPLATE = '%s of %s Reverb Order Tasks have completed syncing with Magento';
     const LAST_EXECUTED_AT_TEMPLATE = '<h3>The last Reverb Order Sync was executed at %s</h3>';
 
     protected $_view_html = '';
