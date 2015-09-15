@@ -94,29 +94,6 @@ abstract class Reverb_Base_Block_Adminhtml_Widget_Form
         ));
     }
 
-    /**
-     * There is no _addNonEditableSelectField because having an uneditable dropdown rarely makes sense
-     * from a UX perspective
-     *
-     * @param Varien_Data_Form_Element_Fieldset $fieldset
-     * @param $field
-     * @param $name
-     * @param array $options - Must be an array of the form
-     *                          array(
-    array(
-    'label' => 'label_for_this_option',
-    'value' =>  'value_for_this_option'
-    ),
-    array(
-    'label' => 'label_for_this_option',
-    'value' =>  'value_for_this_option'
-    ),
-    ...
-    ...
-    ...
-    );
-     * @param bool $required - Defaults to true
-     */
     protected function _addEditableSelectField
     (Varien_Data_Form_Element_Fieldset $fieldset, $field, $name, array $options, $required = true)
     {

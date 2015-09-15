@@ -87,7 +87,7 @@ class Reverb_ReverbSync_Adminhtml_Orders_SyncController
 
     public function getModuleInstanceDescription()
     {
-        return 'Reverb Order Creation Sync Tasks';
+        return 'Reverb Order Sync Tasks';
     }
 
     public function getObjectParamName()
@@ -97,7 +97,7 @@ class Reverb_ReverbSync_Adminhtml_Orders_SyncController
 
     public function getObjectDescription()
     {
-        return 'Order Creation Task';
+        return 'Order Sync Task';
     }
 
     public function getFormActionsController()
