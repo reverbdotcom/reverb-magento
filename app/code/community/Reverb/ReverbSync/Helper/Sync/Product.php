@@ -2,7 +2,6 @@
 
 class Reverb_ReverbSync_Helper_Sync_Product extends Mage_Core_Helper_Data
 {
-    const MODULE_NOT_ENABLED = 'The Reverb Module is not enabled, so products can not be synced with Reverb. Please enable this functionality in System -> Configuration -> Reverb Configuration -> Reverb Extension';
     const UNCAUGHT_EXCEPTION_INDIVIDUAL_PRODUCT_SYNC = 'An uncaught exception occurred while attempting to sync product with id %s with Reverb: %s';
     const PRODUCT_EXCLUDED_FROM_SYNC = 'The "Sync to Reverb" value for this product has been set to "No"; this product can not be synced to Reverb as a result';
 
@@ -114,13 +113,7 @@ class Reverb_ReverbSync_Helper_Sync_Product extends Mage_Core_Helper_Data
 
     protected function _verifyModuleIsEnabled()
     {
-        $isEnabled = Mage::getStoreConfig('ReverbSync/extensionOption_group/module_select');
-        if (!$isEnabled)
-        {
-            throw new Reverb_ReverbSync_Model_Exception_Deactivated(self::MODULE_NOT_ENABLED);
-        }
-
-        return true;
+        return Mage::helper('ReverbSync')->verifyModuleIsEnabled();
     }
 
     protected function _setAdminSessionErrorMessage($error_message)

@@ -2,6 +2,7 @@
 
 class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
 {
+    const MODULE_NOT_ENABLED = 'The Reverb Module is not enabled, so products can not be synced with Reverb. Please enable this functionality in System -> Configuration -> Reverb Configuration -> Reverb Extension';
     const ERROR_LISTING_CREATION_IS_NOT_ENABLED = 'Reverb listing creation has not been enabled.';
 
     const API_CALL_LOG_TEMPLATE = "\n%s\n%s\n%s\n%s\n";
@@ -250,6 +251,17 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         $web_url = $this->_getWebUrlFromListingResponseArray($listing_response);
 
         return $web_url;
+    }
+
+    public function verifyModuleIsEnabled()
+    {
+        $isEnabled = Mage::getStoreConfig('ReverbSync/extensionOption_group/module_select');
+        if (!$isEnabled)
+        {
+            throw new Reverb_ReverbSync_Model_Exception_Deactivated(self::MODULE_NOT_ENABLED);
+        }
+
+        return true;
     }
 
     protected function _getReverbAPIBaseUrl()

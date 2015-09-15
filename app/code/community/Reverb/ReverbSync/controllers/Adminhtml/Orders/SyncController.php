@@ -43,6 +43,8 @@ class Reverb_ReverbSync_Adminhtml_Orders_SyncController
     {
         try
         {
+            Mage::helper('ReverbSync')->verifyModuleIsEnabled();
+
             Mage::helper('ReverbSync/orders_retrieval_creation')->queueReverbOrderSyncActions();
             Mage::helper('ReverbSync/orders_creation_task_processor')->processQueueTasks('order_creation');
 

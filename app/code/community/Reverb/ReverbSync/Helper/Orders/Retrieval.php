@@ -29,10 +29,10 @@ abstract class Reverb_ReverbSync_Helper_Orders_Retrieval extends Reverb_ReverbSy
 
     public function queueReverbOrderSyncActions()
     {
-        if (!$this->_getOrderSyncHelper()->isOrderSyncEnabled())
+        if (!Mage::helper('ReverbSync/orders_sync')->isOrderSyncEnabled())
         {
-            $this->_getOrderSyncHelper()->logOrderSyncDisabledMessage();
-            return false;
+            $exception_message = Mage::helper('ReverbSync/orders_sync')->getOrderSyncIsDisabledMessage();
+            throw new Reverb_ReverbSync_Model_Exception_Deactivated_Order_Sync($exception_message);
         }
 
         $reverbOrdersJsonObject = $this->_retrieveOrdersJsonFromReverb();
