@@ -8,6 +8,7 @@
                 <Reverb_ProcessQueue/>
                 <Reverb_Payment/>
                 <Reverb_Shipping/>
+                <Reverb_Base/>
             </depends>
         </Reverb_ReverbSync>
     </modules>
