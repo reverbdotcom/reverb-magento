@@ -5,7 +5,7 @@ class Reverb_ReverbSync_Adminhtml_Orders_SyncController
     extends Reverb_ProcessQueue_Adminhtml_IndexController
 {
     const EXCEPTION_BULK_ORDERS_SYNC = 'Error executing a Reverb bulk orders sync: %s';
-    const SUCCESS_QUEUED_ORDERS_FOR_SYNC = 'Orders Sync Processed Successfully';
+    const SUCCESS_QUEUED_ORDERS_FOR_SYNC = 'Order sync in progress. Please wait a few minutes and refresh this page...';
     const ERROR_DENIED_ORDER_CREATION_STATUS_UPDATE = 'You do not have permissions to update this task\'s status';
 
     public function indexAction()

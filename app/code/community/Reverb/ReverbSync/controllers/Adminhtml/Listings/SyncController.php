@@ -5,7 +5,7 @@ class Reverb_ReverbSync_Adminhtml_Listings_SyncController extends Reverb_ReverbS
 {
     const BULK_SYNC_EXCEPTION = 'Error executing the Reverb Bulk Product Sync via the admin panel: %s';
     const SUCCESS_BULK_SYNC_COMPLETED = 'Reverb Bulk product sync process completed.';
-    const SUCCESS_BULK_SYNC_QUEUED_UP = '%s products have been queued to be synced with Reverb';
+    const SUCCESS_BULK_SYNC_QUEUED_UP = '%s products have been queued for sync. Please wait a few minutes and refresh this page...';
     const EXCEPTION_STOP_BULK_SYNC = 'Error attempting to stop all reverb listing sync tasks: %s';
     const SUCCESS_STOPPED_LISTING_SYNCS = 'Stopped all pending Reverb Listing Sync tasks';
 
