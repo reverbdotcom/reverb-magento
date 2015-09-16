@@ -7,11 +7,11 @@
 
 class Reverb_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
 {
-    const EXCEPTION_UPDATE_AS_PROCESSING = 'An exception occurred while attempting to update queue task with id %s as processing: %s';
-    const EXCEPTION_SELECT_FOR_UPDATE = 'An uncaught exception occurred while attempting to select queue task with id %s for update: %s';
+    const EXCEPTION_UPDATE_AS_PROCESSING = 'Error attempting to update queue task with id %s as processing: %s';
+    const EXCEPTION_SELECT_FOR_UPDATE = 'Error attempting to select queue task with id %s for update: %s';
     const ERROR_FAILED_TO_SELECT_FOR_UPDATE = 'Failed to select queue task with id %s for update';
-    const EXCEPTION_EXECUTING_TASK = 'An uncaught exception occurred while executing task for queue task object with id %s: %s';
-    const EXCEPTION_ACTING_ON_TASK_RESULT = 'An exception occurred while acting on the task result for task with id %s: %s';
+    const EXCEPTION_EXECUTING_TASK = 'Error executing task for queue task object with id %s: %s';
+    const EXCEPTION_ACTING_ON_TASK_RESULT = 'Error acting on the task result for task with id %s: %s';
     const EXCEPTION_COMMITTING_TRANSACTION = 'An uncaught exception occurred when attempting to commit the transaction for process queue object with id %s: %s';
 
     protected $_moduleName = 'reverb_process_queue';

@@ -6,9 +6,9 @@
 
 abstract class Reverb_ReverbSync_Helper_Orders_Retrieval extends Reverb_ReverbSync_Helper_Data
 {
-    const EXCEPTION_QUEUE_MAGENTO_ORDER_ACTION = "An exception occurred while attempting to queue Magento order %s for Reverb order: %s.\nThe json_encoded order data object was: %s";
+    const EXCEPTION_QUEUE_MAGENTO_ORDER_ACTION = "Error attempting to queue Magento order %s for Reverb order: %s.\nThe json_encoded order data object was: %s";
     const ORDER_NUMBER_EMPTY = 'An attempt was made to create a Reverb order in Magento without specifying a valid Reverb order number. This order can not be synced.';
-    const EXCEPTION_QUEUE_ORDER_ACTION = 'An exception occurred while trying to queue order creation for Reverb order with number %s: %s';
+    const EXCEPTION_QUEUE_ORDER_ACTION = 'Error trying to queue order creation for Reverb order with number %s: %s';
     const ERROR_NO_ORDER_ACTION_QUEUE_ROWS_INSERTED = 'No order creation queue rows were inserted for Reverb order with number %s';
 
     protected $_moduleName = 'ReverbSync';

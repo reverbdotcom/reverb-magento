@@ -7,7 +7,7 @@
 
 class Reverb_ProcessQueue_Model_Cron
 {
-    const CRON_UNCAUGHT_EXCEPTION = 'An uncaught exception occurred while processing the Reverb Process Queue: %s';
+    const CRON_UNCAUGHT_EXCEPTION = 'Error processing the Reverb Process Queue: %s';
 
     public function processQueueTasks()
     {

@@ -6,8 +6,8 @@
 
 class Reverb_ReverbSync_Model_Sync_Order extends Reverb_ProcessQueue_Model_Task
 {
-    const ERROR_ORDER_ALREADY_CREATED = 'Order with Reverb Order Number %s already exists in the Magento system with entity_id %s';
-    const EXCEPTION_CREATING_ORDER = "Exception occurred while trying to create order for reverb order with number %s: %s";
+    const ERROR_ORDER_ALREADY_CREATED = "Reverb Order %s already exists in Magento with entity_id %s";
+    const EXCEPTION_CREATING_ORDER = "Error creating Reverb Order %s: %s";
 
     protected $_orderCreationHelper = null;
 
@@ -45,8 +45,7 @@ class Reverb_ReverbSync_Model_Sync_Order extends Reverb_ProcessQueue_Model_Task
         }
         catch(Exception $e)
         {
-            $error_message = Mage::helper('ReverbSync')->__(self::EXCEPTION_CREATING_ORDER, $reverb_order_number,
-                                                                $e->getMessage(), serialize($argumentsObject));
+            $error_message = Mage::helper('ReverbSync')->__(self::EXCEPTION_CREATING_ORDER, $reverb_order_number, $e->getMessage());
             Mage::getModel('reverbSync/log')->logOrderSyncError($error_message);
             return $this->_returnErrorCallbackResult($error_message);
         }

@@ -11,7 +11,7 @@ abstract class Reverb_Base_Controller_Adminhtml_Form_Abstract
     const ERROR_INVALID_OBJECT_ID = 'No object with classname %s and id %s was found in the database.';
     const ERROR_NON_PERMITTED_FIELDS_UPDATE = 'An attempt was made to modify field(s) "%s" on a %s object. No hacking of html is allowed :)';
     const ERROR_REQUIRED_FIELDS_NOT_POSTED = 'No values for required field(s) "%s" were posted for the %s object being saved. Please include the missing data and try again.';
-    const EXCEPTION_DURING_SAVE_ACTION = 'An exception occurred while attempting to %s: %s';
+    const EXCEPTION_DURING_SAVE_ACTION = 'Error attempting to %s: %s';
     const SUCCESS_OBJECT_SUCESSFULLY_CREATED = '%s has been successfully created.';
     const SUCCESS_OBJECT_SUCESSFULLY_UPDATED = '%s has been successfully updated.';
 

@@ -8,7 +8,7 @@ class Reverb_ReverbSync_Model_Cron_Orders_Update
     extends Reverb_Process_Model_Locked_File_Cron_Abstract
     implements Reverb_Process_Model_Locked_File_Cron_Interface
 {
-    const CRON_UNCAUGHT_EXCEPTION = 'An uncaught exception occurred while processing the Reverb Order Update Process Queue: %s';
+    const CRON_UNCAUGHT_EXCEPTION = 'Error processing the Reverb Order Update Process Queue: %s';
 
     public function executeCron()
     {
