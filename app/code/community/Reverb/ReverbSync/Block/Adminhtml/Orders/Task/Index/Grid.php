@@ -9,7 +9,12 @@ class Reverb_ReverbSync_Block_Adminhtml_Orders_Task_Index_Grid
 {
     public function setCollection($collection)
     {
-        $collection->addCodeFilter('order_update');
+        $collection->addCodeFilter($this->_getCodeToFilterBy());
         parent::setCollection($collection);
+    }
+
+    protected function _getCodeToFilterBy()
+    {
+        return 'order_update';
     }
 }

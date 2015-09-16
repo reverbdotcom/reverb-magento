@@ -7,5 +7,8 @@
 class Reverb_ReverbSync_Block_Adminhtml_Orders_Task_Unique_Index_Grid
     extends Reverb_ReverbSync_Block_Adminhtml_Orders_Task_Index_Grid
 {
-
+    protected function _getCodeToFilterBy()
+    {
+        return 'order_creation';
+    }
 }
