@@ -16,7 +16,7 @@ class Reverb_ReverbSync_Block_Adminhtml_Orders_Task_Edit
 
         $this->_removeButton('delete');
 
-        if (!Mage::helper('ReverbSync/orders_sync')->canAdminUpdateOrderCreationSyncStatus())
+        if (!$this->getAction()->canAdminUpdateStatus())
         {
             $this->_removeButton('save');
             $this->_removeButton('reset');

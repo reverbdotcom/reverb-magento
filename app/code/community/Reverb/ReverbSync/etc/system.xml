@@ -22,6 +22,7 @@
           <show_in_default>1</show_in_default>
           <show_in_website>1</show_in_website>
           <show_in_store>1</show_in_store>
+            <expanded>1</expanded>
           <fields>
             <module_select translate="label tooltip comment">
               <label>Enable Reverb Module:</label>
@@ -44,6 +45,7 @@
           <show_in_default>1</show_in_default>
           <show_in_website>1</show_in_website>
           <show_in_store>1</show_in_store>
+            <expanded>1</expanded>
           <fields>
             <revUrl translate="label">
               <label>Reverb Sync Destination</label>
@@ -75,6 +77,7 @@
           <show_in_default>1</show_in_default>
           <show_in_website>1</show_in_website>
           <show_in_store>1</show_in_store>
+            <expanded>1</expanded>
 
           <fields>
             <enable_listing_creation translate="label">
@@ -121,6 +124,7 @@
             <show_in_default>1</show_in_default>
             <show_in_website>1</show_in_website>
             <show_in_store>1</show_in_store>
+            <expanded>1</expanded>
 
             <fields>
                 <enabled translate="label">

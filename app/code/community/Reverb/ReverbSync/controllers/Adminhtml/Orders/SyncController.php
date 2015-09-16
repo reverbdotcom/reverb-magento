@@ -1,8 +1,8 @@
 <?php
 
-require_once('Reverb/ProcessQueue/controllers/Adminhtml/Unique/IndexController.php');
+require_once('Reverb/ProcessQueue/controllers/Adminhtml/IndexController.php');
 class Reverb_ReverbSync_Adminhtml_Orders_SyncController
-    extends Reverb_ProcessQueue_Adminhtml_Unique_IndexController
+    extends Reverb_ProcessQueue_Adminhtml_IndexController
 {
     const EXCEPTION_BULK_ORDERS_SYNC = 'An exception occurred while executing a Reverb bulk orders sync: %s';
     const SUCCESS_QUEUED_ORDERS_FOR_SYNC = 'Orders Sync Processed Successfully';
@@ -25,7 +25,7 @@ class Reverb_ReverbSync_Adminhtml_Orders_SyncController
 
     public function saveAction()
     {
-        if (!Mage::helper('ReverbSync/orders_sync')->canAdminUpdateOrderCreationSyncStatus())
+        if (!$this->canAdminUpdateStatus())
         {
             $task_param_name = $this->getObjectParamName();
             $task_id = $this->getRequest()->getParam($task_param_name);
@@ -58,17 +58,38 @@ class Reverb_ReverbSync_Adminhtml_Orders_SyncController
             Mage::getSingleton('adminhtml/session')->addError($this->__($error_message));
 
             $redirectException = new Reverb_ReverbSync_Model_Exception_Redirect($error_message);
-            $redirectException->prepareRedirect('reverbSync/adminhtml_orders_sync/index');
+            $redirectException->prepareRedirect($this->_getRedriectPath());
             throw $redirectException;
         }
 
         Mage::getSingleton('adminhtml/session')->addSuccess($this->__(self::SUCCESS_QUEUED_ORDERS_FOR_SYNC));
-        $this->_redirect('reverbSync/adminhtml_orders_sync/index');
+        $this->_redirect($this->_getRedriectPath());
+    }
+
+    protected function _getRedriectPath()
+    {
+        $redirect_controller = $this->getRequest()->getParam('redirect_controller');
+        if (empty($redirect_controller))
+        {
+            $redirect_controller = 'adminhtml_orders_sync';
+        }
+
+        return 'reverbSync/' . $redirect_controller . '/index';
+    }
+
+    public function canAdminUpdateStatus()
+    {
+        return Mage::helper('ReverbSync/orders_sync')->canAdminChangeOrderUpdateSyncStatus();
     }
 
     public function getEditBlockClassname()
     {
         return 'ReverbSync/adminhtml_orders_task_edit';
+    }
+
+    public function getIndexBlockName()
+    {
+        return 'adminhtml_orders_task_index';
     }
 
     public function getUriPathForAction($action)
@@ -84,22 +105,22 @@ class Reverb_ReverbSync_Adminhtml_Orders_SyncController
 
     public function getControllerActiveMenuPath()
     {
-        return 'sales/reverb_order_sync';
+        return 'sales/reverb_order_task_sync';
     }
 
     public function getModuleInstanceDescription()
     {
-        return 'Reverb Order Sync Tasks';
+        return 'Reverb Order Update Sync Tasks';
     }
 
     public function getObjectParamName()
     {
-        return 'unique_task';
+        return 'task';
     }
 
     public function getObjectDescription()
     {
-        return 'Order Sync Task';
+        return 'Order Update Sync Task';
     }
 
     public function getFormActionsController()
@@ -115,5 +136,10 @@ class Reverb_ReverbSync_Adminhtml_Orders_SyncController
     public function getFormBackControllerActionPath()
     {
         return 'adminhtml_orders_sync/index';
+    }
+
+    protected function _getModuleBlockGroupname()
+    {
+        return 'ReverbSync';
     }
 }

@@ -2,8 +2,7 @@
 
 class Reverb_ReverbSync_Block_Adminhtml_Orders_Index extends Mage_Adminhtml_Block_Widget_Container
 {
-    const HEADER_TEXT_TEMPLATE = '%s of %s Reverb Order Tasks have completed syncing with Magento';
-    const LAST_EXECUTED_AT_TEMPLATE = '<h3>The last Reverb Order Sync was executed at %s</h3>';
+    const LAST_EXECUTED_AT_TEMPLATE = '<h3>The last Sync Task was executed at %s</h3>';
 
     protected $_view_html = '';
 
@@ -18,7 +17,7 @@ class Reverb_ReverbSync_Block_Adminhtml_Orders_Index extends Mage_Adminhtml_Bloc
         parent::__construct();
 
         $bulk_orders_sync_process_button = array(
-            'action_url' => Mage::getModel('adminhtml/url')->getUrl('reverbSync/adminhtml_orders_sync/bulkSync'),
+            'action_url' => Mage::getModel('adminhtml/url')->getUrl('reverbSync/adminhtml_orders_sync/bulkSync', $this->_getBulkSyncUrlParams()),
             'label' => 'Bulk Orders Sync'
         );
 
@@ -52,17 +51,17 @@ class Reverb_ReverbSync_Block_Adminhtml_Orders_Index extends Mage_Adminhtml_Bloc
 
     protected function _setHeaderText()
     {
+        $taskProcessHelper = $this->_getTaskProcessorHelper();
         list($completed_queue_tasks, $all_process_queue_tasks) =
-            Mage::helper('reverb_process_queue/task_processor_unique')->getCompletedAndAllQueueTasks('order_creation');
+            $taskProcessHelper->getCompletedAndAllQueueTasks($this->_getTaskCode());
 
-        $outstandingOrdersSyncTasksCollection = Mage::helper('reverb_process_queue/task_processor_unique')
-                                                    ->getQueueTasksForProgressScreen('order_creation');
+        $outstandingOrdersSyncTasksCollection = $taskProcessHelper->getQueueTasksForProgressScreen($this->_getTaskCode());
         $outstanding_tasks = $outstandingOrdersSyncTasksCollection->getItems();
         $outstanding_tasks_remaining = count($outstanding_tasks);
 
         $completed_tasks_count = count($completed_queue_tasks);
         $all_tasks_count = count($all_process_queue_tasks);
-        $header_text = Mage::helper('ReverbSync')->__(self::HEADER_TEXT_TEMPLATE, $completed_tasks_count, $all_tasks_count);
+        $header_text = Mage::helper('ReverbSync')->__($this->_getHeaderTextTemplate(), $completed_tasks_count, $all_tasks_count);
         $this->_headerText = $header_text;
 
         if ($outstanding_tasks_remaining == 0)
@@ -79,6 +78,26 @@ class Reverb_ReverbSync_Block_Adminhtml_Orders_Index extends Mage_Adminhtml_Bloc
             $last_sync_message = sprintf(self::LAST_EXECUTED_AT_TEMPLATE, $locale_most_recent_executed_at_date);
             $this->_view_html = $last_sync_message;
         }
+    }
+
+    protected function _getBulkSyncUrlParams()
+    {
+        return array();
+    }
+
+    protected function _getHeaderTextTemplate()
+    {
+        return '%s of %s Reverb Order Update Tasks have completed syncing with Magento';
+    }
+
+    protected function _getTaskCode()
+    {
+        return 'order_update';
+    }
+
+    protected function _getTaskProcessorHelper()
+    {
+        return Mage::helper('reverb_process_queue/task_processor');
     }
 
     public function getViewHtml()
