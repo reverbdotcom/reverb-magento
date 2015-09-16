@@ -11,8 +11,42 @@ class Reverb_ReverbSync_Model_Adapter_Curl extends Varien_Http_Adapter_Curl
     const POST_DATA_ARGUMENT_TEMPLATE = '--data %s';
     const POST_ERROR_LOG_TEMPLATE = 'The following error occurred with the post above: %s';
     const CURL_ERROR_TEMPLATE = "Curl error number %s occurred with the following error message: %s";
+    const USER_AGENT_TEMPLATE = 'Reverb-Magento MagentoVersion=%s MagentoDomain=%s';
+    const MAGENTO_VERSION_TEMPLATE = '%s-%s';
 
     const REQUEST_LOG_FILE = 'reverb_curl_requests.log';
+
+    protected function _applyConfig()
+    {
+        $this->_addCurrentMagentoVersionUserAgent();
+
+        return parent::_applyConfig();
+    }
+
+    protected function _addCurrentMagentoVersionUserAgent()
+    {
+        $magento_version = Mage::getVersion();
+        $magento_edition = Mage::getEdition();
+        $magento_base_web_url = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
+
+        $magento_version_string = sprintf(self::MAGENTO_VERSION_TEMPLATE, $magento_edition, $magento_version);
+
+        $magento_domain = Mage::helper('reverb_base')->extractDomainFromUrl($magento_base_web_url);
+
+        $user_agent_string = sprintf(self::USER_AGENT_TEMPLATE, $magento_version_string, $magento_domain);
+
+        $this->addOption(CURLOPT_USERAGENT, $user_agent_string);
+
+        $headers_array = $this->_getOption(CURLOPT_HTTPHEADER);
+        if (!is_array($headers_array))
+        {
+            $headers_array = array();
+        }
+        $headers_array[] = 'X-Magento-Version: ' . $magento_version_string;
+        $headers_array[] = 'X-Magento-Domain: ' . $magento_domain;
+
+        $this->addOption(CURLOPT_HTTPHEADER, $headers_array);
+    }
 
     public function read()
     {
@@ -34,7 +68,7 @@ class Reverb_ReverbSync_Model_Adapter_Curl extends Varien_Http_Adapter_Curl
 
     public function executePutRequest($body)
     {
-        $this->addOption(CURLOPT_PUT, true);
+        $this->addOption(CURLOPT_CUSTOMREQUEST, "PUT");
         $this->addOption(CURLOPT_POSTFIELDS, $body);
 
         $this->_applyConfig();
