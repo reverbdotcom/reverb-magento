@@ -281,6 +281,7 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         $options_array[CURLOPT_SSL_VERIFYPEER] = 0;
         $options_array[CURLOPT_HEADER] = 0;
         $options_array[CURLOPT_RETURNTRANSFER] = 1;
+        $options_array[CURLOPT_USERAGENT] = 'Reverb-Magento MagentoVersion=community-1.9';
 
         $x_auth_token = Mage::getStoreConfig('ReverbSync/extension/api_token');
         $options_array[CURLOPT_HTTPHEADER] = array("X-Auth-Token: $x_auth_token", "Content-type: application/hal+json");
