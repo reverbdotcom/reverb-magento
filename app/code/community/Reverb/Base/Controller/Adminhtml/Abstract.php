@@ -50,7 +50,7 @@ abstract class Reverb_Base_Controller_Adminhtml_Abstract
         $this->loadLayout();
 
         $rootBlock = $this->getLayout()->createBlock('core/text_list', 'root', array('output' => "toHtml"));
-        $grid_block_classname = $this->getModuleGroupname() . '/' . $this->getIndexBlockName() . '_grid';
+        $grid_block_classname = $this->_getModuleBlockGroupname() . '/' . $this->getIndexBlockName() . '_grid';
         $gridBlock = $this->getLayout()->createBlock($grid_block_classname, 'ajax.grid');
         $rootBlock->append($gridBlock, 'ajax.grid');
 
@@ -68,6 +68,11 @@ abstract class Reverb_Base_Controller_Adminhtml_Abstract
             Mage::logException($e);
         }
         return $this;
+    }
+
+    protected function _getModuleBlockGroupname()
+    {
+        return $this->getModuleGroupname();
     }
 
     protected function _addBreadcrumb($label = null, $title = null, $link=null)

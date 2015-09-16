@@ -9,15 +9,7 @@ class Reverb_ReverbSync_Block_Adminhtml_Orders_Task_Edit_Form
 {
     public function populateFormFieldset(Varien_Data_Form_Element_Fieldset $fieldset)
     {
-        $this->_addTextFieldEditableIfNewOnly($fieldset, 'code', 'Code', true);
-
-        $code_value = $this->_getValueIfObjectIsSet('code');
-        if (!strcmp($code_value, 'order_creation'))
-        {
-            $this->_addTextFieldEditableIfNewOnly($fieldset, 'unique_id', 'Unique Id', true);
-        }
-
-        if (Mage::helper('ReverbSync/orders_sync')->canAdminUpdateOrderCreationSyncStatus())
+        if ($this->getAction()->canAdminUpdateStatus())
         {
             $status_options_array = Mage::getModel('reverb_process_queue/source_task_status')->getOptionArray();
             $this->_addEditableSelectField($fieldset, 'status', 'Status', $status_options_array, true);
@@ -38,7 +30,7 @@ class Reverb_ReverbSync_Block_Adminhtml_Orders_Task_Edit_Form
 
         $this->_addTextFieldEditableIfNewOnly($fieldset, 'object', 'Object', true);
         $this->_addTextFieldEditableIfNewOnly($fieldset, 'method', 'Method', true);
-        $this->_addTextFieldEditableIfNewOnly($fieldset, 'serialized_arguments_object', 'Serialized Arguments Object', false);
         $this->_addTextFieldEditableIfNewOnly($fieldset, 'status_message', 'Status Message', false);
+        $this->_addTextFieldEditableIfNewOnly($fieldset, 'serialized_arguments_object', 'Serialized Arguments Object', false);
     }
 }

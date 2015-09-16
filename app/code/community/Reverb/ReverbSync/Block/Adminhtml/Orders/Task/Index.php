@@ -11,6 +11,8 @@ class Reverb_ReverbSync_Block_Adminhtml_Orders_Task_Index
     {
         parent::__construct();
 
+        $this->_blockGroup = 'ReverbSync';
+
         $this->removeButton('add');
     }
 } 
