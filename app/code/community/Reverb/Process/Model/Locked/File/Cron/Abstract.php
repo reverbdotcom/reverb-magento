@@ -4,9 +4,9 @@ abstract class Reverb_Process_Model_Locked_File_Cron_Abstract
     extends Reverb_Process_Model_Locked_Cron_Abstract
     implements Reverb_Process_Model_Locked_File_Cron_Interface
 {
-    const ERROR_EXCEPTION_WHILE_OPENING_LOCK_FILE = 'An exception occurred while attempting to open the lock file %s: %s';
-    const ERROR_EXCEPTION_WHILE_SECURING_LOCK_FILE = 'An exception occurred while attempting to secure the lock file %s: %s';
-    const ERROR_EXCEPTION_WHILE_CHANGING_DIRECTORY = 'An exception occurred while attempting to change to directory %s to lock file %s: %s';
+    const ERROR_EXCEPTION_WHILE_OPENING_LOCK_FILE = 'Error attempting to open the lock file %s: %s';
+    const ERROR_EXCEPTION_WHILE_SECURING_LOCK_FILE = 'Error attempting to secure the lock file %s: %s';
+    const ERROR_EXCEPTION_WHILE_CHANGING_DIRECTORY = 'Error attempting to change to directory %s to lock file %s: %s';
     const ERROR_EXCEPTION_CHECKING_AND_CREATING_FOLDER = 'Exception occurred while checking existence of directory %s: %s';
 
     const LOCK_FILE_PERMISSIONS = 0700;

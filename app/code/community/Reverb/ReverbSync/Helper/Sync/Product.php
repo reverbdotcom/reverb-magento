@@ -2,7 +2,7 @@
 
 class Reverb_ReverbSync_Helper_Sync_Product extends Mage_Core_Helper_Data
 {
-    const UNCAUGHT_EXCEPTION_INDIVIDUAL_PRODUCT_SYNC = 'An uncaught exception occurred while attempting to sync product with id %s with Reverb: %s';
+    const UNCAUGHT_EXCEPTION_INDIVIDUAL_PRODUCT_SYNC = 'Error attempting to sync product with id %s with Reverb: %s';
     const PRODUCT_EXCLUDED_FROM_SYNC = 'The "Sync to Reverb" value for this product has been set to "No"; this product can not be synced to Reverb as a result';
 
     const LISTING_CREATION_ENABLED_CONFIG_PATH = 'ReverbSync/reverbDefault/enable_listing_creation';
