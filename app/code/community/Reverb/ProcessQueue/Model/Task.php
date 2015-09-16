@@ -20,6 +20,8 @@ class Reverb_ProcessQueue_Model_Task
 
     protected $_valid_statuses = array(self::STATUS_PENDING, self::STATUS_PROCESSING, self::STATUS_COMPLETE, self::STATUS_ERROR, self::STATUS_ABORTED);
 
+    protected $_argumentsObject = null;
+
     public function getStatus()
     {
         return parent::getStatus();
@@ -120,7 +122,27 @@ class Reverb_ProcessQueue_Model_Task
         return parent::_beforeSave();
     }
 
-    public function getArgumentsObject()
+    public function getArgumentsObject($use_cached = false)
+    {
+        if ($use_cached)
+        {
+            return $this->_getCachedArgumentsObject();
+        }
+
+        return $this->convertSerializedArgumentsIntoObject();
+    }
+
+    protected function _getCachedArgumentsObject()
+    {
+        if (is_null($this->_argumentsObject))
+        {
+            $this->_argumentsObject = $this->convertSerializedArgumentsIntoObject();
+        }
+
+        return $this->_argumentsObject;
+    }
+
+    public function convertSerializedArgumentsIntoObject()
     {
         $serialized_arguments_object_string = $this->getSerializedArgumentsObject();
         $argumentsObject = unserialize($serialized_arguments_object_string);
