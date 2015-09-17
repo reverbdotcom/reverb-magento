@@ -18,10 +18,16 @@ class Reverb_ReverbSync_Block_Adminhtml_Orders_Index extends Mage_Adminhtml_Bloc
 
         $bulk_orders_sync_process_button = array(
             'action_url' => Mage::getModel('adminhtml/url')->getUrl('reverbSync/adminhtml_orders_sync/bulkSync', $this->_getBulkSyncUrlParams()),
-            'label' => 'Bulk Orders Sync'
+            'label' => $this->_retrieveAndProcessTasksButtonLabel()
+        );
+
+        $process_downloaded_tasks_button = array(
+            'action_url' => Mage::getModel('adminhtml/url')->getUrl('reverbSync/adminhtml_orders_sync/syncDownloaded', $this->_getBulkSyncUrlParams()),
+            'label' => $this->_processDownloadedTasksButtonLabel()
         );
 
         $action_buttons_array['bulk_orders_sync'] = $bulk_orders_sync_process_button;
+        $action_buttons_array['sync_downloaded_tasks'] = $process_downloaded_tasks_button;
 
         foreach ($action_buttons_array as $button_id => $button_data)
         {
@@ -47,6 +53,16 @@ class Reverb_ReverbSync_Block_Adminhtml_Orders_Index extends Mage_Adminhtml_Bloc
                 )
             );
         }
+    }
+
+    protected function _retrieveAndProcessTasksButtonLabel()
+    {
+        return 'Download and Process Order Updates';
+    }
+
+    protected function _processDownloadedTasksButtonLabel()
+    {
+        return 'Process Downloaded Order Updates';
     }
 
     protected function _setHeaderText()

@@ -6,11 +6,13 @@ class Reverb_ReverbSync_Adminhtml_Orders_SyncController
 {
     const EXCEPTION_LOAD_TASK = 'An exception occurred while attempting to load an order task to manually act on the task: %s';
     const EXCEPTION_BULK_ORDERS_SYNC = 'Error executing a Reverb bulk orders sync: %s';
-    const SUCCESS_QUEUED_ORDERS_FOR_SYNC = 'Order sync in progress. Please wait a few minutes and refresh this page...';
+    const EXCEPTION_PROCESSING_DOWNLOADED_TASKS = 'Error processing downloaded Reverb Order Sync tasks: %s';
     const ERROR_DENIED_ORDER_CREATION_STATUS_UPDATE = 'You do not have permissions to update this task\'s status';
     const GENERIC_ADMIN_FACING_ERROR_MESSAGE = 'An error occurred with your request. Please try again.';
     const EXCEPTION_ACT_ON_TASK = 'An error occurred while acting on a task for the order with Reverb Id %s: %s';
     const SUCCESS_TASK_ACTION = 'The attempt to %s the Sync of the Order with Reverb ID %s has completed.';
+    const SUCCESS_QUEUED_ORDERS_FOR_SYNC = 'Order sync in progress. Please wait a few minutes and refresh this page...';
+    const SUCCESS_PROCESSING_DOWNLOADED_TASKS = 'Processing downloaded orders. Please wait a few minutes and refresh this page...';
 
     public function indexAction()
     {
@@ -67,6 +69,31 @@ class Reverb_ReverbSync_Adminhtml_Orders_SyncController
         }
 
         Mage::getSingleton('adminhtml/session')->addSuccess($this->__(self::SUCCESS_QUEUED_ORDERS_FOR_SYNC));
+        $this->_redirect($this->_getRedirectPath());
+    }
+
+    public function syncDownloadedAction()
+    {
+        try
+        {
+            Mage::helper('ReverbSync')->verifyModuleIsEnabled();
+
+            Mage::helper('ReverbSync/orders_creation_task_processor')->processQueueTasks('order_creation');
+
+            Mage::helper('reverb_process_queue/task_processor')->processQueueTasks('order_update');
+        }
+        catch(Exception $e)
+        {
+            $error_message = $this->__(self::EXCEPTION_PROCESSING_DOWNLOADED_TASKS, $e->getMessage());
+            Mage::getSingleton('reverbSync/log')->logOrderSyncError($error_message);
+            Mage::getSingleton('adminhtml/session')->addError($this->__($error_message));
+
+            $redirectException = new Reverb_ReverbSync_Model_Exception_Redirect($error_message);
+            $redirectException->prepareRedirect($this->_getRedirectPath());
+            throw $redirectException;
+        }
+
+        Mage::getSingleton('adminhtml/session')->addSuccess($this->__(self::SUCCESS_PROCESSING_DOWNLOADED_TASKS));
         $this->_redirect($this->_getRedirectPath());
     }
 
