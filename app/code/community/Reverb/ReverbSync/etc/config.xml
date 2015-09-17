@@ -202,19 +202,20 @@
         </events>
     </crontab>
 
-  <default>
-    <ReverbSync>
-      <reverbDefault>
-        <enable_listing_creation>0</enable_listing_creation>
-        <revCond>Brand New</revCond>
-        <revInvent>1</revInvent>
-      </reverbDefault>
-      <extension>
-        <revUrl>https://sandbox.reverb.com</revUrl>
-      </extension>
-        <orders_sync>
-            <enabled>0</enabled>
-        </orders_sync>
-    </ReverbSync>
-  </default>
+    <default>
+        <ReverbSync>
+            <reverbDefault>
+                <enable_listing_creation>0</enable_listing_creation>
+                <revCond>Brand New</revCond>
+                <revInvent>1</revInvent>
+            </reverbDefault>
+            <extension>
+                <revUrl>https://sandbox.reverb.com</revUrl>
+            </extension>
+            <orders_sync>
+                <enabled>0</enabled>
+                <super_mode_enabled>0</super_mode_enabled>
+            </orders_sync>
+        </ReverbSync>
+    </default>
 </config>
