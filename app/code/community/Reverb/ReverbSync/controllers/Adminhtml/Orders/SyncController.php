@@ -58,15 +58,15 @@ class Reverb_ReverbSync_Adminhtml_Orders_SyncController
             Mage::getSingleton('adminhtml/session')->addError($this->__($error_message));
 
             $redirectException = new Reverb_ReverbSync_Model_Exception_Redirect($error_message);
-            $redirectException->prepareRedirect($this->_getRedriectPath());
+            $redirectException->prepareRedirect($this->_getRedirectPath());
             throw $redirectException;
         }
 
         Mage::getSingleton('adminhtml/session')->addSuccess($this->__(self::SUCCESS_QUEUED_ORDERS_FOR_SYNC));
-        $this->_redirect($this->_getRedriectPath());
+        $this->_redirect($this->_getRedirectPath());
     }
 
-    protected function _getRedriectPath()
+    protected function _getRedirectPath()
     {
         $redirect_controller = $this->getRequest()->getParam('redirect_controller');
         if (empty($redirect_controller))

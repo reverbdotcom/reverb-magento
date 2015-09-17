@@ -160,6 +160,27 @@ class Reverb_ProcessQueue_Model_Task
         return $this->getResource()->setTaskAsCompleted($this, $success_message);
     }
 
+    public function getActionText()
+    {
+        $status = $this->getStatus();
+        if (!$this->isStatusValid($status))
+        {
+            return '';
+        }
+
+        switch($status)
+        {
+            case self::STATUS_ERROR:
+                return 'Retry';
+            case self::STATUS_PENDING:
+                return 'Execute';
+            default:
+                return '';
+        }
+
+        return '';
+    }
+
     protected function _returnSuccessCallbackResult($success_message)
     {
         $methodCallbackResultToReturn = Mage::getModel('reverb_process_queue/task_result');

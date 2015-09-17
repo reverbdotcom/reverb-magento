@@ -64,6 +64,17 @@ class Reverb_ReverbSync_Block_Adminhtml_Orders_Task_Unique_Index_Grid
             'type'      => 'datetime'
         ));
 
+        $this->addColumn('action', array(
+            'header'    => $this->_getTranslationHelper()->__('Action'),
+            'width'     => '50px',
+            'type'      => 'action',
+            'getter'    => 'getId',
+            'renderer'  => 'ReverbSync/adminhtml_widget_grid_column_renderer_order_task_action',
+            'filter'    => false,
+            'sortable'  => false,
+            'task_controller' => 'adminhtml_orders_sync_unique'
+        ));
+
         return parent::_prepareColumns();
     }
 
