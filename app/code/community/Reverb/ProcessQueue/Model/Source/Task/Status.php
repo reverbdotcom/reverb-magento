@@ -29,7 +29,7 @@ class Reverb_ProcessQueue_Model_Source_Task_Status
                     'value' => Reverb_ProcessQueue_Model_Task::STATUS_ERROR
                 ),
                 array(
-                    'label' => Mage::helper('reverb_process_queue')->__('Aborted'),
+                    'label' => Mage::helper('reverb_process_queue')->__('Failed'),
                     'value' => Reverb_ProcessQueue_Model_Task::STATUS_ABORTED
                 ),
             );
