@@ -1,0 +1,23 @@
+<?php /* @var $this Reverb_ReverbSync_Block_Adminhtml_Orders_Index */ ?>
+
+<div class="content-header">
+    <table cellspacing="0">
+        <tr>
+            <td><h3><?php echo $this->getHeaderText() ?></h3></td>
+            <td class="form-buttons">
+                <?php echo $this->getButtonsHtml() ?>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="reverb_orders_sync_detail">
+    <?php if(!$this->areTasksOutstanding()) { ?>
+        <div class="most_recent_task"><?php echo $this->getMostRecentTaskMessaging(); ?></div>
+    <?php } ?>
+
+    <?php foreach ($this->getTaskCountsByStatusDetailLabel() as $status_label => $task_count) { ?>
+        <span class="status_label">Tasks <?php echo $status_label ?></span> - <span class="task_count"><?php echo $task_count ?> Tasks</span>
+        <br>
+    <?php } ?>
+</div>
