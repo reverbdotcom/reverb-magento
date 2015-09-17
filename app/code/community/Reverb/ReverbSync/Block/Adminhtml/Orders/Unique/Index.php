@@ -2,6 +2,16 @@
 
 class Reverb_ReverbSync_Block_Adminhtml_Orders_Unique_Index extends Reverb_ReverbSync_Block_Adminhtml_Orders_Index
 {
+    protected function _retrieveAndProcessTasksButtonLabel()
+    {
+        return 'Download and Create New Orders';
+    }
+
+    protected function _processDownloadedTasksButtonLabel()
+    {
+        return 'Create Downloaded Orders';
+    }
+
     protected function _getBulkSyncUrlParams()
     {
         return array('redirect_controller' => 'adminhtml_orders_sync_unique');
