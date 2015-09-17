@@ -8,7 +8,7 @@ require_once('Reverb/ProcessQueue/controllers/Adminhtml/Unique/IndexController.p
 class Reverb_ReverbSync_Adminhtml_Orders_Sync_UniqueController
     extends Reverb_ProcessQueue_Adminhtml_Unique_IndexController
 {
-    const EXCEPTION_LOAD_UNIQUE_TASK = 'An exception occurred while attempting to load a unique order task to manually act on the order: %s';
+    const EXCEPTION_LOAD_UNIQUE_TASK = 'An exception occurred while attempting to load a unique order task to manually act on the task: %s';
     const EXCEPTION_ACT_ON_TASK = 'An error occurred while acting on the task for the order with Reverb Order Id %s: %s';
     const GENERIC_ADMIN_FACING_ERROR_MESSAGE = 'An error occurred with your request. Please try again.';
     const SUCCESS_TASK_ACTION = 'The attempt to %s the Sync of Reverb Order with id %s has completed.';
@@ -36,7 +36,7 @@ class Reverb_ReverbSync_Adminhtml_Orders_Sync_UniqueController
             $uniqueQueueTask = Mage::getModel('reverb_process_queue/task_unique')->load($reverb_order_id);
             if ((!is_object($uniqueQueueTask)) || (!$uniqueQueueTask->getId()))
             {
-                throw new Exception('An invalid Unique Task Id was passed to the Reverb Orders Sync Unique Controller');
+                throw new Exception('An invalid Unique Task Id was passed to the Reverb Orders Sync Unique Controller: ' . $reverb_order_id);
             }
         }
         catch(Exception $e)

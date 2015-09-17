@@ -4,9 +4,13 @@ require_once('Reverb/ProcessQueue/controllers/Adminhtml/IndexController.php');
 class Reverb_ReverbSync_Adminhtml_Orders_SyncController
     extends Reverb_ProcessQueue_Adminhtml_IndexController
 {
+    const EXCEPTION_LOAD_TASK = 'An exception occurred while attempting to load an order task to manually act on the task: %s';
     const EXCEPTION_BULK_ORDERS_SYNC = 'Error executing a Reverb bulk orders sync: %s';
     const SUCCESS_QUEUED_ORDERS_FOR_SYNC = 'Order sync in progress. Please wait a few minutes and refresh this page...';
     const ERROR_DENIED_ORDER_CREATION_STATUS_UPDATE = 'You do not have permissions to update this task\'s status';
+    const GENERIC_ADMIN_FACING_ERROR_MESSAGE = 'An error occurred with your request. Please try again.';
+    const EXCEPTION_ACT_ON_TASK = 'An error occurred while acting on a task for the order with Reverb Id %s: %s';
+    const SUCCESS_TASK_ACTION = 'The attempt to %s the Sync of the Order with Reverb ID %s has completed.';
 
     public function indexAction()
     {
@@ -64,6 +68,55 @@ class Reverb_ReverbSync_Adminhtml_Orders_SyncController
 
         Mage::getSingleton('adminhtml/session')->addSuccess($this->__(self::SUCCESS_QUEUED_ORDERS_FOR_SYNC));
         $this->_redirect($this->_getRedirectPath());
+    }
+
+    public function actOnTaskAction()
+    {
+        try
+        {
+            $task_id = $this->getRequest()->getParam('task_id');
+            $queueTask = Mage::getModel('reverb_process_queue/task')->load($task_id);
+            if ((!is_object($queueTask)) || (!$queueTask->getId()))
+            {
+                throw new Exception('An invalid Task Id was passed to the Reverb Orders Sync Controller: ' . $task_id);
+            }
+
+            $argumentsObject = $queueTask->convertSerializedArgumentsIntoObject();
+            $reverb_order_id = isset($argumentsObject->order_number) ? $argumentsObject->order_number : '';
+        }
+        catch(Exception $e)
+        {
+            $error_message = sprintf(self::EXCEPTION_LOAD_TASK, $e->getMessage());
+            $this->_logOrderSyncError($error_message);
+            Mage::getSingleton('adminhtml/session')->addError($this->__(self::GENERIC_ADMIN_FACING_ERROR_MESSAGE));
+            $exception = new Reverb_ReverbSync_Controller_Varien_Exception($error_message);
+            $exception->prepareRedirect('*/*/index');
+            throw $exception;
+        }
+
+        try
+        {
+            Mage::helper('reverb_process_queue/task_processor')->processQueueTask($queueTask);
+        }
+        catch(Exception $e)
+        {
+            $error_message = sprintf(self::EXCEPTION_ACT_ON_TASK, $reverb_order_id, $e->getMessage());
+            $this->_logOrderSyncError($error_message);
+            Mage::getSingleton('adminhtml/session')->addError($this->__($error_message));
+            $exception = new Reverb_ReverbSync_Controller_Varien_Exception($error_message);
+            $exception->prepareRedirect('*/*/index');
+            throw $exception;
+        }
+
+        $action_text = $queueTask->getActionText();
+        $success_message = sprintf(self::SUCCESS_TASK_ACTION, $action_text, $reverb_order_id);
+        Mage::getSingleton('adminhtml/session')->addSuccess($this->__($success_message));
+        $this->_redirect('*/*/index');
+    }
+
+    protected function _logOrderSyncError($error_message)
+    {
+        Mage::getSingleton('reverbSync/log')->logOrderSyncError($error_message);
     }
 
     protected function _getRedirectPath()
