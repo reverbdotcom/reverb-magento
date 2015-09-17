@@ -48,6 +48,7 @@ class Reverb_ProcessQueue_Model_Mysql4_Task extends Mage_Core_Model_Mysql4_Abstr
         //  connections will see that this row is already processing
 
         $update_bind_array = array('status' => Reverb_ProcessQueue_Model_Task::STATUS_PROCESSING,
+                                    'status_message' => null,
                                     'last_executed_at' => $current_gmt_datetime);
         $where_conditions_array = array('task_id=?' => $task_id, 'status=?' => $current_status);
 
