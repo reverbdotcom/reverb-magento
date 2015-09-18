@@ -10,6 +10,9 @@ class Reverb_ReverbSync_Helper_Orders_Creation extends Reverb_ReverbSync_Helper_
     const ERROR_AMOUNT_TAX_MISSING = 'The amount_tax object, which is supposed contain the product\'s tax amount, was not found';
     const ERROR_INVALID_SKU = 'An attempt was made to create an order in magento for a Reverb order which had an invalid sku %s';
     const INVALID_CURRENCY_CODE = 'An invalid currency code %s was defined.';
+    const EXCEPTION_UPDATE_STORE_NAME = 'An error occurred while setting the store name to %s for order with Reverb Order Id #%s: %s';
+
+    const REVERB_ORDER_STORE_NAME = 'Reverb';
 
     public function createMagentoOrder(stdClass $reverbOrderObject)
     {
@@ -62,6 +65,19 @@ class Reverb_ReverbSync_Helper_Orders_Creation extends Reverb_ReverbSync_Helper_
         $order->setReverbOrderStatus($reverb_order_status);
 
         $order->save();
+
+        try
+        {
+            // Update store name as adapter query for performance consideration purposes
+            Mage::getResourceSingleton('reverbSync/order')
+                ->setReverbStoreNameByReverbOrderId($reverb_order_number, self::REVERB_ORDER_STORE_NAME);
+        }
+        catch(Exception $e)
+        {
+            // Log the exception but don't stop execution
+            $error_message = $this->__(self::EXCEPTION_UPDATE_STORE_NAME, self::REVERB_ORDER_STORE_NAME, $reverb_order_number, $e->getMessage());
+            $this->_logOrderSyncError($error_message);
+        }
 
         $this->_getShippingHelper()->unsetOrderBeingSynced();
         $this->_getPaymentHelper()->unsetOrderBeingSynced();
