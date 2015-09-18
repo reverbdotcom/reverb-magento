@@ -21,8 +21,12 @@ class Reverb_ReverbSync_Helper_Orders_Creation extends Reverb_ReverbSync_Helper_
         }
 
         $quoteToBuild = Mage::getModel('sales/quote');
-        // Process this quote as though we were an admin in the admin panel
-        $quoteToBuild->setIsSuperMode(true);
+
+        if (Mage::helper('ReverbSync/orders_sync')->isOrderSyncSuperModeEnabled())
+        {
+            // Process this quote as though we were an admin in the admin panel
+            $quoteToBuild->setIsSuperMode(true);
+        }
 
         $productToAddToQuote = $this->_getProductToAddToQuote($reverbOrderObject);
         $qty = $reverbOrderObject->quantity;

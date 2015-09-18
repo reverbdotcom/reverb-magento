@@ -8,6 +8,7 @@ class Reverb_ReverbSync_Helper_Orders_Sync extends Mage_Core_Helper_Abstract
 {
     const ORDER_SYNC_DISABLED_MESSAGE = 'Order Sync Is Not Enabled in System -> Configuration -> Reverb Configuration -> Order Sync -> Enable Order Sync';
     const ORDER_SYNC_ENABLED_CONFIG_PATH = 'ReverbSync/orders_sync/enabled';
+    const ORDER_SYNC_SUPER_MODE_ENABLED_CONFIG_PATH = 'ReverbSync/orders_sync/super_mode_enabled';
 
     const ORDER_UPDATE_SYNC_ACL_PATH = 'sales/reverb_order_task_sync_update';
     const ORDER_CREATION_SYNC_ACL_PATH = 'sales/reverb_order_unique_task_sync_update';
@@ -29,6 +30,11 @@ class Reverb_ReverbSync_Helper_Orders_Sync extends Mage_Core_Helper_Abstract
     public function isOrderSyncEnabled()
     {
         return Mage::getStoreConfig(self::ORDER_SYNC_ENABLED_CONFIG_PATH);
+    }
+
+    public function isOrderSyncSuperModeEnabled()
+    {
+        return Mage::getStoreConfig(self::ORDER_SYNC_SUPER_MODE_ENABLED_CONFIG_PATH);
     }
 
     public function logOrderSyncDisabledMessage()
