@@ -20,4 +20,10 @@ class Reverb_ReverbSync_Helper_Orders_Layout
         $orderInfoBlock = Mage::app()->getLayout()->getBlock('order_info');
         $orderInfoBlock->setTemplate('ReverbSync/sales/order/view/info.phtml');
     }
+
+    public function updateAdminOrderViewLayoutForReverbOrderInvoice($reverbOrder)
+    {
+        $orderInfoBlock = Mage::app()->getLayout()->getBlock('order_info');
+        $orderInfoBlock->setTemplate('ReverbSync/sales/order/view/info.phtml');
+    }
 }

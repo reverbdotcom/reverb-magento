@@ -133,6 +133,16 @@
                 </update_layout_for_reverb_order>
             </observers>
         </controller_action_layout_render_before_adminhtml_sales_order_view>
+
+        <controller_action_layout_render_before_adminhtml_sales_order_invoice_view>
+            <observers>
+                <update_layout_for_reverb_order>
+                    <type>singleton</type>
+                    <class>reverbSync/observer_orders</class>
+                    <method>updateAdminOrderViewForReverbOrderInvoices</method>
+                </update_layout_for_reverb_order>
+            </observers>
+        </controller_action_layout_render_before_adminhtml_sales_order_invoice_view>
     </events>
 
   </adminhtml>
