@@ -21,6 +21,7 @@ class Reverb_ReverbSync_Helper_Orders_Creation extends Reverb_ReverbSync_Helper_
         }
 
         $quoteToBuild = Mage::getModel('sales/quote');
+        $reverb_order_number = $reverbOrderObject->order_number;
 
         if (Mage::helper('ReverbSync/orders_sync')->isOrderSyncSuperModeEnabled())
         {
@@ -39,8 +40,7 @@ class Reverb_ReverbSync_Helper_Orders_Creation extends Reverb_ReverbSync_Helper_
 
         $this->_addTaxAndCurrencyToQuoteItem($quoteToBuild, $reverbOrderObject);
 
-        $magentoCustomerObject = Mage::getModel('customer/customer');
-        $quoteToBuild->setCustomer($magentoCustomerObject);
+        $this->_getCustomerHelper()->addCustomerToQuote($reverbOrderObject, $quoteToBuild);
 
         $this->_getAddressHelper()->addOrderAddressAsShippingAndBillingToQuote($reverbOrderObject, $quoteToBuild);
         $this->_getShippingHelper()->setShippingMethodAndRateOnQuote($reverbOrderObject, $quoteToBuild);
@@ -52,7 +52,6 @@ class Reverb_ReverbSync_Helper_Orders_Creation extends Reverb_ReverbSync_Helper_
 
         $order = $service->getOrder();
 
-        $reverb_order_number = $reverbOrderObject->order_number;
         $order->setReverbOrderId($reverb_order_number);
 
         $reverb_order_status = $reverbOrderObject->status;
