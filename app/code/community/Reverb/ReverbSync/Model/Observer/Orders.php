@@ -50,6 +50,24 @@ class Reverb_ReverbSync_Model_Observer_Orders
         }
     }
 
+    public function updateAdminOrderViewForReverbOrderInvoices($observer)
+    {
+        $orderInvoice = Mage::registry('current_invoice');
+        if (is_object($orderInvoice) && $orderInvoice->getId())
+        {
+            $order = $orderInvoice->getOrder();
+            if (is_object($order) && $order->getId())
+            {
+                $reverb_order_id = $order->getReverbOrderId();
+                if (!empty($reverb_order_id))
+                {
+                    Mage::helper('ReverbSync/orders_layout')
+                        ->updateAdminOrderViewLayoutForReverbOrderInvoice($order);
+                }
+            }
+        }
+    }
+
     protected function _getReverbShippingHelper()
     {
         if (is_null($this->_reverbShippingHelper))

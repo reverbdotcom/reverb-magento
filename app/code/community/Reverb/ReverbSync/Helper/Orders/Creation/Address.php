@@ -63,25 +63,8 @@ class Reverb_ReverbSync_Helper_Orders_Creation_Address extends Reverb_ReverbSync
     protected function _getCustomerAddressForOrder(stdClass $shippingAddressObject)
     {
         $name = $shippingAddressObject->name;
-        $exploded_name = explode(' ', $name);
-        $first_name = array_shift($exploded_name);
-        if (empty($exploded_name))
-        {
-            // Only one word was provided in the name field, default last name to "Customer"
-            $last_name = "Customer";
-            $middle_name = '';
-        }
-        else if (count($exploded_name) > 1)
-        {
-            // Middle name was provided
-            $middle_name = array_shift($exploded_name);
-            $last_name = implode(' ', $exploded_name);
-        }
-        else
-        {
-            $middle_name = '';
-            $last_name = implode(' ', $exploded_name);
-        }
+
+        list($first_name, $middle_name, $last_name) = $this->getExplodedNameFields($name);
 
         $street_address = $shippingAddressObject->street_address;
         $extended_address = $shippingAddressObject->extended_address;
