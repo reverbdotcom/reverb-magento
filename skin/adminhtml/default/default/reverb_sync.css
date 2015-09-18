@@ -1,0 +1,9 @@
+div.reverb_orders_sync_detail table.task_status_counts .task_count
+{
+    padding-left: 15px;
+}
+
+div.reverb_orders_sync_detail table.task_status_counts
+{
+    font-weight: bold;
+}
