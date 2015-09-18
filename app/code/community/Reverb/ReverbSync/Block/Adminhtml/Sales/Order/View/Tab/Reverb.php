@@ -26,12 +26,23 @@ class Reverb_ReverbSync_Block_Adminhtml_Sales_Order_View_Tab_Reverb
         return null;
     }
 
-    public function getOrderStatus()
+    public function getReverbOrderId()
     {
         $reverbOrder = $this->getReverbOrder();
         if (is_object($reverbOrder) && $reverbOrder->getId())
         {
-            return $reverbOrder->getStatus();
+            return $reverbOrder->getReverbOrderId();
+        }
+
+        return null;
+    }
+
+    public function getReverbOrderStatus()
+    {
+        $reverbOrder = $this->getReverbOrder();
+        if (is_object($reverbOrder) && $reverbOrder->getId())
+        {
+            return $reverbOrder->getReverbOrderStatus();
         }
 
         return null;
