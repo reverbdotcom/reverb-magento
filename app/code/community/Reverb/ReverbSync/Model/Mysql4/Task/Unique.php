@@ -22,4 +22,19 @@ abstract class Reverb_ReverbSync_Model_Mysql4_Task_Unique extends Reverb_ReverbS
         $insert_data_array_template['unique_id'] = $unique_id;
         return $insert_data_array_template;
     }
+
+    public function getPrimaryKeyByUniqueId($unique_id)
+    {
+        $table_name = $this->getMainTable();
+        $readConnection = $this->getReadConnection();
+
+        $select = $readConnection
+                    ->select()
+                    ->from($table_name, array('task_id'))
+                    ->where('unique_id = ?', $unique_id);
+
+        $unique_task_primary_key = $readConnection->fetchOne($select);
+
+        return $unique_task_primary_key;
+    }
 }

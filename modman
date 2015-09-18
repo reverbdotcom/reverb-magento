@@ -11,3 +11,4 @@ app/design/adminhtml/default/default/layout/ReverbSync.xml                      
 app/design/adminhtml/default/default/template/ReverbSync                            app/design/adminhtml/default/default/template/ReverbSync
 app/design/frontend/base/default/template/ReverbSync                                app/design/frontend/base/default/template/ReverbSync
 app/code/community/Reverb                                                           app/code/community/Reverb
+skin/adminhtml/default/default/reverb_sync.css                                      skin/adminhtml/default/default/reverb_sync.css

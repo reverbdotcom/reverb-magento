@@ -14,12 +14,12 @@ class Reverb_ReverbSync_Helper_Orders_Retrieval_Creation
     public function queueOrderActionByReverbOrderDataObject(stdClass $orderDataObject)
     {
         $reverb_order_number = $orderDataObject->order_number;
-
         try
         {
-            $magento_entity_id = Mage::getResourceSingleton('reverbSync/order')
-                                    ->getMagentoOrderEntityIdByReverbOrderNumber($reverb_order_number);
-            if (!empty($magento_entity_id))
+            // The Reverb Order Number is used as the unique_id for the order creation tasks
+            $unique_task_primary_key_id = Mage::getResourceSingleton('reverbSync/task_order')
+                                            ->getPrimaryKeyByUniqueId($reverb_order_number);
+            if (!empty($unique_task_primary_key_id))
             {
                 // Order was already synced, don't attempt to queue an order creation
                 // Return true because the calling block will throw an exception if we return an empty() value

@@ -12,5 +12,17 @@
 	<adminhtml_catalog_product_edit>
 		<update handle="add_reverb_product_tab"/>
 	</adminhtml_catalog_product_edit>
+
+    <reverb_sync_adminhtml_orders_sync_index>
+        <reference name="head">
+            <action method="addCss"><file>reverb_sync.css</file></action>
+        </reference>
+    </reverb_sync_adminhtml_orders_sync_index>
+
+    <reverb_sync_adminhtml_orders_sync_unique_index>
+        <reference name="head">
+            <action method="addCss"><file>reverb_sync.css</file></action>
+        </reference>
+    </reverb_sync_adminhtml_orders_sync_unique_index>
 </layout>
 
