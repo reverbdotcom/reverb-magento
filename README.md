@@ -1,8 +1,6 @@
-# Reverb Magento Sample Integration
+# Reverb Magento Plugin
 
-This is a demo Magento application for integrating with Reverb's API. It is a functional way to sync your listing inventory with Reverb, but is under development. 
-
-Since there are many different magento versions and installations out there, we hope that by providing this sample integration, shops can customize it as needed.
+This is a Magento app for integrating with Reverb's API including product sync (magento->reverb) and order sync (reverb->magento). It is currently under heavy development. Please read this entire README prior to installing the application.
 
 
 ## Installation: Part 1 - Install the App
