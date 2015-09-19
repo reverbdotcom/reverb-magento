@@ -41,6 +41,11 @@ class Reverb_ProcessQueue_Model_Mysql4_Task extends Mage_Core_Model_Mysql4_Abstr
         }
         // Status here can be PENDING or ERROR
         $current_status = $taskObject->getStatus();
+        if (Reverb_ProcessQueue_Model_Task::STATUS_PROCESSING == $current_status)
+        {
+            // Assume another execution thread is actively processing this task
+            return false;
+        }
         $current_gmt_datetime = Mage::getSingleton('core/date')->gmtDate();
 
         // First, attempt to update the row based on id and status. If no rows are updated, another thread has already
