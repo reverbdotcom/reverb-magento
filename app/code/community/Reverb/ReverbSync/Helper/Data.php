@@ -5,6 +5,10 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
     const MODULE_NOT_ENABLED = 'The Reverb Module is not enabled, so products can not be synced with Reverb. Please enable this functionality in System -> Configuration -> Reverb Configuration -> Reverb Extension';
     const ERROR_LISTING_CREATION_IS_NOT_ENABLED = 'Reverb listing creation has not been enabled.';
 
+    // In the event that no configuration value was returned for the base url, default to the sandbox URL
+    // It's better to make erroneous calls to the sandbox than to production
+    const DEFAULT_REVERB_BASE_API_URL = 'https://sandbox.reverb.com';
+
     const API_CALL_LOG_TEMPLATE = "\n%s\n%s\n%s\n%s\n";
 
     const LISTING_STATUS_ERROR = 0;
@@ -82,7 +86,7 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         }
 
         // Construct URL for API Request
-        $rev_url = Mage::getStoreConfig('ReverbSync/extension/revUrl');
+        $rev_url = $this->_getReverbAPIBaseUrl();
         $url = $rev_url . "/api/listings";
         // Get post body content for API Request
         $fieldsArray = $listingWrapper->getApiCallContentData();
@@ -266,7 +270,13 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
 
     protected function _getReverbAPIBaseUrl()
     {
-        return Mage::getStoreConfig('ReverbSync/extension/revUrl');
+        $base_url = Mage::getStoreConfig('ReverbSync/extension/revUrl');
+        if (empty($base_url))
+        {
+            $base_url = self::DEFAULT_REVERB_BASE_API_URL;
+        }
+
+        return $base_url;
     }
 
     /**
