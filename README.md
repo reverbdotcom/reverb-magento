@@ -12,13 +12,13 @@ Please follow the instructions below to download and install the app. This assum
 export MAGENTO_PATH=/path/to/magento
 
 # Download the release
-cd /tmp && wget https://github.com/reverbdotcom/magento/archive/0.3.6.tar.gz
+cd /tmp && wget https://github.com/reverbdotcom/magento/archive/0.3.7.tar.gz
 
 # Unzip the release
-tar zxvf 0.3.6.tar.gz
+tar zxvf 0.3.7.tar.gz
 
 # Copy everything from the app folder into your magento app
-rsync -avzp magento-0.3.6/app/* $MAGENTO_PATH/htdocs/app/
+rsync -avzp magento-0.3.7/app/* $MAGENTO_PATH/htdocs/app/
 
 # Clear your cache
 rm -rf $MAGENTO_PATH/htdocs/var/cache
