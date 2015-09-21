@@ -44,6 +44,7 @@ class Reverb_ReverbSync_Model_Adapter_Curl extends Varien_Http_Adapter_Curl
         }
         $headers_array[] = 'X-Magento-Version: ' . $magento_version_string;
         $headers_array[] = 'X-Magento-Domain: ' . $magento_domain;
+        $headers_array[] = 'X-Reverb-App: magento';
 
         $this->addOption(CURLOPT_HTTPHEADER, $headers_array);
     }
