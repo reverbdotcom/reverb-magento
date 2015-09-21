@@ -6,6 +6,50 @@
 
 class Reverb_ReverbSync_Helper_Orders_View
 {
+    public function getLinkToItemOnReverb($reverbOrder)
+    {
+        $orderItem = $this->_getReverbOrderItemByOrder($reverbOrder);
+
+        $reverb_item_link = $orderItem->getReverbItemLink();
+        if (!empty($reverb_item_link))
+        {
+            $reverb_base_url = Mage::helper('ReverbSync')->getReverbBaseUrl();
+            $item_link = $reverb_base_url . $reverb_item_link;
+            return $item_link;
+        }
+
+        return '';
+    }
+
+    public function getReverbOrderItemSku($reverbOrder)
+    {
+        $orderItem = $this->_getReverbOrderItemByOrder($reverbOrder);
+        if (is_object($orderItem) && $orderItem->getId())
+        {
+            return $orderItem->getSku();
+        }
+
+        return false;
+    }
+
+    protected function _getReverbOrderItemByOrder($reverbOrder)
+    {
+        if ((!is_object($reverbOrder)) || (!$reverbOrder->getId()))
+        {
+            return false;
+        }
+
+        $order_items = $reverbOrder->getAllVisibleItems();
+        // There should only be one item in any Reverb Order
+        $orderItem = reset($order_items);
+        if ((!is_object($orderItem)) || (!$orderItem->getId()))
+        {
+            return false;
+        }
+
+        return $orderItem;
+    }
+
     public function getStoreNameForReverbOrder($reverbOrder)
     {
         if (is_object($reverbOrder) && $reverbOrder->getId())

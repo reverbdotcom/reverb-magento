@@ -73,6 +73,14 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
                 <td class="label"><label><?php echo Mage::helper('sales')->__('Reverb Order Status') ?></label></td>
                 <td class="value"><strong><?php echo Mage::helper('ReverbSync/orders_view')->getReverbOrderStatus($this->getOrder()) ?></strong></td>
             </tr>
+            <?php if($link_to_item_on_reverb = Mage::helper('ReverbSync/orders_view')->getLinkToItemOnReverb($this->getOrder())) { ?>
+                <?php $item_sku = Mage::helper('ReverbSync/orders_view')->getReverbOrderItemSku($this->getOrder()); ?>
+                <?php $link_text = (!empty($item_sku)) ? $item_sku : 'Item on Reverb' ?>
+                <tr>
+                    <td class="label"><label><?php echo Mage::helper('sales')->__('Link to Item on Reverb') ?></label></td>
+                    <td class="value"><strong><a href="<?php echo $link_to_item_on_reverb ?>"><?php echo $link_text ?></a></strong></td>
+                </tr>
+            <?php } ?>
             <?php if($_order->getRelationChildId()): ?>
             <tr>
                 <td class="label"><label><?php echo Mage::helper('sales')->__('Link to the New Order') ?></label></td>

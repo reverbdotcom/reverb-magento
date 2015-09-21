@@ -39,7 +39,9 @@ class Reverb_ReverbSync_Helper_Orders_Creation extends Reverb_ReverbSync_Helper_
             $qty = 1;
         }
         $qty = intval($qty);
-        $quoteToBuild->addProduct($productToAddToQuote, $qty);
+        $quoteItem = $quoteToBuild->addProduct($productToAddToQuote, $qty);
+
+        $this->_addReverbItemLinkToQuoteItem($quoteItem, $reverbOrderObject);
 
         $this->_addTaxAndCurrencyToQuoteItem($quoteToBuild, $reverbOrderObject);
 
@@ -117,6 +119,15 @@ class Reverb_ReverbSync_Helper_Orders_Creation extends Reverb_ReverbSync_Helper_
         $product->setPrice($product_cost);
 
         return $product;
+    }
+
+    protected function _addReverbItemLinkToQuoteItem(Mage_Sales_Model_Quote_Item $quoteItem, $reverbOrderObject)
+    {
+        if (isset($reverbOrderObject->_links->listing->href))
+        {
+            $listing_api_url_path = $reverbOrderObject->_links->listing->href;
+            $quoteItem->setReverbItemLink($listing_api_url_path);
+        }
     }
 
     protected function _addTaxAndCurrencyToQuoteItem(Mage_Sales_Model_Quote $quoteToBuild, $reverbOrderObject)
