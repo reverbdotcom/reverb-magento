@@ -8,6 +8,8 @@ class Reverb_ReverbSync_Helper_Orders_Creation_Customer extends Reverb_ReverbSyn
 {
     const EXCEPTION_ADDING_CUSTOMER_NAME = 'An error occurred while trying to add the buyer\'s name to the quote while creating order with Reverb id #%s: %s';
 
+    const BUYER_EMAIL_TEMPLATE = '%s@orders.reverb.com';
+
     public function addCustomerToQuote(stdClass $reverbOrderObject, Mage_Sales_Model_Quote $quoteToBuild)
     {
         $magentoCustomerObject = Mage::getModel('customer/customer');
@@ -22,6 +24,14 @@ class Reverb_ReverbSync_Helper_Orders_Creation_Customer extends Reverb_ReverbSyn
                 $magentoCustomerObject->setFirstname($first_name);
                 $magentoCustomerObject->setMiddlename($middle_name);
                 $magentoCustomerObject->setLastname($last_name);
+            }
+
+            if (isset($reverbOrderObject->buyer_id) && (!empty($reverbOrderObject->buyer_id)))
+            {
+                $buyer_id = $reverbOrderObject->buyer_id;
+                $hashed_buyer_id = md5($buyer_id);
+                $customer_email = sprintf(self::BUYER_EMAIL_TEMPLATE, $hashed_buyer_id);
+                $magentoCustomerObject->setEmail($customer_email);
             }
         }
         catch(Exception $e)
