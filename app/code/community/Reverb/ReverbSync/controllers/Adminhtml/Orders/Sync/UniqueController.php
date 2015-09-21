@@ -32,8 +32,8 @@ class Reverb_ReverbSync_Adminhtml_Orders_Sync_UniqueController
     {
         try
         {
-            $reverb_order_id = $this->getRequest()->getParam('task_id');
-            $uniqueQueueTask = Mage::getModel('reverb_process_queue/task_unique')->load($reverb_order_id);
+            $task_id = $this->getRequest()->getParam('task_id');
+            $uniqueQueueTask = Mage::getModel('reverb_process_queue/task_unique')->load($task_id);
             if ((!is_object($uniqueQueueTask)) || (!$uniqueQueueTask->getId()))
             {
                 throw new Exception('An invalid Unique Task Id was passed to the Reverb Orders Sync Unique Controller: ' . $reverb_order_id);
@@ -55,7 +55,7 @@ class Reverb_ReverbSync_Adminhtml_Orders_Sync_UniqueController
         }
         catch(Exception $e)
         {
-            $error_message = sprintf(self::EXCEPTION_ACT_ON_TASK, $reverb_order_id, $e->getMessage());
+            $error_message = sprintf(self::EXCEPTION_ACT_ON_TASK, $task_id, $e->getMessage());
             $this->_logOrderSyncError($error_message);
             Mage::getSingleton('adminhtml/session')->addError($this->__($error_message));
             $exception = new Reverb_ReverbSync_Controller_Varien_Exception($error_message);
@@ -64,6 +64,7 @@ class Reverb_ReverbSync_Adminhtml_Orders_Sync_UniqueController
         }
 
         $action_text = $uniqueQueueTask->getActionText();
+        $reverb_order_id = $uniqueQueueTask->getUniqueId();
         $success_message = sprintf(self::SUCCESS_TASK_ACTION, $action_text, $reverb_order_id);
         Mage::getSingleton('adminhtml/session')->addSuccess($this->__($success_message));
         $this->_redirect('*/*/index');
