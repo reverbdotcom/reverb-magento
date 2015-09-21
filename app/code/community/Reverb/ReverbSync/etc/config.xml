@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Reverb_ReverbSync>
-            <version>0.1.4</version>
+            <version>0.1.5</version>
         </Reverb_ReverbSync>
     </modules>
     <global>
@@ -179,14 +179,23 @@
                 </run>
             </reverb_process_queued_listing_sync_tasks>
 
-            <reverb_sync_orders>
+            <reverb_sync_order_creations>
                 <schedule>
-                    <cron_expr>*/5 * * * *</cron_expr>
+                    <cron_expr>2,7,12,17,22,27,32,37,42,47,52,57 * * * *</cron_expr>
                 </schedule>
                 <run>
-                    <model>reverbSync/cron_orders_sync::executeOrderRetrievalAndProcessing</model>
+                    <model>reverbSync/cron_orders_creation::attemptCronExecution</model>
                 </run>
-            </reverb_sync_orders>
+            </reverb_sync_order_creations>
+
+            <reverb_sync_order_updates>
+                <schedule>
+                    <cron_expr>3,8,13,18,23,28,33,38,43,48,53,58 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>reverbSync/cron_orders_update::attemptCronExecution</model>
+                </run>
+            </reverb_sync_order_updates>
         </jobs>
 
         <events>
