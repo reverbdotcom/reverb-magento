@@ -279,6 +279,11 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         return $base_url;
     }
 
+    public function getReverbBaseUrl()
+    {
+        return $this->_getReverbAPIBaseUrl();
+    }
+
     /**
      * @param $url
      * @param array $options_array
