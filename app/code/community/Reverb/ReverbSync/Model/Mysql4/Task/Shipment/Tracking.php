@@ -39,12 +39,15 @@ class Reverb_ReverbSync_Model_Mysql4_Task_Shipment_Tracking extends Reverb_Rever
     public function queueOrderCreationByReverbOrderDataObject(Mage_Sales_Model_Order_Shipment_Track $shipmentTrackingObject)
     {
         $unique_id_key = $this->_getReverbShipmentHelper()->getTrackingSyncQueueTaskUniqueId($shipmentTrackingObject);
+        $reverb_order_id = $this->_getReverbShipmentHelper()
+                                    ->getReverbOrderIdForMagentoShipmentTrackingObject($shipmentTrackingObject);
 
         $insert_data_array = $this->_getUniqueInsertDataArrayTemplate(self::ORDER_CREATION_OBJECT,
                                                                         self::ORDER_CREATION_METHOD, $unique_id_key);
 
         $tracking_data = $shipmentTrackingObject->getData();
         $tracking_data_to_serialize = array_intersect_key($tracking_data, $this->_tracking_data_values_to_serialize);
+        $tracking_data_to_serialize['reverb_order_id'] = $reverb_order_id;
 
         try
         {
