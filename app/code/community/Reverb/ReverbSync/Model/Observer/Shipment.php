@@ -27,7 +27,7 @@ class Reverb_ReverbSync_Model_Observer_Shipment
         catch(Exception $e)
         {
             $error_message = $this->_getReverbShipmentHelper()->__(self::ERROR_SEND_TRACKING_INFO_TO_REVERB, $e->getMessage());
-            Mage::getSingleton('reverbSync/log')->logShipmentTrackingSyncError($error_message);
+            $this->_getReverbShipmentHelper()->logError($error_message);
         }
     }
 

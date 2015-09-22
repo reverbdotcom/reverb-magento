@@ -8,10 +8,10 @@
                     <sales>
                         <children>
                             <reverb_order_unique_task_sync translate="title" module="ReverbSync">
-                                <title>Reverb Order Creation Sync</title>
+                                <title>Reverb Order Creation and Shipment Tracking Sync</title>
                             </reverb_order_unique_task_sync>
                             <reverb_order_unique_task_sync_update translate="title" module="ReverbSync">
-                                <title>Change Reverb Order Creation Sync Task Status</title>
+                                <title>Change Reverb Order Creation and Shipment Tracking Sync Task Status</title>
                             </reverb_order_unique_task_sync_update>
                             <reverb_order_task_sync translate="title" module="ReverbSync">
                                 <title>Reverb Order Update Sync</title>
@@ -36,7 +36,7 @@
         <sales translate="title" module="ReverbSync">
             <children>
                 <reverb_order_unique_task_sync translate="title" module="ReverbSync">
-                    <title>Reverb Order Creation Sync</title>
+                    <title>Reverb Order Creation and Shipment Tracking Sync</title>
                     <action>reverbSync/adminhtml_orders_sync_unique</action>
                     <sort_order>15</sort_order>
                 </reverb_order_unique_task_sync>

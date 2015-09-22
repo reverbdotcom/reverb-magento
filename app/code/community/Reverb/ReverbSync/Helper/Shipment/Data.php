@@ -34,7 +34,7 @@ class Reverb_ReverbSync_Helper_Shipment_Data extends Mage_Core_Helper_Abstract
             // We shouldn't be catching anything here. If we do, a PHP level exception likely occurred
             $tracking_id = is_object($shipmentTrackingObject) ? $shipmentTrackingObject->getId() : null;
             $error_message = $this->__(self::EXCEPTION_QUEUE_TRACKING_SYNC, $tracking_id, $e->getMessage());
-            $this->_logError($error_message);
+            $this->logError($error_message);
         }
 
         return null;
@@ -142,7 +142,7 @@ class Reverb_ReverbSync_Helper_Shipment_Data extends Mage_Core_Helper_Abstract
         {
             $tracking_shipment_id = $shipmentTrackingObject->getId();
             $error_message = $this->__(self::EXCEPTION_GET_REVERB_ORDER_ID, $tracking_shipment_id, $e->getMessage());
-            $this->_logError($error_message);
+            $this->logError($error_message);
         }
 
         return null;
@@ -166,7 +166,7 @@ class Reverb_ReverbSync_Helper_Shipment_Data extends Mage_Core_Helper_Abstract
         return null;
     }
 
-    protected function _logError($error_message)
+    public function logError($error_message)
     {
         Mage::getSingleton('reverbSync/log')->logShipmentTrackingSyncError($error_message);
     }

@@ -6,10 +6,10 @@
 
 class Reverb_ReverbSync_Model_Mysql4_Task_Shipment_Tracking extends Reverb_ReverbSync_Model_Mysql4_Task_Unique
 {
+    const ERROR_ADDING_PRODUCT_DATA = 'An error occurred while adding product data to a Reverb Shipment Tracking Sync queue task object for shipment track with tracking number %s: %s';
+
     const ORDER_CREATION_OBJECT = 'reverbSync/sync_shipment_tracking';
     const ORDER_CREATION_METHOD = 'transmitTrackingDataToReverb';
-
-    protected $_task_code = 'shipment_tracking_sync';
 
     protected $_tracking_data_values_to_serialize = array(
         'carrier_code' => 'carrier_code',
@@ -46,6 +46,27 @@ class Reverb_ReverbSync_Model_Mysql4_Task_Shipment_Tracking extends Reverb_Rever
         $tracking_data = $shipmentTrackingObject->getData();
         $tracking_data_to_serialize = array_intersect_key($tracking_data, $this->_tracking_data_values_to_serialize);
 
+        try
+        {
+            $magentoShipment = $shipmentTrackingObject->getShipment();
+            if (is_object($magentoShipment))
+            {
+                $magentoOrder = $magentoShipment->getOrder();
+                if (is_object($magentoOrder))
+                {
+                    $magentoProduct = Mage::helper('ReverbSync/orders_sync')->getReverbOrderItemByOrder($magentoOrder);
+                    $tracking_data_to_serialize['sku'] = $magentoProduct->getSku();
+                    $tracking_data_to_serialize['name'] = $magentoProduct->getName();
+                }
+            }
+        }
+        catch(Exception $e)
+        {
+            // Do not stop execution, but log the exception
+            $error_message = $this->_getReverbShipmentHelper()->__(self::ERROR_ADDING_PRODUCT_DATA, $shipmentTrackingObject->getTrackNumber(), $e->getMessage());
+            $this->_getReverbShipmentHelper()->logError($error_message);
+        }
+
         $serialized_arguments_object = serialize($tracking_data_to_serialize);
         $insert_data_array['serialized_arguments_object'] = $serialized_arguments_object;
 
@@ -64,7 +85,7 @@ class Reverb_ReverbSync_Model_Mysql4_Task_Shipment_Tracking extends Reverb_Rever
 
     public function getTaskCode()
     {
-        return $this->_task_code;
+        return Reverb_ReverbSync_Model_Sync_Shipment_Tracking::JOB_CODE;
     }
 
     protected function _getReverbShipmentHelper()

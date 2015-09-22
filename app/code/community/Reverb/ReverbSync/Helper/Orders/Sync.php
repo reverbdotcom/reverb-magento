@@ -17,6 +17,24 @@ class Reverb_ReverbSync_Helper_Orders_Sync extends Mage_Core_Helper_Abstract
 
     protected $_order_sync_is_disabled_message = null;
 
+    public function getReverbOrderItemByOrder($reverbOrder)
+    {
+        if ((!is_object($reverbOrder)) || (!$reverbOrder->getId()))
+        {
+            return false;
+        }
+
+        $order_items = $reverbOrder->getAllVisibleItems();
+        // There should only be one item in any Reverb Order
+        $orderItem = reset($order_items);
+        if ((!is_object($orderItem)) || (!$orderItem->getId()))
+        {
+            return false;
+        }
+
+        return $orderItem;
+    }
+
     public function canAdminChangeOrderCreationSyncStatus()
     {
         return Mage::getSingleton('admin/session')->isAllowed(self::ORDER_CREATION_SYNC_ACL_PATH);
