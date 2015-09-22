@@ -19,8 +19,14 @@ class Reverb_ReverbSync_Model_Adapter_Curl extends Varien_Http_Adapter_Curl
     protected function _applyConfig()
     {
         $this->_addCurrentMagentoVersionUserAgent();
+        $this->_applyOptions();
 
         return parent::_applyConfig();
+    }
+
+    protected function _applyOptions()
+    {
+        curl_setopt_array($this->_getResource(), $this->_options);
     }
 
     protected function _addCurrentMagentoVersionUserAgent()
