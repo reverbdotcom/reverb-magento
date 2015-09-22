@@ -21,6 +21,21 @@ class Reverb_ReverbSync_Model_Mysql4_Order extends Mage_Sales_Model_Mysql4_Order
         return $order_entity_id;
     }
 
+    public function getReverbOrderIdByMagentoOrderEntityId($magento_order_entity_id)
+    {
+        $table_name = $this->getMainTable();
+        $readConnection = $this->getReadConnection();
+
+        $select = $readConnection
+            ->select()
+            ->from($table_name, array('reverb_order_id'))
+            ->where('entity_id = ?', $magento_order_entity_id);
+
+        $order_entity_id = $readConnection->fetchOne($select);
+
+        return $order_entity_id;
+    }
+
     public function updateReverbOrderStatusByMagentoEntityId($magento_entity_id, $reverb_order_status)
     {
         $update_bind_array = array('reverb_order_status' => $reverb_order_status);
