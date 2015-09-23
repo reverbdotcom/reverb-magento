@@ -16,6 +16,8 @@ abstract class Reverb_Process_Model_Locked_Cron_Abstract
 
     abstract public function attemptLockForThread($thread_number);
 
+    protected $_suppress_failed_lock_attempt_error_messages = false;
+
     public function attemptLock()
     {
         $thread_count = $this->getParallelThreadCount();
@@ -63,7 +65,10 @@ abstract class Reverb_Process_Model_Locked_Cron_Abstract
             $cron_code = $this->getCronCode();
             $error_message = sprintf(self::ERROR_UNABLE_TO_SECURE_LOCK_FILE, $cron_code);
 
-            $this->_logError($error_message);
+            if (!$this->_suppress_failed_lock_attempt_error_messages)
+            {
+                $this->_logError($error_message);
+            }
         }
     }
 }

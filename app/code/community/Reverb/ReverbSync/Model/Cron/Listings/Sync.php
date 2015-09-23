@@ -10,6 +10,8 @@ class Reverb_ReverbSync_Model_Cron_Listings_Sync
 {
     const CRON_UNCAUGHT_EXCEPTION = 'Error processing the Reverb Listing Sync Process Queue: %s';
 
+    protected $_suppress_failed_lock_attempt_error_messages = true;
+
     public function executeCron()
     {
         try
@@ -43,5 +45,10 @@ class Reverb_ReverbSync_Model_Cron_Listings_Sync
     public function getCronCode()
     {
         return 'reverb_listing_sync';
+    }
+
+    protected function _logError($error_message)
+    {
+        Mage::getSingleton('reverbSync/log')->logListingSyncError($error_message);
     }
 } 
