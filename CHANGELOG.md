@@ -1,3 +1,6 @@
+## 0.3.9
+* Fix "curl error #3" affecting certain versions of Magento
+
 ## 0.3.8
 
 * Orders have a "fake" but consistent (across orders) buyer email a1b2c3@orders.reverb.com for use with other systems that rely on email as a unique key

@@ -10,9 +10,9 @@ class Reverb_ReverbSync_Adminhtml_Orders_SyncController
     const ERROR_DENIED_ORDER_CREATION_STATUS_UPDATE = 'You do not have permissions to update this task\'s status';
     const GENERIC_ADMIN_FACING_ERROR_MESSAGE = 'An error occurred with your request. Please try again.';
     const EXCEPTION_ACT_ON_TASK = 'An error occurred while acting on a task for the order with Reverb Id %s: %s';
-    const SUCCESS_TASK_ACTION = 'The attempt to %s the Sync of the Order with Reverb ID %s has completed.';
-    const SUCCESS_QUEUED_ORDERS_FOR_SYNC = 'Order sync in progress. Please wait a few minutes and refresh this page...';
-    const SUCCESS_PROCESSING_DOWNLOADED_TASKS = 'Processing downloaded orders. Please wait a few minutes and refresh this page...';
+    const NOTICE_TASK_ACTION = 'The attempt to %s the Sync of the Order with Reverb ID %s has completed.';
+    const NOTICE_QUEUED_ORDERS_FOR_SYNC = 'Order sync in progress. Please wait a few minutes and refresh this page...';
+    const NOTICE_PROCESSING_DOWNLOADED_TASKS = 'Processing downloaded orders. Please wait a few minutes and refresh this page...';
 
     public function indexAction()
     {
@@ -68,7 +68,7 @@ class Reverb_ReverbSync_Adminhtml_Orders_SyncController
             throw $redirectException;
         }
 
-        Mage::getSingleton('adminhtml/session')->addSuccess($this->__(self::SUCCESS_QUEUED_ORDERS_FOR_SYNC));
+        Mage::getSingleton('adminhtml/session')->addNotice($this->__(self::NOTICE_QUEUED_ORDERS_FOR_SYNC));
         $this->_redirect($this->_getRedirectPath());
     }
 
@@ -93,7 +93,7 @@ class Reverb_ReverbSync_Adminhtml_Orders_SyncController
             throw $redirectException;
         }
 
-        Mage::getSingleton('adminhtml/session')->addSuccess($this->__(self::SUCCESS_PROCESSING_DOWNLOADED_TASKS));
+        Mage::getSingleton('adminhtml/session')->addNotice($this->__(self::NOTICE_PROCESSING_DOWNLOADED_TASKS));
         $this->_redirect($this->_getRedirectPath());
     }
 
@@ -136,8 +136,8 @@ class Reverb_ReverbSync_Adminhtml_Orders_SyncController
         }
 
         $action_text = $queueTask->getActionText();
-        $success_message = sprintf(self::SUCCESS_TASK_ACTION, $action_text, $reverb_order_id);
-        Mage::getSingleton('adminhtml/session')->addSuccess($this->__($success_message));
+        $notice_message = sprintf(self::NOTICE_TASK_ACTION, $action_text, $reverb_order_id);
+        Mage::getSingleton('adminhtml/session')->addNotice($this->__($notice_message));
         $this->_redirect('*/*/index');
     }
 

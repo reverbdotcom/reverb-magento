@@ -1,18 +1,5 @@
 <?xml version="1.0"?>
 <layout>
-	<add_reverb_product_tab>
-		<reference name="product_tabs">
-			<action method="addTab">
-				<name>offlinesynctab</name>
-				<block>ReverbSync/adminhtml_catalog_product_tab</block>
-			</action>
-		</reference>
-	</add_reverb_product_tab>
-	<!-- supports simple product -->
-	<adminhtml_catalog_product_edit>
-		<update handle="add_reverb_product_tab"/>
-	</adminhtml_catalog_product_edit>
-
     <reverb_sync_adminhtml_orders_sync_index>
         <reference name="head">
             <action method="addCss"><file>reverb_sync.css</file></action>
@@ -25,4 +12,3 @@
         </reference>
     </reverb_sync_adminhtml_orders_sync_unique_index>
 </layout>
-

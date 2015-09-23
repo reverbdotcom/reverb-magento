@@ -55,4 +55,9 @@ class Reverb_ReverbSync_Model_Cron_Orders_Retrieval
     {
         return 'reverb_order_retrieval';
     }
+
+    protected function _logError($error_message)
+    {
+        Mage::getSingleton('reverbSync/log')->logOrderSyncError($error_message);
+    }
 }
