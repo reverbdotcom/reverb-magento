@@ -1,13 +1,6 @@
 <?xml version="1.0"?>
 
 <layout>
-  <adminhtml_reports_reverbreport_index>
-    <reference name="menu">
-      <action method="setActive">
-        <menupath>catalog/reverb_sync</menupath>
-      </action>
-    </reference>
-  </adminhtml_reports_reverbreport_index>
   <adminhtml_reports_reverbreport_ajaxgrid>
     <block type="core/text_list" name="root" output="toHtml">
       <block type="reverb_reports/adminhtml_reverbreport_grid" name="reverbreport_grid"/>
