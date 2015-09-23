@@ -12,8 +12,8 @@ class Reverb_ReverbSync_Adminhtml_Orders_Sync_UniqueController
     const EXCEPTION_ACT_ON_TASK = 'An error occurred while acting on the task for the order with Reverb Order Id %s: %s';
     const GENERIC_ADMIN_FACING_ERROR_MESSAGE = 'An error occurred with your request. Please try again.';
     const EXCEPTION_SYNC_SHIPMENT_TRACKING = 'An error occurred while attempting to sync shipment tracking data with Reverb: %s';
-    const SUCCESS_TASK_ACTION = 'The attempt to %s the Sync of Reverb Order with id %s has completed.';
-    const SUCCESS_SYNC_SHIPMENT_TRACKING = 'The attempt to sync shipment tracking data with Reverb has completed';
+    const NOTICE_TASK_ACTION = 'The attempt to %s the Sync of Reverb Order with id %s has completed.';
+    const NOTICE_SYNC_SHIPMENT_TRACKING = 'The attempt to sync shipment tracking data with Reverb has completed';
 
     public function indexAction()
     {
@@ -67,8 +67,8 @@ class Reverb_ReverbSync_Adminhtml_Orders_Sync_UniqueController
 
         $action_text = $uniqueQueueTask->getActionText();
         $reverb_order_id = $uniqueQueueTask->getUniqueId();
-        $success_message = sprintf(self::SUCCESS_TASK_ACTION, $action_text, $reverb_order_id);
-        Mage::getSingleton('adminhtml/session')->addSuccess($this->__($success_message));
+        $notice_message = sprintf(self::NOTICE_TASK_ACTION, $action_text, $reverb_order_id);
+        Mage::getSingleton('adminhtml/session')->addNotice($this->__($notice_message));
         $this->_redirect('*/*/index');
     }
 
@@ -90,7 +90,7 @@ class Reverb_ReverbSync_Adminhtml_Orders_Sync_UniqueController
             throw $exception;
         }
 
-        Mage::getSingleton('adminhtml/session')->addSuccess($this->__(self::SUCCESS_SYNC_SHIPMENT_TRACKING));
+        Mage::getSingleton('adminhtml/session')->addNotice($this->__(self::NOTICE_SYNC_SHIPMENT_TRACKING));
         $this->_redirect('*/*/index');
     }
 

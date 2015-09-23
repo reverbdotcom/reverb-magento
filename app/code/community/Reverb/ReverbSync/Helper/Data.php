@@ -4,12 +4,17 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
 {
     const MODULE_NOT_ENABLED = 'The Reverb Module is not enabled, so products can not be synced with Reverb. Please enable this functionality in System -> Configuration -> Reverb Configuration -> Reverb Extension';
     const ERROR_LISTING_CREATION_IS_NOT_ENABLED = 'Reverb listing creation has not been enabled.';
+    const ERROR_EMPTY_RESPONSE = 'The API call returned an empty response. Curl error message: %s';
+    const ERROR_RESPONSE_ERROR = "The API call response contained errors: %s\nCurl error message: %s";
+    const ERROR_API_STATUS_NOT_OK = "The API call returned an HTTP status that was not 200: %s.\nURL: %s\n:Content: %s\nCurl Error Message: %s";
 
     // In the event that no configuration value was returned for the base url, default to the sandbox URL
     // It's better to make erroneous calls to the sandbox than to production
     const DEFAULT_REVERB_BASE_API_URL = 'https://sandbox.reverb.com';
 
     const API_CALL_LOG_TEMPLATE = "\n%s\n%s\n%s\n%s\n";
+
+    const HTTP_STATUS_OK = 200;
 
     const LISTING_STATUS_ERROR = 0;
     const LISTING_STATUS_SUCCESS = 1;
