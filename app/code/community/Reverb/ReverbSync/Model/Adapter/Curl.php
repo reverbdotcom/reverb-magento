@@ -154,6 +154,11 @@ class Reverb_ReverbSync_Model_Adapter_Curl extends Varien_Http_Adapter_Curl
         return curl_errno($this->_getResource());
     }
 
+    public function getOption($option)
+    {
+        return isset($this->_options[$option]) ? $this->_options[$option] : null;
+    }
+
     protected function _getOption($option)
     {
         return isset($this->_options[$option]) ? $this->_options[$option] : null;

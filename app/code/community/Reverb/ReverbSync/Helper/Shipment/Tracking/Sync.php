@@ -4,7 +4,9 @@
  * Created: 9/22/15
  */
 
-class Reverb_ReverbSync_Helper_Shipment_Tracking_Sync extends Reverb_ReverbSync_Helper_Data
+class Reverb_ReverbSync_Helper_Shipment_Tracking_Sync
+    extends Reverb_ReverbSync_Helper_Data
+    implements Reverb_ReverbSync_Helper_Api_Adapter_Interface
 {
     const ERROR_NO_REVERB_ORDER_ID = 'No Reverb Order Id was defined in an attempt to send a shipment tracking sync call to Reverb';
 
@@ -13,6 +15,17 @@ class Reverb_ReverbSync_Helper_Shipment_Tracking_Sync extends Reverb_ReverbSync_
     const PARAM_SEND_NOTIFICATION = 'send_notification';
     const PARAM_PROVIDER = 'provider';
 
+    /**
+     * The calling block is expected to provide a try-catch block in which to execute this request
+     *
+     * @param int $reverb_order_id
+     * @param string $tracking_number
+     * @param string $shipping_provider
+     * @param bool $send_notification
+     * @return array - Containing the json_deocded response
+     *
+     * @throws Reverb_ReverbSync_Model_Exception_Api_Shipment_Tracking -
+     */
     public function sendShipmentTrackingDataToReverb($reverb_order_id, $tracking_number, $shipping_provider, $send_notification)
     {
         $api_endpoint_base_url = $this->_getReverbAPIBaseUrl();
@@ -27,38 +40,26 @@ class Reverb_ReverbSync_Helper_Shipment_Tracking_Sync extends Reverb_ReverbSync_
 
         $curlResource = $this->_getCurlResource($api_url);
         $post_response_as_json = $curlResource->executePostRequest($post_fields_content);
-        $status = $curlResource->getRequestHttpCode();
-        // Need to grab any potential errors before closing the resource
-        $curl_error_message = $curlResource->getCurlErrorMessage();
-        $curlResource->logRequest();
-        // Close the CURL Resource
-        $curlResource->close();
-        // Log the response
-        $this->_logApiCall($post_fields_content, $post_response_as_json, 'shipmentTracking', $status);
-        // Decode the json response
-        $response_as_array = json_decode($post_response_as_json, true);
 
-        if ($status != self::HTTP_STATUS_OK)
-        {
-            $error_message = $this->__(self::ERROR_API_STATUS_NOT_OK, $status, $api_url, $post_fields_content, $curl_error_message);
-            Mage::getSingleton('reverbSync/log')->logShipmentTrackingSyncError($error_message);
-            throw new Reverb_ReverbSync_Model_Exception_Api_Shipment_Tracking($error_message);
-        }
-
-        if (empty($response_as_array))
-        {
-            $error_message = $this->__(self::ERROR_EMPTY_RESPONSE, $curl_error_message);
-            Mage::getSingleton('reverbSync/log')->logShipmentTrackingSyncError($error_message);
-            throw new Reverb_ReverbSync_Model_Exception_Api_Shipment_Tracking($error_message);
-        }
-
-        if (isset($response['errors']))
-        {
-            $errors_as_string = implode("\n", $response['errors']);
-            $error_message = $this->__(self::ERROR_RESPONSE_ERROR, $errors_as_string, $curl_error_message);
-            throw new Reverb_ReverbSync_Model_Exception_Api_Shipment_Tracking($error_message);
-        }
-
+        // If there are any errors with the api call or response, the method below will throw an Exception
+        $response_as_array = $this->_processCurlRequestResponse($post_response_as_json, $curlResource, $post_fields_content);
+        // If the response did contain errors, the above method would have thrown an Exception
         return $response_as_array;
+    }
+
+    public function getApiLogFileSuffix()
+    {
+        return 'shipment_tracking';
+    }
+
+    public function getExceptionObject($error_message)
+    {
+        $exceptionObject = new Reverb_ReverbSync_Model_Exception_Api_Shipment_Tracking($error_message);
+        return $exceptionObject;
+    }
+
+    public function logError($error_message)
+    {
+        Mage::getSingleton('reverbSync/log')->logShipmentTrackingSyncError($error_message);
     }
 }
