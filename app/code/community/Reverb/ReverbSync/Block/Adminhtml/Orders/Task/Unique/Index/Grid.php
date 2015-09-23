@@ -21,6 +21,7 @@ class Reverb_ReverbSync_Block_Adminhtml_Orders_Task_Unique_Index_Grid
             'header'    => $this->_getTranslationHelper()->__('Reverb Order ID'),
             'align'     => 'left',
             'index'     => 'unique_id',
+            'renderer'  => 'ReverbSync/adminhtml_widget_grid_column_renderer_order_id',
             'type'      => 'text'
         ));
 
