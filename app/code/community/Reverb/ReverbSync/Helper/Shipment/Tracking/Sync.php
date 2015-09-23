@@ -10,7 +10,7 @@ class Reverb_ReverbSync_Helper_Shipment_Tracking_Sync
 {
     const ERROR_NO_REVERB_ORDER_ID = 'No Reverb Order Id was defined in an attempt to send a shipment tracking sync call to Reverb';
 
-    const SHIPMENT_TRACKING_URL_PATH_TEMPLATE = '/my/orders/selling/%s/ship';
+    const SHIPMENT_TRACKING_URL_PATH_TEMPLATE = '/api/my/orders/selling/%s/ship';
     const PARAM_TRACKING_NUMBER = 'tracking_number';
     const PARAM_SEND_NOTIFICATION = 'send_notification';
     const PARAM_PROVIDER = 'provider';

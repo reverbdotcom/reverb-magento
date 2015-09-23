@@ -8,6 +8,7 @@ class Reverb_ReverbSync_Model_Sync_Shipment_Tracking extends Reverb_ProcessQueue
 {
     const ERROR_INSUFFICIENT_DATA = "Insufficient data is set on a queue task object for Reverb Shipment Tracking Sync:\nReverb_Order Id: %s\nCarrier Code: %s\nTracking Number: %s";
     const ERROR_SEND_TRACKING_DATA = 'An error occurred while sending tracking data to Reverb: %s';
+    const SUCCESS_SHIPMENT_TRACKING_SYNC = 'Shipment Tracking has been synced with Reverb';
 
     const JOB_CODE = 'shipment_tracking_sync';
 
@@ -56,8 +57,7 @@ class Reverb_ReverbSync_Model_Sync_Shipment_Tracking extends Reverb_ProcessQueue
             return $this->_returnErrorCallbackResult($error_message);
         }
 
-        $api_response_as_string = implode("\n", $api_call_response);
-        return $this->_returnSuccessCallbackResult($api_response_as_string);
+        return $this->_returnSuccessCallbackResult(self::SUCCESS_SHIPMENT_TRACKING_SYNC);
     }
 
     public function getReverbShippingProviderByMagentoCarrierCode($carrier_code)
