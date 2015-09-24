@@ -9,6 +9,9 @@
  */
 class Reverb_ReverbSync_Model_Mapper_Product
 {
+    const LISTING_CREATION_ENABLED_CONFIG_PATH = 'ReverbSync/reverbDefault/enable_image_sync';
+
+    protected $_image_sync_is_enabled = null;
     protected $_condition = null;
     protected $_has_inventory = null;
 
@@ -33,7 +36,7 @@ class Reverb_ReverbSync_Model_Mapper_Product
                 "price"=>$price
                );
 
-        $fieldsArray = $this->addBaseImageUrlToArrayIfExists($fieldsArray, $product);
+        $this->addBaseImageUrlToArrayIfExists($fieldsArray, $product);
 
         $reverbListingWrapper->setApiCallContentData($fieldsArray);
         $reverbListingWrapper->setMagentoProduct($product);
@@ -63,7 +66,7 @@ class Reverb_ReverbSync_Model_Mapper_Product
             "price"=>$price
         );
 
-        $fieldsArray = $this->addBaseImageUrlToArrayIfExists($fieldsArray, $product);
+        $this->addBaseImageUrlToArrayIfExists($fieldsArray, $product);
 
         $reverbListingWrapper->setApiCallContentData($fieldsArray);
         $reverbListingWrapper->setMagentoProduct($product);
@@ -71,8 +74,13 @@ class Reverb_ReverbSync_Model_Mapper_Product
         return $reverbListingWrapper;
     }
 
-    public function addBaseImageUrlToArrayIfExists($fieldsArray, Mage_Catalog_Model_Product $product)
+    public function addBaseImageUrlToArrayIfExists(&$fieldsArray, Mage_Catalog_Model_Product $product)
     {
+        if (!$this->_getImageSyncIsEnabled())
+        {
+            return;
+        }
+
         try
         {
             Mage::getResourceSingleton('catalog/product')->load($product, $product->getId(), array('image'));
@@ -89,8 +97,16 @@ class Reverb_ReverbSync_Model_Mapper_Product
         {
             // Do nothing here
         }
+    }
 
-        return $fieldsArray;
+    protected function _getImageSyncIsEnabled()
+    {
+        if (is_null($this->_image_sync_is_enabled))
+        {
+            $this->_image_sync_is_enabled = Mage::getStoreConfig(self::LISTING_CREATION_ENABLED_CONFIG_PATH);
+        }
+
+        return $this->_image_sync_is_enabled;
     }
 
     protected function _getCondition()
