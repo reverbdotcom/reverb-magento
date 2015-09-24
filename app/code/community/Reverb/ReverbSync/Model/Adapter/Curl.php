@@ -7,12 +7,14 @@
 class Reverb_ReverbSync_Model_Adapter_Curl extends Varien_Http_Adapter_Curl
 {
     const REQUEST_LOG_TEMPLATE = "\ncurl -X%s %s %s %s";
-    const AUTH_TOKEN_HEADER_TEMPLATE = '-H "%s"';
+    const HEADER_TEMPLATE = '-H "%s"';
     const POST_DATA_ARGUMENT_TEMPLATE = '--data %s';
     const POST_ERROR_LOG_TEMPLATE = 'The following error occurred with the post above: %s';
     const CURL_ERROR_TEMPLATE = "Curl error number %s occurred with the following error message: %s";
     const USER_AGENT_TEMPLATE = 'Reverb-Magento MagentoVersion=%s MagentoDomain=%s';
     const MAGENTO_VERSION_TEMPLATE = '%s-%s';
+
+    const PUT_CUSTOM_REQUEST_VALUE = 'PUT';
 
     const REQUEST_LOG_FILE = 'reverb_curl_requests.log';
 
@@ -75,7 +77,7 @@ class Reverb_ReverbSync_Model_Adapter_Curl extends Varien_Http_Adapter_Curl
 
     public function executePutRequest($body)
     {
-        $this->addOption(CURLOPT_CUSTOMREQUEST, "PUT");
+        $this->addOption(CURLOPT_CUSTOMREQUEST, self::PUT_CUSTOM_REQUEST_VALUE);
         $this->addOption(CURLOPT_POSTFIELDS, $body);
 
         $this->_applyConfig();
@@ -92,24 +94,25 @@ class Reverb_ReverbSync_Model_Adapter_Curl extends Varien_Http_Adapter_Curl
 
     public function logRequest()
     {
-        $x_auth_token_header_to_log = '';
         $http_header = $this->_getOption(CURLOPT_HTTPHEADER);
+        $http_header_string_to_log = '';
+
         if (is_array($http_header))
         {
+            $http_headers_to_log_array = array();
+
             foreach($http_header as $header_value)
             {
-                if (strpos($header_value, 'X-Auth-Token') !== FALSE)
-                {
-                    $x_auth_token_header = $header_value;
-                    $x_auth_token_header_to_log = sprintf(self::AUTH_TOKEN_HEADER_TEMPLATE, $x_auth_token_header);
-                }
+                $http_headers_to_log_array[] = sprintf(self::HEADER_TEMPLATE, $header_value);
             }
+
+            $http_header_string_to_log = implode(' ' , $http_headers_to_log_array);
         }
 
         $url_to_log = $this->_getOption(CURLOPT_URL);
-        if ($this->_getOption(CURLOPT_PUT))
+        if (!strcmp($this->_getOption(CURLOPT_CUSTOMREQUEST), self::PUT_CUSTOM_REQUEST_VALUE))
         {
-            $http_method_log = 'PUT';
+            $http_method_log = self::PUT_CUSTOM_REQUEST_VALUE;
             $body = $this->_getOption(CURLOPT_POSTFIELDS);
             $body_to_log = sprintf(self::POST_DATA_ARGUMENT_TEMPLATE, $body);
         }
@@ -125,7 +128,7 @@ class Reverb_ReverbSync_Model_Adapter_Curl extends Varien_Http_Adapter_Curl
             $body_to_log = '';
         }
 
-        $string_to_log = sprintf(self::REQUEST_LOG_TEMPLATE, $http_method_log, $x_auth_token_header_to_log, $url_to_log, $body_to_log);
+        $string_to_log = sprintf(self::REQUEST_LOG_TEMPLATE, $http_method_log, $http_header_string_to_log, $url_to_log, $body_to_log);
         Mage::log($string_to_log, null, self::REQUEST_LOG_FILE);
 
         $status = $this->getRequestHttpCode();
@@ -158,6 +161,11 @@ class Reverb_ReverbSync_Model_Adapter_Curl extends Varien_Http_Adapter_Curl
     public function getCurlErrorNumber()
     {
         return curl_errno($this->_getResource());
+    }
+
+    public function getOption($option)
+    {
+        return isset($this->_options[$option]) ? $this->_options[$option] : null;
     }
 
     protected function _getOption($option)

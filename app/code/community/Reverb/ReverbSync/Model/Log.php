@@ -21,6 +21,11 @@ class Reverb_ReverbSync_Model_Log
         $this->logSyncError($error_message, 'orders');
     }
 
+    public function logShipmentTrackingSyncError($error_message)
+    {
+        $this->logSyncError($error_message, 'shipment_tracking');
+    }
+
     public function logListingSyncError($error_message)
     {
         $this->logSyncError($error_message, 'listings');

@@ -79,6 +79,19 @@
             </reverb_item_link>
         </sales_convert_quote_item>
     </fieldsets>
+
+    <events>
+        <sales_order_shipment_track_save_after>
+            <observers>
+                <send_tracking_info_to_reverb_if_necessary>
+                    <type>singleton</type>
+                    <class>reverbSync/observer_shipment</class>
+                    <method>sendTrackingInfoToReverbIfReverbOrder</method>
+                </send_tracking_info_to_reverb_if_necessary>
+            </observers>
+        </sales_order_shipment_track_save_after>
+    </events>
+
   </global>
   <adminhtml>
     <layout>

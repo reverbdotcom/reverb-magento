@@ -9,11 +9,19 @@ class Reverb_ReverbSync_Block_Adminhtml_Orders_Task_Unique_Index_Grid
 {
     protected function _prepareColumns()
     {
+        $this->addColumn('code', array(
+            'header'    => $this->_getTranslationHelper()->__('Sync Code'),
+            'align'     => 'left',
+            'index'     => 'code',
+            'type'      => 'options',
+            'options'   => Mage::getModel('reverbSync/source_unique_task_codes')->getOptionArray()
+        ));
+
         $this->addColumn('unique_id', array(
             'header'    => $this->_getTranslationHelper()->__('Reverb Order ID'),
-            'width'     => 50,
             'align'     => 'left',
             'index'     => 'unique_id',
+            'renderer'  => 'ReverbSync/adminhtml_widget_grid_column_renderer_order_id',
             'type'      => 'text'
         ));
 
@@ -61,7 +69,8 @@ class Reverb_ReverbSync_Block_Adminhtml_Orders_Task_Unique_Index_Grid
             'header'    => $this->_getTranslationHelper()->__('Last Executed At'),
             'align'     => 'left',
             'index'     => 'last_executed_at',
-            'type'      => 'datetime'
+            'type'      => 'datetime',
+            'renderer'  => 'ReverbSync/adminhtml_widget_grid_column_renderer_datetime',
         ));
 
         $this->addColumn('action', array(
@@ -80,7 +89,7 @@ class Reverb_ReverbSync_Block_Adminhtml_Orders_Task_Unique_Index_Grid
 
     public function setCollection($collection)
     {
-        $collection->addCodeFilter('order_creation');
+        $collection->addCodeFilter(array('order_creation', Reverb_ReverbSync_Model_Sync_Shipment_Tracking::JOB_CODE));
         parent::setCollection($collection);
     }
 }

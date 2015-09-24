@@ -147,9 +147,23 @@ class Reverb_ProcessQueue_Model_Task
         $serialized_arguments_object_string = $this->getSerializedArgumentsObject();
         $argumentsObject = unserialize($serialized_arguments_object_string);
 
+        if (is_array($argumentsObject))
+        {
+            $argumentsObjectToReturn = new stdClass();
+            foreach ($argumentsObject as $key => $value)
+            {
+                $argumentsObjectToReturn->$key = $value;
+            }
+
+            return $argumentsObjectToReturn;
+        }
+
         if (!is_object($argumentsObject))
         {
-            $argumentsObject = new stdClass();
+            $argumentsObjectToReturn = new stdClass();
+            $argumentsObjectToReturn->value = $argumentsObject;
+
+            return $argumentsObjectToReturn;
         }
 
         return $argumentsObject;

@@ -6,6 +6,8 @@
 
 class Reverb_ReverbSync_Helper_Orders_View
 {
+    protected $_orderSyncHelper = null;
+
     public function getLinkToItemOnReverb($reverbOrder)
     {
         $orderItem = $this->_getReverbOrderItemByOrder($reverbOrder);
@@ -34,20 +36,7 @@ class Reverb_ReverbSync_Helper_Orders_View
 
     protected function _getReverbOrderItemByOrder($reverbOrder)
     {
-        if ((!is_object($reverbOrder)) || (!$reverbOrder->getId()))
-        {
-            return false;
-        }
-
-        $order_items = $reverbOrder->getAllVisibleItems();
-        // There should only be one item in any Reverb Order
-        $orderItem = reset($order_items);
-        if ((!is_object($orderItem)) || (!$orderItem->getId()))
-        {
-            return false;
-        }
-
-        return $orderItem;
+        return $this->_getReverbOrderSyncHelper()->getReverbOrderItemByOrder($reverbOrder);
     }
 
     public function getStoreNameForReverbOrder($reverbOrder)
@@ -83,5 +72,15 @@ class Reverb_ReverbSync_Helper_Orders_View
         }
         // This should never happen, but handle the case where it does
         return '';
+    }
+
+    protected function _getReverbOrderSyncHelper()
+    {
+        if (is_null($this->_orderSyncHelper))
+        {
+            $this->_orderSyncHelper = Mage::helper('ReverbSync/orders_sync');
+        }
+
+        return $this->_orderSyncHelper;
     }
 }

@@ -5,7 +5,7 @@
  */
 
 class Reverb_ReverbSync_Block_Adminhtml_Widget_Grid_Column_Renderer_Order_Reverb_Id
-    extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract
+    extends Reverb_ReverbSync_Block_Adminhtml_Widget_Grid_Column_Renderer_Order_Id
 {
     public function _getValue(Varien_Object $row)
     {
@@ -13,7 +13,7 @@ class Reverb_ReverbSync_Block_Adminhtml_Widget_Grid_Column_Renderer_Order_Reverb
         if (isset($argumentsObject->order_number))
         {
             $reverb_order_number = $argumentsObject->order_number;
-            return $this->escapeHtml($reverb_order_number);
+            return $this->getHtmlAnchorLinkToViewOrderPageByReverbOrderId($reverb_order_number);
         }
         // This should never happen
         return '';

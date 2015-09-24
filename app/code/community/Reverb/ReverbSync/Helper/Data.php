@@ -1,15 +1,23 @@
 <?php
 
-class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
+class Reverb_ReverbSync_Helper_Data
+    extends Mage_Core_Helper_Abstract
+    implements Reverb_ReverbSync_Helper_Api_Adapter_Interface
 {
     const MODULE_NOT_ENABLED = 'The Reverb Module is not enabled, so products can not be synced with Reverb. Please enable this functionality in System -> Configuration -> Reverb Configuration -> Reverb Extension';
     const ERROR_LISTING_CREATION_IS_NOT_ENABLED = 'Reverb listing creation has not been enabled.';
+    const ERROR_EMPTY_RESPONSE = 'The API call returned an empty response. Curl error message: %s';
+    const ERROR_RESPONSE_ERROR = "The API call response contained errors: %s\nCurl error message: %s";
+    const ERROR_API_STATUS_NOT_OK = "The API call returned an HTTP status that was not 200: %s.\nURL: %s\nContent: %s\nCurl Error Message: %s";
 
     // In the event that no configuration value was returned for the base url, default to the sandbox URL
     // It's better to make erroneous calls to the sandbox than to production
     const DEFAULT_REVERB_BASE_API_URL = 'https://sandbox.reverb.com';
 
     const API_CALL_LOG_TEMPLATE = "\n%s\n%s\n%s\n%s\n";
+
+    const HTTP_STATUS_OK = 200;
+    const HTTP_STATUS_SUCCESS_REGEX = '/^2[0-9]{2}$/';
 
     const LISTING_STATUS_ERROR = 0;
     const LISTING_STATUS_SUCCESS = 1;
@@ -268,6 +276,84 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
         return true;
     }
 
+    protected function _processCurlRequestResponse($response_as_json, Reverb_ReverbSync_Model_Adapter_Curl $curlResource, $content_body = null)
+    {
+        $status = $curlResource->getRequestHttpCode();
+        // Need to grab any potential errors before closing the resource
+        $curl_error_message = $curlResource->getCurlErrorMessage();
+        $curlResource->logRequest();
+        // Close the CURL Resource
+        $curlResource->close();
+        // Log the response
+        $this->_logApiCall($content_body, $response_as_json, $this->getApiLogFileSuffix(), $status);
+        // Decode the json response
+        $response_as_array = json_decode($response_as_json, true);
+        // Ensure the status code is of the form 2xx
+        if (!$this->_isStatusSuccessful($status))
+        {
+            $api_url = $curlResource->getOption(CURLOPT_URL);
+            $error_message = $this->__(self::ERROR_API_STATUS_NOT_OK, $status, $api_url, $content_body, $curl_error_message);
+            $this->_logErrorAndThrowException($error_message);
+        }
+        // Ensure that the response was not empty
+        if (empty($response_as_json))
+        {
+            $error_message = $this->__(self::ERROR_EMPTY_RESPONSE, $curl_error_message);
+            $this->_logErrorAndThrowException($error_message);
+        }
+        // Ensure that the response did not signal any errors occurred
+        if (isset($response_as_array['errors']))
+        {
+            $errors_as_string = json_encode($response_as_array['errors']);
+            $error_message = $this->__(self::ERROR_RESPONSE_ERROR, $errors_as_string, $curl_error_message);
+            $this->_logErrorAndThrowException($error_message);
+        }
+
+        return $response_as_array;
+    }
+
+    protected function _isStatusSuccessful($status)
+    {
+        return preg_match(self::HTTP_STATUS_SUCCESS_REGEX, $status);
+    }
+
+    protected function _logErrorAndThrowException($error_message)
+    {
+        $this->logError($error_message);
+        $exceptionToThrow = $this->getExceptionObject($error_message);
+        throw $exceptionToThrow;
+    }
+
+    /**
+     * This method can be overwritten to return api-call specific exception objects
+     *
+     * @param string $error_message - Exception message
+     * @return Reverb_ReverbSync_Model_Exception_Api
+     */
+    public function getExceptionObject($error_message)
+    {
+        $exceptionObject = new Reverb_ReverbSync_Model_Exception_Api($error_message);
+        return $exceptionObject;
+    }
+
+    /**
+     * This method expected to be overridden by subclasses to target api-call specific log files
+     * @param $error_message
+     */
+    public function logError($error_message)
+    {
+        Mage::getSingleton('reverbSync/log')->logSyncError($error_message);
+    }
+
+    /**
+     * This method expected to be overridden by subclasses to target api-call specific log files
+     * @return string
+     */
+    public function getApiLogFileSuffix()
+    {
+        return 'curl_request';
+    }
+
     protected function _getReverbAPIBaseUrl()
     {
         $base_url = Mage::getStoreConfig('ReverbSync/extension/revUrl');
@@ -310,7 +396,7 @@ class Reverb_ReverbSync_Helper_Data extends Mage_Core_Helper_Abstract
     protected function _logApiCall($request, $response, $api_request, $status)
     {
         $message = sprintf(self::API_CALL_LOG_TEMPLATE, $api_request, $request, $status, $response);
-        $file = 'reverb_' . $api_request . '.log';
+        $file = 'reverb_sync_' . $api_request . '.log';
         Mage::log($message, null, $file);
     }
 }
