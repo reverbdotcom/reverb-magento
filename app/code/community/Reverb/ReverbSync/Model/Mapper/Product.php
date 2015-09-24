@@ -36,7 +36,7 @@ class Reverb_ReverbSync_Model_Mapper_Product
                 "price"=>$price
                );
 
-        $this->addBaseImageUrlToArrayIfExists($fieldsArray, $product);
+        $this->addProductImagesToFieldsArray($fieldsArray, $product);
 
         $reverbListingWrapper->setApiCallContentData($fieldsArray);
         $reverbListingWrapper->setMagentoProduct($product);
@@ -66,7 +66,7 @@ class Reverb_ReverbSync_Model_Mapper_Product
             "price"=>$price
         );
 
-        $this->addBaseImageUrlToArrayIfExists($fieldsArray, $product);
+        $this->addProductImagesToFieldsArray($fieldsArray, $product);
 
         $reverbListingWrapper->setApiCallContentData($fieldsArray);
         $reverbListingWrapper->setMagentoProduct($product);
@@ -74,7 +74,7 @@ class Reverb_ReverbSync_Model_Mapper_Product
         return $reverbListingWrapper;
     }
 
-    public function addBaseImageUrlToArrayIfExists(&$fieldsArray, Mage_Catalog_Model_Product $product)
+    public function addProductImagesToFieldsArray(&$fieldsArray, Mage_Catalog_Model_Product $product)
     {
         if (!$this->_getImageSyncIsEnabled())
         {
@@ -83,14 +83,19 @@ class Reverb_ReverbSync_Model_Mapper_Product
 
         try
         {
-            Mage::getResourceSingleton('catalog/product')->load($product, $product->getId(), array('image'));
-
-            $base_image_path_relative_path = $product->getImage();
-            if ((!empty($base_image_path_relative_path)) && (strcmp('no_selection', $base_image_path_relative_path)))
+            $gallery_image_urls_array = array();
+            $galleryImagesCollection = $product->getMediaGalleryImages();
+            if (is_object($galleryImagesCollection))
             {
-                $base_image_url = Mage::getModel('catalog/product_media_config')
-                                    ->getMediaUrl($base_image_path_relative_path);
-                $fieldsArray['photos'] = array($base_image_url);
+                $gallery_image_items = $galleryImagesCollection->getItems();
+                foreach($gallery_image_items as $galleryImageObject)
+                {
+                    $full_image_url = $galleryImageObject->getUrl();
+                    $gallery_image_urls_array[] = $full_image_url;
+                }
+                // Remove any potential duplicates
+                $unique_image_urls_array = array_unique($gallery_image_urls_array);
+                $fieldsArray['photos'] = $unique_image_urls_array;
             }
         }
         catch(Exception $e)
