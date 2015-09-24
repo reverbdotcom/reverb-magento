@@ -119,7 +119,7 @@ class Reverb_ReverbSync_Helper_Data
             $response['message'] = 'The response could not be decoded as a json.';
         }
 
-        if ($status != 201)
+        if (!$this->_isStatusSuccessful($status))
         {
             $listingWrapper->setStatus(self::LISTING_STATUS_ERROR);
 
@@ -182,7 +182,8 @@ class Reverb_ReverbSync_Helper_Data
             $response['message'] = 'The response could not be decoded as a json.';
         }
 
-        if ($status != 200) {
+        if (!$this->_isStatusSuccessful($status))
+        {
             if (isset($response['errors'])) {
                 throw new Exception($response['message'] . $response['errors'][key($response['errors'])][0]);
             } else {
@@ -242,7 +243,7 @@ class Reverb_ReverbSync_Helper_Data
 
         $response = json_decode($put_response_as_json, true);
 
-        if ($status != 200)
+        if (!$this->_isStatusSuccessful($status))
         {
             $listingWrapper->setStatus(self::LISTING_STATUS_ERROR);
             if (!empty($curl_error_message))
