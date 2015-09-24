@@ -13,7 +13,7 @@ class Reverb_ReverbSync_Model_Mapper_Product
     protected $_has_inventory = null;
 
     //function to Map the Mgento and Reverb attributes
-    public function getUpdateListingWrapper($product)
+    public function getUpdateListingWrapper(Mage_Catalog_Model_Product $product)
     {
         $reverbListingWrapper = Mage::getModel('reverbSync/wrapper_listing');
         $stock = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product);
@@ -33,13 +33,15 @@ class Reverb_ReverbSync_Model_Mapper_Product
                 "price"=>$price
                );
 
+        $fieldsArray = $this->addBaseImageUrlToArrayIfExists($fieldsArray, $product);
+
         $reverbListingWrapper->setApiCallContentData($fieldsArray);
         $reverbListingWrapper->setMagentoProduct($product);
 
         return $reverbListingWrapper;
     }
 
-    public function getCreateListingWrapper($product)
+    public function getCreateListingWrapper(Mage_Catalog_Model_Product $product)
     {
         $reverbListingWrapper = Mage::getModel('reverbSync/wrapper_listing');
         $stock = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product);
@@ -61,10 +63,34 @@ class Reverb_ReverbSync_Model_Mapper_Product
             "price"=>$price
         );
 
+        $fieldsArray = $this->addBaseImageUrlToArrayIfExists($fieldsArray, $product);
+
         $reverbListingWrapper->setApiCallContentData($fieldsArray);
         $reverbListingWrapper->setMagentoProduct($product);
 
         return $reverbListingWrapper;
+    }
+
+    public function addBaseImageUrlToArrayIfExists($fieldsArray, Mage_Catalog_Model_Product $product)
+    {
+        try
+        {
+            Mage::getResourceSingleton('catalog/product')->load($product, $product->getId(), array('image'));
+
+            $base_image_path_relative_path = $product->getImage();
+            if ((!empty($base_image_path_relative_path)) && (strcmp('no_selection', $base_image_path_relative_path)))
+            {
+                $base_image_url = Mage::getModel('catalog/product_media_config')
+                                    ->getMediaUrl($base_image_path_relative_path);
+                $fieldsArray['photos'] = array($base_image_url);
+            }
+        }
+        catch(Exception $e)
+        {
+            // Do nothing here
+        }
+
+        return $fieldsArray;
     }
 
     protected function _getCondition()
