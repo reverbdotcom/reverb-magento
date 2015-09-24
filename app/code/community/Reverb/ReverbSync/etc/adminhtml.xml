@@ -32,7 +32,7 @@
     <menu>
         <reverb translate="title" module="ReverbSync">
             <title>Reverb</title>
-            <sort_order>90</sort_order>
+            <sort_order>35</sort_order>
             <children>
                 <reverb_listings_sync translate="title" module="ReverbSync">
                     <title>Reverb Bulk Listings Sync</title>
