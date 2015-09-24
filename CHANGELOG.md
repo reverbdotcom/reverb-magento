@@ -1,3 +1,7 @@
+## 0.4.0
+
+* Sync tracking information back to Reverb when marked as shipped in magento
+
 ## 0.3.9
 * Fix "curl error #3" affecting certain versions of Magento
 
