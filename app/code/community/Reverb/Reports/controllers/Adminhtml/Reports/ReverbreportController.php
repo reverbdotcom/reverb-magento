@@ -64,7 +64,7 @@ extends Mage_Adminhtml_Controller_Action {
     }
 
   protected function _isAllowed() {
-    return Mage::getSingleton('admin/session') -> isAllowed('reverb_reports/reverbreport');
+    return Mage::getSingleton('admin/session') -> isAllowed('reverb/reverb_listings_sync');
   }
 
 }

@@ -5,7 +5,8 @@
         <resources>
             <admin>
                 <children>
-                    <sales>
+                    <reverb translate="title" module="ReverbSync">
+                        <title>Reverb</title>
                         <children>
                             <reverb_order_unique_task_sync translate="title" module="ReverbSync">
                                 <title>Reverb Order Creation and Shipment Tracking Sync</title>
@@ -19,22 +20,25 @@
                             <reverb_order_task_sync_update translate="title" module="ReverbSync">
                                 <title>Change Reverb Order Update Sync Task Status</title>
                             </reverb_order_task_sync_update>
-                        </children>
-                    </sales>
-                    <catalog>
-                        <children>
                             <reverb_listings_sync translate="title" module="ReverbSync">
                                 <title>Reverb Bulk Listings Sync</title>
                             </reverb_listings_sync>
                         </children>
-                    </catalog>
+                    </reverb>
                 </children>
             </admin>
         </resources>
     </acl>
     <menu>
-        <sales translate="title" module="ReverbSync">
+        <reverb translate="title" module="ReverbSync">
+            <title>Reverb</title>
+            <sort_order>35</sort_order>
             <children>
+                <reverb_listings_sync translate="title" module="ReverbSync">
+                    <title>Reverb Bulk Listings Sync</title>
+                    <action>reverbReports/adminhtml_reports_reverbreport</action>
+                    <sort_order>5</sort_order>
+                </reverb_listings_sync>
                 <reverb_order_unique_task_sync translate="title" module="ReverbSync">
                     <title>Reverb Order Creation and Shipment Tracking Sync</title>
                     <action>reverbSync/adminhtml_orders_sync_unique</action>
@@ -43,18 +47,9 @@
                 <reverb_order_task_sync translate="title" module="ReverbSync">
                     <title>Reverb Order Update Sync</title>
                     <action>reverbSync/adminhtml_orders_sync</action>
-                    <sort_order>15</sort_order>
+                    <sort_order>25</sort_order>
                 </reverb_order_task_sync>
             </children>
-        </sales>
-        <catalog translate="title" module="ReverbSync">
-            <children>
-                <reverb_listings_sync translate="title" module="ReverbSync">
-                    <title>Reverb Bulk Listings Sync</title>
-                    <action>reverbReports/adminhtml_reports_reverbreport</action>
-                    <sort_order>5</sort_order>
-                </reverb_listings_sync>
-            </children>
-        </catalog>
+        </reverb>
     </menu>
 </config>
