@@ -127,7 +127,7 @@ class Reverb_ReverbSync_Adminhtml_Orders_Sync_UniqueController
 
     public function getControllerActiveMenuPath()
     {
-        return 'sales/reverb_order_unique_task_sync';
+        return 'reverb/reverb_order_unique_task_sync';
     }
 
     public function getModuleInstanceDescription()
