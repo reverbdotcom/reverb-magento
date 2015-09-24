@@ -13,12 +13,12 @@ abstract class Reverb_ReverbSync_Model_Mysql4_Task_Unique extends Reverb_ReverbS
 
     protected function _getInsertColumnsArray()
     {
-        return array('code', 'unique_id', 'status', 'object', 'method', 'serialized_arguments_object');
+        return array('code', 'unique_id', 'status', 'object', 'method', 'serialized_arguments_object', 'subject_id');
     }
 
-    protected function _getUniqueInsertDataArrayTemplate($object, $method, $unique_id)
+    protected function _getUniqueInsertDataArrayTemplate($object, $method, $unique_id, $subject_id = null)
     {
-        $insert_data_array_template = parent::_getInsertDataArrayTemplate($object, $method);
+        $insert_data_array_template = parent::_getInsertDataArrayTemplate($object, $method, $subject_id);
         $insert_data_array_template['unique_id'] = $unique_id;
         return $insert_data_array_template;
     }

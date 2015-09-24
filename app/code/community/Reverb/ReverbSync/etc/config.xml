@@ -199,6 +199,15 @@
                 </run>
             </reverb_process_queued_listing_sync_tasks>
 
+            <reverb_process_queued_listing_image_sync_tasks>
+                <schedule>
+                    <cron_expr>*/2 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>reverbSync/cron_listings_images_sync::attemptCronExecution</model>
+                </run>
+            </reverb_process_queued_listing_image_sync_tasks>
+
             <reverb_sync_order_creations>
                 <schedule>
                     <cron_expr>2,7,12,17,22,27,32,37,42,47,52,57 * * * *</cron_expr>

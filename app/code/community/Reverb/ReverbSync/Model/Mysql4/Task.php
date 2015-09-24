@@ -28,17 +28,20 @@ abstract class Reverb_ReverbSync_Model_Mysql4_Task extends Mage_Core_Model_Mysql
 
     protected function _getInsertColumnsArray()
     {
-        return array('code', 'status', 'object', 'method', 'serialized_arguments_object');
+        return array('code', 'status', 'object', 'method', 'serialized_arguments_object', 'subject_id');
     }
 
-    protected function _getInsertDataArrayTemplate($object, $method)
+    protected function _getInsertDataArrayTemplate($object, $method, $subject_id = null)
     {
         $task_code = $this->getTaskCode();
-        return array(
-            'code' => $task_code,
-            'status' => Reverb_ProcessQueue_Model_Task::STATUS_PENDING,
-            'object' => $object,
-            'method' => $method
-        );
+        $data_array_template = array('code' => $task_code, 'status' => Reverb_ProcessQueue_Model_Task::STATUS_PENDING,
+                                    'object' => $object, 'method' => $method);
+
+        if (!is_null($subject_id))
+        {
+            $data_array_template['subject_id'] = $subject_id;
+        }
+
+        return $data_array_template;
     }
 }

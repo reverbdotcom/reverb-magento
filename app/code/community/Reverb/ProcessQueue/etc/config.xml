@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Reverb_ProcessQueue>
-            <version>0.0.3</version>
+            <version>0.0.4</version>
         </Reverb_ProcessQueue>
     </modules>
 
