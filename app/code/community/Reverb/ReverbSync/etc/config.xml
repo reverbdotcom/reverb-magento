@@ -245,6 +245,7 @@
         <ReverbSync>
             <reverbDefault>
                 <enable_listing_creation>0</enable_listing_creation>
+                <enable_image_sync>0</enable_image_sync>
                 <revCond>Brand New</revCond>
                 <revInvent>1</revInvent>
             </reverbDefault>
