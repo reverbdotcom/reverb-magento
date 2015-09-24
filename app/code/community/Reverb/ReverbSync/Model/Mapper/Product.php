@@ -36,7 +36,8 @@ class Reverb_ReverbSync_Model_Mapper_Product
                 "price"=>$price
                );
 
-        $this->addProductImagesToFieldsArray($fieldsArray, $product);
+        // We only want to bulk add images during the listing creation sync
+        //$this->addProductImagesToFieldsArray($fieldsArray, $product);
 
         $reverbListingWrapper->setApiCallContentData($fieldsArray);
         $reverbListingWrapper->setMagentoProduct($product);
