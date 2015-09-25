@@ -2,6 +2,15 @@
 
 This is a Magento app for integrating with Reverb's API including product sync (magento->reverb) and order sync (reverb->magento). It is currently under heavy development. Please read this entire README prior to installing the application.
 
+## Features
+
+* Create new listings on Reverb from Magento products (limitation: does not sync category yet)
+* Sync updates for price/inventory from Magento to Reverb
+* Sync orders from Reverb to Magento
+* Sync shipping number from Magento to Reverb
+* Sync images from Magento to Reverb (create only)
+
+Only simple products are synced. Configurable products are not synced.
 
 ## Installation: Part 1 - Install the App
 
@@ -64,27 +73,6 @@ The bulk sync uses multiple threads (runs in parallel). It takes some time to sp
 2. Enable logging (System->Configuration->Advanced->Developer->Log Settings
 3. Let the cron run again (wait a minute), then check logs `tail -f /path/to/magento/htdocs/var/log/*`
 
-## What's working
-
-Currently this extension syncs inventory from Magento to Reverb based on SKU.
-
-It will also create new listings on Reverb if the SKU is not found. The option to turn on or off listing creation is available in the global settings screen.
-
-The result of the sync is logged to a sync log available from the settings screen.
-
-Only simple products are synced. Configurable products are not synced.
-
-## What's not working
-
-* Syncing configurable products
-* Syncing images from magento to Reverb
-* Syncing inventory (decrements/increments) from Reverb to Magento [using webhooks](https://reverb.com/page/api#webhooks)
-* Order syncing from Reverb to Magento
-* Category mapping - from Magento categories to Reverb categories
-
-## Advanced cron usage (optional)
-
-Only one of these should be included in the crontab, not both. Also the schedule can be set to be less frequent than every minute if desired, but this would prevent the Reverb listing sync parallel execution threads from being started every other minute, which is the time defined in the config.xml file. It is recommended that if the Magento crontab schedule defined above is less often than every minute, the Reverb listing sync crontab job should have its schedule set to occur half as often as the Magento crontab; this will prevent the Reverb listing sync from blocking out other cron functionality once a Bulk Product Sync is triggered.
 
 ## Contributing
 
