@@ -39,12 +39,12 @@ class Reverb_ReverbSync_Helper_Data
             $reverb_listing_url = $this->findReverbListingUrlByMagentoSku($magento_sku);
             if ($reverb_listing_url)
             {
-                $listingWrapper = Mage::getModel('reverbSync/Mapper_Product')->getUpdateListingWrapper($product);
+                $listingWrapper = Mage::getSingleton('reverbSync/Mapper_Product')->getUpdateListingWrapper($product);
                 $reverb_web_url = $this->updateObject($listingWrapper, $reverb_listing_url);
             }
             else if(!$do_not_allow_creation)
             {
-                $listingWrapper = Mage::getModel('reverbSync/Mapper_Product')->getCreateListingWrapper($product);
+                $listingWrapper = Mage::getSingleton('reverbSync/Mapper_Product')->getCreateListingWrapper($product);
                 $reverb_web_url = $this->createObject($listingWrapper);
             }
             else
