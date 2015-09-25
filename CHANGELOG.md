@@ -1,3 +1,8 @@
+## 0.4.1
+* All reverb functionality consolidated under Reverb tab
+* Sync images (listing create only)
+* Fix handling of successful responses from listing create when attaching images
+
 ## 0.4.0
 
 * Sync tracking information back to Reverb when marked as shipped in magento
