@@ -122,7 +122,7 @@ class Reverb_ReverbSync_Adminhtml_Listings_Image_SyncController
 
     public function getFormBackControllerActionPath()
     {
-        return 'adminhtml_listings_image_sync_unique/index';
+        return 'adminhtml_listings_image_sync/index';
     }
 
     public function getBlockModuleGroupname()

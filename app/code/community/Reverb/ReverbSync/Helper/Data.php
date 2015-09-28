@@ -170,6 +170,15 @@ class Reverb_ReverbSync_Helper_Data
         return $web_url;
     }
 
+    protected function _getListingsApiEndpoint($magento_sku)
+    {
+        $rev_url = $this->_getReverbAPIBaseUrl();
+        $escaped_sku = urlencode($magento_sku);
+        $params = "state=all&sku=" . $escaped_sku;
+        $url = $rev_url . "/api/my/listings?" . $params;
+        return $url;
+    }
+
     /**
      * /api/my/listings?sku=#{CGI.escape(sku)}&
      *
@@ -181,12 +190,8 @@ class Reverb_ReverbSync_Helper_Data
      */
     public function findReverbListingUrlByMagentoSku($magento_sku)
     {
-        $rev_url = $this->_getReverbAPIBaseUrl();
-        $escaped_sku = urlencode($magento_sku);
-        $params = "state=all&sku=" . $escaped_sku;
-        $url = $rev_url . "/api/my/listings?" . $params;
         // Execute API Request via CURL
-        $curlResource = $this->_getCurlResource($url);
+        $curlResource = $this->_getCurlResource($this->_getListingsApiEndpoint($magento_sku));
         $json_response = $curlResource->read();
         $status = $curlResource->getRequestHttpCode();
         // Need to grab any potential errors before closing the resource
@@ -195,6 +200,7 @@ class Reverb_ReverbSync_Helper_Data
         // Close the CURL Resource
         $curlResource->close();
         // Log the response
+        $params = "state=all&sku=" . $magento_sku;
         $this->_logApiCall($params, $json_response, 'findReverbListingUrlByMagentoSku', $status);
 
         $response = json_decode($json_response, true);
