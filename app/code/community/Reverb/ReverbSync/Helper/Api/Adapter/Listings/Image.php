@@ -13,14 +13,15 @@ class Reverb_ReverbSync_Helper_Api_Adapter_Listings_Image
     public function transmitGalleryImageToReverb($magento_sku, $image_url)
     {
         // Get the API Endpoint URL for this sku
-        $api_endpoint_url = $this->_getListingsApiEndpoint($magento_sku);
+        $api_endpoint_url = Mage::helper('ReverbSync/api_adapter_listings_fetch')->getUpdatePutLinkBySku($magento_sku);
+
         // Get API Request body content
         $api_params = array(self::PHOTOS_PARAM_NAME => array($image_url));
         $post_fields_content = json_encode($api_params);
         // Get cURL Resource
         $curlResource = $this->_getCurlResource($api_endpoint_url);
         // Execute the API request
-        $post_response_as_json = $curlResource->executePostRequest($post_fields_content);
+        $post_response_as_json = $curlResource->executePutRequest($post_fields_content);
         // If there are any errors with the api call or response, the method below will throw an Exception
         $response_as_array = $this->_processCurlRequestResponse($post_response_as_json, $curlResource, $post_fields_content);
         // If the response did contain errors, the above method would have thrown an Exception

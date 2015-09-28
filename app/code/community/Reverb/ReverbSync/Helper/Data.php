@@ -331,7 +331,7 @@ class Reverb_ReverbSync_Helper_Data
             $this->_logErrorAndThrowException($error_message);
         }
         // Ensure that the response did not signal any errors occurred
-        if (isset($response_as_array['errors']))
+        if (isset($response_as_array['errors']) && !empty($response_as_array['errors']))
         {
             $errors_as_string = json_encode($response_as_array['errors']);
             $error_message = $this->__(self::ERROR_RESPONSE_ERROR, $errors_as_string, $curl_error_message);
