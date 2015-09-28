@@ -21,19 +21,24 @@ class Reverb_ReverbSync_Model_Mapper_Product
         $reverbListingWrapper = Mage::getModel('reverbSync/wrapper_listing');
         $stock = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product);
         $qty = $stock->getQty();
-        $price = $product->getPrice();
-        $name = $product->getName();
-        $sku = $product->getSku();
-        $condition = $this->_getCondition();
         $hasInventory = $this->_getHasInventory();
+        $sku = $product->getSku();
+
+        // We are only syncing quantity on updates. In the future, the rest of these
+        // will be put behind switches so that sellers can decide whether they want
+        // to sync title and price
+        //
+        // $price = $product->getPrice();
+        // $name = $product->getName();
+        // $condition = $this->_getCondition();
 
         $fieldsArray = array(
-                'title'=> $name,
                 'sku'=> $sku,
-                'condition' => $condition,
                 "has_inventory"=>$hasInventory,
                 "inventory"=>$qty,
-                "price"=>$price
+                // 'title'=> $name,
+                // 'condition' => $condition,
+                // "price"=>$price
                );
 
         // We only want to bulk add images during the listing creation sync
