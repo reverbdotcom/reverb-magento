@@ -11,19 +11,40 @@ class Reverb_ReverbSync_Model_Observer
         $product_id = $observer->getProduct()->getId();
         try
         {
-            $productSyncHelper->executeIndividualProductDataSync($product_id);
+            $listingWrapper = $productSyncHelper->executeIndividualProductDataSync($product_id);
         }
         catch(Reverb_ReverbSync_Model_Exception_Product_Excluded $e)
         {
             // If the product has been listed as being excluded from the sync, don't prevent product save
             $this->_getLogSingleton()->setSessionErrorIfAdminIsLoggedIn($e->getMessage());
+            return;
         }
         catch(Reverb_ReverbSync_Model_Exception_Deactivated $e)
         {
             // If the module is deactivated, don't prevent product save
             $this->_getLogSingleton()->setSessionErrorIfAdminIsLoggedIn($e->getMessage());
+            return;
         }
-        // Any other Exception is understood to prevent product save
+        catch(Exception $e)
+        {
+            // Any other Exception is understood to prevent product save
+            throw $e;
+        }
+
+        try
+        {
+            $product = $observer->getProduct();
+            // If we have reached this point, and the create/update performed above was successful, and the admin
+            //      uploaded any new images, queue image syncs for each of the new images
+            if ($listingWrapper->wasCallSuccessful())
+            {
+                Mage::helper('ReverbSync/sync_image')->queueImageSyncForProductGalleryImages($product, true);
+            }
+        }
+        catch(Exception $e)
+        {
+            // Exceptions during image sync should NOT prevent product save
+        }
     }
 
     // function to get the product quantity placed through order

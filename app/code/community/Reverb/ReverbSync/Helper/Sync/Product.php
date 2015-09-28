@@ -80,6 +80,7 @@ class Reverb_ReverbSync_Helper_Sync_Product extends Mage_Core_Helper_Data
 
         //pass the data to create or update the product in Reverb
         $listingWrapper = Mage::helper('ReverbSync/data') -> createOrUpdateReverbListing($product, $do_not_allow_creation);
+        return $listingWrapper;
     }
 
     public function deleteAllListingSyncTasks()

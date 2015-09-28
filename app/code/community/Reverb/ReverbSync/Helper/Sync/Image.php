@@ -18,7 +18,7 @@ class Reverb_ReverbSync_Helper_Sync_Image extends Mage_Core_Helper_Data
      * @return int - The number of images queued for sync
      * @throws Reverb_ReverbSync_Model_Exception_Listing_Image_Sync
      */
-    public function queueImageSyncForProductGalleryImages(Mage_Catalog_Model_Product $product)
+    public function queueImageSyncForProductGalleryImages(Mage_Catalog_Model_Product $product, $only_new_images = false)
     {
         $images_queued_for_sync = 0;
 
@@ -37,7 +37,15 @@ class Reverb_ReverbSync_Helper_Sync_Image extends Mage_Core_Helper_Data
             return $images_queued_for_sync;
         }
 
-        $gallery_image_items = $galleryImagesCollection->getItems();
+        if ($only_new_images)
+        {
+            $gallery_image_items = $this->_getOnlyNewGalleryImageObjects($galleryImagesCollection);
+        }
+        else
+        {
+            $gallery_image_items = $galleryImagesCollection->getItems();
+        }
+
         $sku = $product->getSku();
         $errors_to_throw = array();
         foreach($gallery_image_items as $galleryImageObject)
@@ -62,6 +70,20 @@ class Reverb_ReverbSync_Helper_Sync_Image extends Mage_Core_Helper_Data
         }
 
         return $images_queued_for_sync;
+    }
+
+    protected function _getOnlyNewGalleryImageObjects(Varien_Data_Collection $galleryImagesCollection)
+    {
+        $new_gallery_image_objects = array();
+        foreach ($galleryImagesCollection->getItems() as $galleryImageObject)
+        {
+            if (!($galleryImageObject->getValueId() && $galleryImageObject->getId()))
+            {
+                $new_gallery_image_objects[] = $galleryImageObject;
+            }
+        }
+
+        return $new_gallery_image_objects;
     }
 
     public function getSkuForTask(Reverb_ProcessQueue_Model_Task $uniqueQueueTask)
