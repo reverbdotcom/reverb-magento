@@ -8,6 +8,8 @@ class Reverb_ReverbSync_Helper_Sync_Image extends Mage_Core_Helper_Data
 {
     const ERROR_PROCESSING_GALLERY_IMAGE_LISTING_SYNC = 'An error occurred while attempting to sync gallery image with value_id %s for product with sku %s: %s';
 
+    const LISTINGS_IMAGE_SYNC_ACL_PATH = 'reverb/reverb_listings_image_sync_update';
+
     protected $_moduleName = 'ReverbSync';
     protected $_imageSyncResourceSingleton = null;
 
@@ -62,6 +64,14 @@ class Reverb_ReverbSync_Helper_Sync_Image extends Mage_Core_Helper_Data
         return $images_queued_for_sync;
     }
 
+    public function getSkuForTask(Reverb_ProcessQueue_Model_Task $uniqueQueueTask)
+    {
+        $unique_id = $uniqueQueueTask->getUniqueId();
+        $exploded_unique_id = explode('_', $unique_id);
+        array_pop($exploded_unique_id);
+        return implode('_', $exploded_unique_id);
+    }
+
     /**
      * @param $sku
      * @param Varien_Object $galleryImageObject
@@ -89,6 +99,11 @@ class Reverb_ReverbSync_Helper_Sync_Image extends Mage_Core_Helper_Data
         $catalog_product_entity_media_gallery_id = $galleryImageObject->getValueId();
         $unique_id = $sku . '_' . $catalog_product_entity_media_gallery_id;
         return $unique_id;
+    }
+
+    public function canAdminChangeListingsSyncStatus()
+    {
+        return Mage::getSingleton('admin/session')->isAllowed(self::LISTINGS_IMAGE_SYNC_ACL_PATH);
     }
 
     protected function _getImageSyncTaskResource()

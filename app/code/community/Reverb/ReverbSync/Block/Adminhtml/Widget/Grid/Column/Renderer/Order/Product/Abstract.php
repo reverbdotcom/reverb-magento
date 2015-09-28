@@ -5,17 +5,8 @@
  */
 
 abstract class Reverb_ReverbSync_Block_Adminhtml_Widget_Grid_Column_Renderer_Order_Product_Abstract
-    extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract
+    extends Reverb_Base_Block_Adminhtml_Widget_Grid_Column_Renderer_Product_Edit_Link
 {
-    const ANCHOR_TAG_TEMPLATE = '<a href="%s">%s</a>';
-
-    public function getHtmlAnchorLinkToProductEditPage($label, $magentoProduct)
-    {
-        $escaped_label = $this->escapeHtml($label);
-        $product_edit_url = $this->getUrl('adminhtml/catalog_product/edit', array('id' => $magentoProduct->getId()));
-        return sprintf(self::ANCHOR_TAG_TEMPLATE, $product_edit_url, $escaped_label);
-    }
-
     protected function _getMagentoProductForRow(Varien_Object $row)
     {
         $magentoProduct = $row->getReverbMagentoProduct();
