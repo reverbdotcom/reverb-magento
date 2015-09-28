@@ -1,3 +1,6 @@
+## 0.4.2
+* Turn off price and title sync on update. Only inventory will be synced. Version 0.4.3 will include global settings to turn these on and off.
+
 ## 0.4.1
 * All reverb functionality consolidated under Reverb tab
 * Sync images (listing create only)
