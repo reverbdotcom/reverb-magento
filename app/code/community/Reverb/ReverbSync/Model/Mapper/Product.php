@@ -14,35 +14,35 @@ class Reverb_ReverbSync_Model_Mapper_Product
     protected $_image_sync_is_enabled = null;
     protected $_condition = null;
     protected $_has_inventory = null;
+    protected $_listingsUpdateSyncHelper = null;
 
-    //function to Map the Mgento and Reverb attributes
+    //LEGACY CODE: function to Map the Magento and Reverb attributes
     public function getUpdateListingWrapper(Mage_Catalog_Model_Product $product)
     {
         $reverbListingWrapper = Mage::getModel('reverbSync/wrapper_listing');
-        $stock = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product);
-        $qty = $stock->getQty();
-        $hasInventory = $this->_getHasInventory();
         $sku = $product->getSku();
-
-        // We are only syncing quantity on updates. In the future, the rest of these
-        // will be put behind switches so that sellers can decide whether they want
-        // to sync title and price
-        //
-        // $price = $product->getPrice();
-        // $name = $product->getName();
         // $condition = $this->_getCondition();
 
-        $fieldsArray = array(
-                'sku'=> $sku,
-                "has_inventory"=>$hasInventory,
-                "inventory"=>$qty,
-                // 'title'=> $name,
-                // 'condition' => $condition,
-                // "price"=>$price
-               );
+        $fieldsArray = array('sku'=> $sku);
 
-        // We only want to bulk add images during the listing creation sync
-        //$this->addProductImagesToFieldsArray($fieldsArray, $product);
+        if ($this->_getListingsUpdateSyncHelper()->isTitleUpdateEnabled())
+        {
+            $fieldsArray['title'] = $product->getName();
+        }
+
+        if ($this->_getListingsUpdateSyncHelper()->isPriceUpdateEnabled())
+        {
+            $fieldsArray['price'] = $product->getPrice();
+        }
+
+        if ($this->_getListingsUpdateSyncHelper()->isInventoryQtyUpdateEnabled())
+        {
+            $hasInventory = $this->_getHasInventory();
+            $fieldsArray['has_inventory'] = $hasInventory;
+
+            $stock = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product);
+            $fieldsArray['inventory'] = $stock->getQty();
+        }
 
         $reverbListingWrapper->setApiCallContentData($fieldsArray);
         $reverbListingWrapper->setMagentoProduct($product);
@@ -108,6 +108,16 @@ class Reverb_ReverbSync_Model_Mapper_Product
         {
             // Do nothing here
         }
+    }
+
+    protected function _getListingsUpdateSyncHelper()
+    {
+        if (is_null($this->_listingsUpdateSyncHelper))
+        {
+            $this->_listingsUpdateSyncHelper = Mage::helper('ReverbSync/sync_listings_update');
+        }
+
+        return $this->_listingsUpdateSyncHelper;
     }
 
     protected function _getImageSyncIsEnabled()

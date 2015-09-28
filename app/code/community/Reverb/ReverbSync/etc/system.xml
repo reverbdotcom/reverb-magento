@@ -128,6 +128,51 @@
           </fields>
         </reverbDefault>
 
+          <listings_update_switches translate="label">
+              <label>Listings Update Fields</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>150</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <expanded>1</expanded>
+              <fields>
+                  <title translate="label">
+                      <label>Title</label>
+                      <comment>Click "Yes" to have the listing title updated whenever a listing update call is made to Reverb</comment>
+                      <frontend_type>select</frontend_type>
+                      <sort_order>10</sort_order>
+                      <show_in_default>1</show_in_default>
+                      <show_in_website>1</show_in_website>
+                      <show_in_store>1</show_in_store>
+                      <source_model>adminhtml/system_config_source_yesno</source_model>
+                      <validate>input-text required-entry</validate>
+                  </title>
+                  <price translate="label">
+                      <label>Price</label>
+                      <comment>Click "Yes" to have the listing price updated whenever a listing update call is made to Reverb</comment>
+                      <frontend_type>select</frontend_type>
+                      <sort_order>20</sort_order>
+                      <show_in_default>1</show_in_default>
+                      <show_in_website>1</show_in_website>
+                      <show_in_store>1</show_in_store>
+                      <source_model>adminhtml/system_config_source_yesno</source_model>
+                      <validate>input-text required-entry</validate>
+                  </price>
+                  <inventory_qty translate="label">
+                      <label>Inventory</label>
+                      <comment>Click "Yes" to have the listing inventory quantity updated whenever a listing update call is made to Reverb</comment>
+                      <frontend_type>select</frontend_type>
+                      <sort_order>30</sort_order>
+                      <show_in_default>1</show_in_default>
+                      <show_in_website>1</show_in_website>
+                      <show_in_store>1</show_in_store>
+                      <source_model>adminhtml/system_config_source_yesno</source_model>
+                      <validate>input-text required-entry</validate>
+                  </inventory_qty>
+              </fields>
+          </listings_update_switches>
+
         <orders_sync translate="label">
             <label>Order Sync</label>
             <frontend_type>text</frontend_type>
