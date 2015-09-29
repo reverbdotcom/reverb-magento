@@ -1,3 +1,7 @@
+## 0.4.3
+* Price, title, inventory sync are now available as switches in the settings screen. Only inventory is on by default.
+* Image sync now works on update as well as creation.
+
 ## 0.4.2
 * Turn off price and title sync on update. Only inventory will be synced. Version 0.4.3 will include global settings to turn these on and off.
 
