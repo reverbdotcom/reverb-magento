@@ -8,7 +8,8 @@ This is a Magento app for integrating with Reverb's API including product sync (
 * Sync updates for inventory from Magento to Reverb. (soon: Price/title sync can be turned on optionally)
 * Sync orders from Reverb to Magento
 * Sync shipping number from Magento to Reverb
-* Sync images from Magento to Reverb (create only)
+* Sync images from Magento to Reverb
+* Selectively enable sync for various fields (price/title/inventory)
 
 Only simple products are synced. Configurable products are not synced.
 
