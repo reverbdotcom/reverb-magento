@@ -6,9 +6,9 @@
 
 class Reverb_ReverbSync_Model_Adapter_Curl extends Varien_Http_Adapter_Curl
 {
-    const REQUEST_LOG_TEMPLATE = "\ncurl -X%s %s %s %s";
+    const REQUEST_LOG_TEMPLATE = "\ncurl -i -k -X%s %s \"%s\" %s";
     const HEADER_TEMPLATE = '-H "%s"';
-    const POST_DATA_ARGUMENT_TEMPLATE = '--data %s';
+    const POST_DATA_ARGUMENT_TEMPLATE = "--data '%s'";
     const POST_ERROR_LOG_TEMPLATE = 'The following error occurred with the post above: %s';
     const CURL_ERROR_TEMPLATE = "Curl error number %s occurred with the following error message: %s";
     const USER_AGENT_TEMPLATE = 'Reverb-Magento MagentoVersion=%s MagentoDomain=%s';

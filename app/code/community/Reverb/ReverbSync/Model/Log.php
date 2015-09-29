@@ -26,9 +26,19 @@ class Reverb_ReverbSync_Model_Log
         $this->logSyncError($error_message, 'shipment_tracking');
     }
 
+    public function logListingsFetchError($error_message)
+    {
+        $this->logSyncError($error_message, 'listings_fetch');
+    }
+
     public function logListingSyncError($error_message)
     {
         $this->logSyncError($error_message, 'listings');
+    }
+
+    public function logListingImageSyncError($error_message)
+    {
+        $this->logSyncError($error_message, 'listing_images');
     }
 
     public function logSyncError($error_message, $sync_process = null)

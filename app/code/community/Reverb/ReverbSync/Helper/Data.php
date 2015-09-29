@@ -9,6 +9,7 @@ class Reverb_ReverbSync_Helper_Data
     const ERROR_EMPTY_RESPONSE = 'The API call returned an empty response. Curl error message: %s';
     const ERROR_RESPONSE_ERROR = "The API call response contained errors: %s\nCurl error message: %s";
     const ERROR_API_STATUS_NOT_OK = "The API call returned an HTTP status that was not 200: %s.\nURL: %s\nContent: %s\nCurl Error Message: %s";
+    const ERROR_LISTING_IMAGE_SYNC = 'An error occurred while queueing listing image syncs for the product: %s';
 
     // In the event that no configuration value was returned for the base url, default to the sandbox URL
     // It's better to make erroneous calls to the sandbox than to production
@@ -46,6 +47,19 @@ class Reverb_ReverbSync_Helper_Data
             {
                 $listingWrapper = Mage::getSingleton('reverbSync/Mapper_Product')->getCreateListingWrapper($product);
                 $reverb_web_url = $this->createObject($listingWrapper);
+
+                // If we are here, we know that the creation sync attempt worked. Attempt to queue image sync for
+                //  all of the product's gallery images
+                try
+                {
+                    Mage::helper('ReverbSync/sync_image')->queueImageSyncForProductGalleryImages($product);
+                }
+                catch(Exception $e)
+                {
+                    $listingWrapper->setReverbWebUrl($reverb_web_url);
+                    $error_message = $this->__(self::ERROR_LISTING_IMAGE_SYNC, $e->getMessage());
+                    throw new Reverb_ReverbSync_Model_Exception_Listing_Image_Sync($error_message);
+                }
             }
             else
             {
@@ -63,6 +77,15 @@ class Reverb_ReverbSync_Helper_Data
             // Log Exception on reports row
             $listingWrapper->setSyncDetails($e->getMessage());
             $listingWrapper->setStatus(self::LISTING_STATUS_ERROR);
+        }
+        catch(Reverb_ReverbSync_Model_Exception_Listing_Image_Sync $e)
+        {
+            Mage::getSingleton('reverbSync/log')->setSessionErrorIfAdminIsLoggedIn($e->getMessage());
+
+            // Log Exception on reports row
+            $listingWrapper->setSyncDetails($e->getMessage());
+            // In this event, the actual listing creation succeeded, so set the status to success
+            $listingWrapper->setStatus(self::LISTING_STATUS_SUCCESS);
         }
         catch(Exception $e)
         {
@@ -147,6 +170,15 @@ class Reverb_ReverbSync_Helper_Data
         return $web_url;
     }
 
+    protected function _getListingsApiEndpoint($magento_sku)
+    {
+        $rev_url = $this->_getReverbAPIBaseUrl();
+        $escaped_sku = urlencode($magento_sku);
+        $params = "state=all&sku=" . $escaped_sku;
+        $url = $rev_url . "/api/my/listings?" . $params;
+        return $url;
+    }
+
     /**
      * /api/my/listings?sku=#{CGI.escape(sku)}&
      *
@@ -158,12 +190,8 @@ class Reverb_ReverbSync_Helper_Data
      */
     public function findReverbListingUrlByMagentoSku($magento_sku)
     {
-        $rev_url = $this->_getReverbAPIBaseUrl();
-        $escaped_sku = urlencode($magento_sku);
-        $params = "state=all&sku=" . $escaped_sku;
-        $url = $rev_url . "/api/my/listings?" . $params;
         // Execute API Request via CURL
-        $curlResource = $this->_getCurlResource($url);
+        $curlResource = $this->_getCurlResource($this->_getListingsApiEndpoint($magento_sku));
         $json_response = $curlResource->read();
         $status = $curlResource->getRequestHttpCode();
         // Need to grab any potential errors before closing the resource
@@ -172,6 +200,7 @@ class Reverb_ReverbSync_Helper_Data
         // Close the CURL Resource
         $curlResource->close();
         // Log the response
+        $params = "state=all&sku=" . $magento_sku;
         $this->_logApiCall($params, $json_response, 'findReverbListingUrlByMagentoSku', $status);
 
         $response = json_decode($json_response, true);
@@ -303,7 +332,7 @@ class Reverb_ReverbSync_Helper_Data
             $this->_logErrorAndThrowException($error_message);
         }
         // Ensure that the response did not signal any errors occurred
-        if (isset($response_as_array['errors']))
+        if (isset($response_as_array['errors']) && !empty($response_as_array['errors']))
         {
             $errors_as_string = json_encode($response_as_array['errors']);
             $error_message = $this->__(self::ERROR_RESPONSE_ERROR, $errors_as_string, $curl_error_message);

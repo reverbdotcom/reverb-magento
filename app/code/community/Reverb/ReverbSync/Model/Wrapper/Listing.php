@@ -5,6 +5,12 @@ class Reverb_ReverbSync_Model_Wrapper_Listing extends Varien_Object
     protected $_api_call_content_data = null;
     protected $_magentoProduct = null;
 
+    public function wasCallSuccessful()
+    {
+        $status = $this->getStatus();
+        return (Reverb_ReverbSync_Helper_Data::LISTING_STATUS_SUCCESS == $status);
+    }
+
     public function getMagentoProduct()
     {
         return $this->_magentoProduct;

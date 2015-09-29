@@ -15,6 +15,6 @@ class Reverb_ReverbSync_Block_Adminhtml_Widget_Grid_Column_Renderer_Order_Produc
             return null;
         }
 
-        return $this->getHtmlAnchorLinkToProductEditPage($magentoProduct->getName(), $magentoProduct);
+        return $this->getHtmlAnchorLinkToProductEditPage($magentoProduct->getName(), $magentoProduct->getId());
     }
 }
