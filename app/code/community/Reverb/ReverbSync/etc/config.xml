@@ -252,6 +252,11 @@
             <extension>
                 <revUrl>https://sandbox.reverb.com</revUrl>
             </extension>
+            <listings_update_switches>
+                <title>0</title>
+                <price>0</price>
+                <inventory_qty>1</inventory_qty>
+            </listings_update_switches>
             <orders_sync>
                 <enabled>0</enabled>
                 <super_mode_enabled>0</super_mode_enabled>
