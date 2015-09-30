@@ -60,7 +60,7 @@ The sync to Reverb can be triggered in two ways:
 
 1. When you Save any Product in Magento, it will automaticaly sync to Reverb. Make sure you set "Sync to Reverb" to "Yes" on the bottom of the product page, and enable the Reverb Module in your global settings (see Part 3 of installation).
 
-2. Bulk Sync. Visit Catalog->Reverb Bulk Sync, and press the "Bulk Product Sync" button in the upper right. The page will update with progress over time. Please note that very large catalogs (thousands of skus) may take an hour or more to fully sync. Please refresh the page to see the sync report.
+2. Bulk Sync. Under the Reverb menu item, select listing or order sync and use the Bulk Sync button in the upper right. The page will update with progress over time. Please note that very large catalogs (thousands of skus) may take an hour or more to fully sync. Please refresh the page to see the sync report.
 
 ## Notes on Bulk Sync
 
@@ -74,6 +74,9 @@ The bulk sync uses multiple threads (runs in parallel). It takes some time to sp
 2. Enable logging (System->Configuration->Advanced->Developer->Log Settings
 3. Let the cron run again (wait a minute), then check logs `tail -f /path/to/magento/htdocs/var/log/*`
 
+### Blank pages or plugin doesn't load
+
+Please make sure you've [cleared your magento cache](https://www.properhost.com/support/kb/23/How-To-Clear-The-Magento-Cache).
 
 ## Contributing
 
