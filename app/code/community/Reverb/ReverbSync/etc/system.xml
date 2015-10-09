@@ -48,7 +48,8 @@
           <expanded>1</expanded>
           <fields>
             <revUrl translate="label">
-              <label>Reverb Sync Destination</label>
+              <label>Reverb Sync Destination (Production/Sandbox)</label>
+              <comment>Set to Sandbox to test your extension without affecting your live listings. Note: fake orders will be synced from Sandbox if you have Order sync enabled.</comment>
               <frontend_type>select</frontend_type>
               <sort_order>1</sort_order>
               <show_in_default>1</show_in_default>
@@ -194,6 +195,16 @@
               <source_model>adminhtml/system_config_source_yesno</source_model>
               <validate>input-text required-entry</validate>
             </enabled>
+            <order_sync_reverb_source_url>
+              <label>Which orders should sync from Reverb?</label>
+              <frontend_type>select</frontend_type>
+              <sort_order>1</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <validate>input-text required-entry</validate>
+              <source_model>reverbSync/source_orderurl</source_model>
+            </order_sync_reverb_source_url>
             <super_mode_enabled translate="label">
               <label>Override Product Inventory/Status Checks</label>
               <comment>Set to "Yes" to ignore all product inventory/availability checks while syncing orders</comment>

@@ -269,6 +269,7 @@
       <orders_sync>
         <enabled>0</enabled>
         <super_mode_enabled>0</super_mode_enabled>
+        <order_sync_reverb_source_url>/api/my/orders/selling/all?updated_start_date=%s</order_sync_reverb_source_url>
       </orders_sync>
     </ReverbSync>
   </default>
