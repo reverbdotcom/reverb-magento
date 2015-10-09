@@ -197,8 +197,9 @@
             </enabled>
             <order_sync_reverb_source_url>
               <label>Which orders should sync from Reverb?</label>
+              <comment>It's recommended to sync all orders so that you pull and reserve inventory as soon as an offer is accepted. If your order sync triggers external systems, you may want to sync only paid orders awaiting shipment to prevent triggering shipment of an unpaid item.</comment>
               <frontend_type>select</frontend_type>
-              <sort_order>1</sort_order>
+              <sort_order>35</sort_order>
               <show_in_default>1</show_in_default>
               <show_in_website>1</show_in_website>
               <show_in_store>1</show_in_store>
@@ -207,7 +208,7 @@
             </order_sync_reverb_source_url>
             <super_mode_enabled translate="label">
               <label>Override Product Inventory/Status Checks</label>
-              <comment>Set to "Yes" to ignore all product inventory/availability checks while syncing orders</comment>
+              <comment>Set to "Yes" to ignore all product inventory/availability checks while syncing orders. This will enable you to see all your Reverb orders, even if you don't have the item in stock in Magento. If you have this disabled, orders that fail to sync will be available in the Reverb order sync tab so that you can restock inventory and then resync the order.</comment>
               <frontend_type>select</frontend_type>
               <sort_order>40</sort_order>
               <show_in_default>1</show_in_default>

@@ -7,7 +7,7 @@
 class Reverb_ReverbSync_Model_Source_Orderurl
 {
     const ALL_ORDERS_URL = '/api/my/orders/selling/all?updated_start_date=%s';
-    const ALL_ORDERS_LABEL = 'All Orders (including Accepted Offers Awaiting Payment)';
+    const ALL_ORDERS_LABEL = 'All (including Unpaid Accepted Offers)';
     const ORDERS_AWAITING_SHIPMENT_URL = '/api/my/orders/selling/awaiting_shipment?updated_start_date=%s';
     const ORDERS_AWAITING_SHIPMENT_LABEL = 'Paid Orders Awaiting Shipment';
 
