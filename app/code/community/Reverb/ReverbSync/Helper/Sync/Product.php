@@ -91,7 +91,7 @@ class Reverb_ReverbSync_Helper_Sync_Product extends Mage_Core_Helper_Data
 
     protected function _productIsExcludedFromSync($product)
     {
-        $revSync = $product -> getRevSync();
+        $revSync = $product -> getSyncToReverb();
         if (is_null($revSync))
         {
             // Default functionality should be to sync product
@@ -131,4 +131,4 @@ class Reverb_ReverbSync_Helper_Sync_Product extends Mage_Core_Helper_Data
 
         return $this->_reverbAdminHelper;
     }
-} 
+}
