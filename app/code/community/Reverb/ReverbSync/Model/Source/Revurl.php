@@ -7,7 +7,7 @@
 class Reverb_ReverbSync_Model_Source_Revurl
 {
     const PRODUCTION_URL = 'https://reverb.com';
-    const PRODUCTION_LABEL = 'Reverb.com';
+    const PRODUCTION_LABEL = 'Reverb.com (Production)';
     const SANDBOX_URL = 'https://sandbox.reverb.com';
     const SANDBOX_LABEL = 'Reverb Sandbox (Testing)';
 
