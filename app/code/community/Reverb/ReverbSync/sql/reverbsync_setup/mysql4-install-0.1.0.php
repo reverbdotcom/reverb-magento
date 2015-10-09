@@ -51,7 +51,7 @@ catch (Exception $excp)
     Mage::log($excp->getMessage());
 }
 try{
-    $setup->addAttribute(Mage_Catalog_Model_Product::ENTITY, 'rev_sync', array(
+    $setup->addAttribute(Mage_Catalog_Model_Product::ENTITY, 'sync_to_reverb', array(
         'group' => 'General',
         'type' => 'int',
         'backend' => '',
