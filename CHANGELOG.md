@@ -1,3 +1,7 @@
+## 0.4.4 (Unreleased)
+* Magento owner can select whether to sync accepted offers (unpaid orders) or only paid orders
+* Performance improvements (thanks Steve Wolfe)
+
 ## 0.4.3
 * Price, title, inventory sync are now available as switches in the settings screen. Only inventory is on by default.
 * Image sync now works on update as well as creation.
