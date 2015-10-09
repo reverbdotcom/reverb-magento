@@ -7,11 +7,18 @@ class Reverb_ReverbSync_Model_Observer
     //function to create the product in reverb
     public function productSave($observer)
     {
+      try
+      {
         $productSyncHelper = Mage::helper('ReverbSync/sync_product');
         $product_id = $observer->getProduct()->getId();
-        try
-        {
-            $listingWrapper = $productSyncHelper->executeIndividualProductDataSync($product_id);
+          // TODO: This will generate one SQL query per product saved.  Revamp this to queue the check and process in batches.
+          $syncToReverb = Mage::getResourceModel('catalog/product')->getAttributeRawValue($product_id, 'rev_sync');
+          if (!$syncToReverb) {
+            // Sync To Reverb is disabled for this product
+            return;
+          }
+
+          $listingWrapper = $productSyncHelper->executeIndividualProductDataSync($product_id);
         }
         catch(Reverb_ReverbSync_Model_Exception_Product_Excluded $e)
         {
