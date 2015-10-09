@@ -9,15 +9,21 @@ class Reverb_ReverbSync_Model_Observer
     {
       try
       {
-        $productSyncHelper = Mage::helper('ReverbSync/sync_product');
-        $product_id = $observer->getProduct()->getId();
-          // TODO: This will generate one SQL query per product saved.  Revamp this to queue the check and process in batches.
-          $syncToReverb = Mage::getResourceModel('catalog/product')->getAttributeRawValue($product_id, 'rev_sync');
+          $product = $observer->getProduct();
+          $product_id = $product->getId();
+
+          $syncToReverb = $product->getData('rev_sync');
+          if (is_null($syncToReverb)) {
+              // TODO: This will potentially generate one SQL query per product saved.  Revamp this to queue the check and process in async batches.
+              $syncToReverb = Mage::getResourceModel('catalog/product')->getAttributeRawValue($product_id, 'rev_sync');
+          }
+
           if (!$syncToReverb) {
             // Sync To Reverb is disabled for this product
             return;
           }
 
+          $productSyncHelper = Mage::helper('ReverbSync/sync_product');
           $listingWrapper = $productSyncHelper->executeIndividualProductDataSync($product_id);
         }
         catch(Reverb_ReverbSync_Model_Exception_Product_Excluded $e)
