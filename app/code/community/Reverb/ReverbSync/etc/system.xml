@@ -60,7 +60,7 @@
             </revUrl>
             <api_token translate="label">
               <label>API Token</label>
-              <comment>From bottom of https://reverb.com/my/account/settings:</comment>
+              <comment>From https://reverb.com/my/api_settings</comment>
               <frontend_type>password</frontend_type>
               <sort_order>5</sort_order>
               <show_in_default>1</show_in_default>
