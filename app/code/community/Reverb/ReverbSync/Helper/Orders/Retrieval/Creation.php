@@ -7,7 +7,6 @@
 class Reverb_ReverbSync_Helper_Orders_Retrieval_Creation
     extends Reverb_ReverbSync_Helper_Orders_Retrieval
 {
-    const ORDERS_CREATION_RETRIEVAL_URL_TEMPLATE = '/api/my/orders/selling/all?created_start_date=%s';
     const MINUTES_IN_PAST_FOR_CREATION_QUERY = 1440;
     const EXCEPTION_CHECK_IF_ORDER_ALREADY_SYNCED = 'Error checking to see if order with reverb id %s had already been created in Magento: %s';
 
@@ -37,7 +36,7 @@ class Reverb_ReverbSync_Helper_Orders_Retrieval_Creation
 
     protected function _getAPICallUrlPathTemplate()
     {
-        return self::ORDERS_CREATION_RETRIEVAL_URL_TEMPLATE;
+        return Mage::getStoreConfig("ReverbSync/orders_sync/order_sync_reverb_source_url");
     }
 
     protected function _getMinutesInPastForAPICall()
