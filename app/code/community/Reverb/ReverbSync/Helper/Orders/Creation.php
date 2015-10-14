@@ -23,7 +23,7 @@ class Reverb_ReverbSync_Helper_Orders_Creation extends Reverb_ReverbSync_Helper_
             throw new Reverb_ReverbSync_Model_Exception_Deactivated_Order_Sync($exception_message);
         }
 
-        $quoteToBuild = Mage::getModel('sales/quote');
+        $quoteToBuild = Mage::getModel('sales/quote')->setStoreId(Mage::app('default')->getStore('default')->getId());
         $reverb_order_number = $reverbOrderObject->order_number;
 
         if (Mage::helper('ReverbSync/orders_sync')->isOrderSyncSuperModeEnabled())
