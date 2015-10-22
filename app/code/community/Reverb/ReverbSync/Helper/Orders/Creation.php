@@ -23,7 +23,8 @@ class Reverb_ReverbSync_Helper_Orders_Creation extends Reverb_ReverbSync_Helper_
             throw new Reverb_ReverbSync_Model_Exception_Deactivated_Order_Sync($exception_message);
         }
 
-        $quoteToBuild = Mage::getModel('sales/quote');
+        $storeId = $this->_getStoreId();
+        $quoteToBuild = Mage::getModel('sales/quote')->setStoreId($storeId);
         $reverb_order_number = $reverbOrderObject->order_number;
 
         if (Mage::helper('ReverbSync/orders_sync')->isOrderSyncSuperModeEnabled())
@@ -178,5 +179,26 @@ class Reverb_ReverbSync_Helper_Orders_Creation extends Reverb_ReverbSync_Helper_
         }
         $currencyToForce = Mage::getModel('directory/currency')->load($currency_code);
         $quoteToBuild->setForcedCurrency($currencyToForce);
+    }
+
+    protected function _getStoreId()
+    {
+        // TODO: Make the Store Id a configurable setting
+
+        // Return the first "real" store Id, falling back to the special Admin store if no stores are defined (unlikely)
+        $websites = Mage::app()->getWebsites(true);
+        $defaultSite = $adminSite = null;
+
+        foreach($websites as $website) {
+            if ($website->getId() == 0) {
+                $adminSite = $website;
+                continue;
+            }
+            $defaultSite = $website;
+            break;
+        }
+
+        $website = !is_null($defaultSite) ? $defaultSite : $adminSite;
+        return $website->getDefaultGroup()->getDefaultStoreId();
     }
 }
