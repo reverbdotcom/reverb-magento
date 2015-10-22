@@ -1,4 +1,7 @@
-## 0.4.4 (Unreleased)
+## 0.4.5
+* Orders are now created in the default store instead of the admin store. The end result is that order numbering should be consistent with existing orders instead of starting from 0001.
+
+## 0.4.4
 * Magento owner can select whether to sync accepted offers (unpaid orders) or only paid orders
 * Performance improvements (thanks Steve Wolfe)
 
