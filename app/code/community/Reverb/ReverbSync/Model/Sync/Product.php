@@ -7,7 +7,7 @@
 class Reverb_ReverbSync_Model_Sync_Product extends Reverb_ProcessQueue_Model_Task
 {
     const ERROR_PRODUCT_ID_INVALID = '%s::%s was passed an invalid product_id %s in its argument object (no sku found for that product id). This method is intended to be used as a callback for a Reverb_ProcessQueue_Model_Task object. The serialized arguments object was %s.';
-    const EXCEPTION_SYNCING_PRODUCT = 'Exception occurred when attempting to sync product listing with Reverb for product with id %s: %s';
+    const EXCEPTION_SYNCING_PRODUCT = 'Error syncing Reverb product id %s: %s';
 
     /**
      * Method intended to be used as a Reverb_ProcessQueue_Model_Task callback.

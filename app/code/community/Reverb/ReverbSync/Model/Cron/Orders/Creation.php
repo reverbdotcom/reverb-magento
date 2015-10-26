@@ -8,7 +8,7 @@ class Reverb_ReverbSync_Model_Cron_Orders_Creation
     extends Reverb_Process_Model_Locked_File_Cron_Abstract
     implements Reverb_Process_Model_Locked_File_Cron_Interface
 {
-    const CRON_UNCAUGHT_EXCEPTION = 'An uncaught exception occurred while processing the Reverb Order Creation Process Queue: %s';
+    const CRON_UNCAUGHT_EXCEPTION = 'Error processing the Reverb Order Creation Process Queue: %s';
 
     public function executeCron()
     {
@@ -16,7 +16,6 @@ class Reverb_ReverbSync_Model_Cron_Orders_Creation
         {
             if (!Mage::helper('ReverbSync/orders_sync')->isOrderSyncEnabled())
             {
-                Mage::helper('ReverbSync/orders_sync')->logOrderSyncDisabledMessage();
                 return false;
             }
 
@@ -49,5 +48,10 @@ class Reverb_ReverbSync_Model_Cron_Orders_Creation
     public function getCronCode()
     {
         return 'reverb_order_creation';
+    }
+
+    protected function _logError($error_message)
+    {
+        Mage::getSingleton('reverbSync/log')->logOrderSyncError($error_message);
     }
 } 

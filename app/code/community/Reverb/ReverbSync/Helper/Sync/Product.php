@@ -2,8 +2,8 @@
 
 class Reverb_ReverbSync_Helper_Sync_Product extends Mage_Core_Helper_Data
 {
-    const MODULE_NOT_ENABLED = 'The Reverb Module is not enabled. Please enable this functionality in System -> Configuration -> Reverb Configuration -> Reverb Extension';
-    const UNCAUGHT_EXCEPTION_INDIVIDUAL_PRODUCT_SYNC = 'An uncaught exception occurred while attempting to sync product with id %s with Reverb: %s';
+    const UNCAUGHT_EXCEPTION_INDIVIDUAL_PRODUCT_SYNC = 'Error attempting to sync product with id %s with Reverb: %s';
+    const PRODUCT_EXCLUDED_FROM_SYNC = 'The "Sync to Reverb" value for this product has been set to "No"; this product can not be synced to Reverb as a result';
 
     const LISTING_CREATION_ENABLED_CONFIG_PATH = 'ReverbSync/reverbDefault/enable_listing_creation';
 
@@ -44,16 +44,13 @@ class Reverb_ReverbSync_Helper_Sync_Product extends Mage_Core_Helper_Data
         return $errors_array;
     }
 
-    /**
-     * For now, use an adapter query to get all product ids in system: more efficient than querying via
-     *  the ORM.
-     *
-     * For now all products should be considered eligible to be synced with Reverb
-     */
     public function getReverbSyncEligibleProductIds()
     {
-        $productResourceSingleton = Mage::getSingleton('reverbSync/catalog_resource_product');
-        return $productResourceSingleton->getAllProductIdsArray();
+        $products = Mage::getModel('catalog/product')->getCollection()
+            ->addFieldToFilter('rev_sync', true);
+        $ids = $products->getAllIds();
+
+        return $ids;
     }
 
     /**
@@ -73,31 +70,20 @@ class Reverb_ReverbSync_Helper_Sync_Product extends Mage_Core_Helper_Data
         if ($productType != 'simple') {
             throw new Reverb_ReverbSync_Model_Exception_Product_Excluded("Only simple products can be synced.");
         }
-        if ($this->_productIsExcludedFromSync($product))
+        if (!$product->getRevSync())
         {
-            throw new Reverb_ReverbSync_Model_Exception_Product_Excluded("This product has been listed as being excluded from the Reverb Listing Sync Process");
+            throw new Reverb_ReverbSync_Model_Exception_Product_Excluded(self::PRODUCT_EXCLUDED_FROM_SYNC);
         }
 
         //pass the data to create or update the product in Reverb
         $listingWrapper = Mage::helper('ReverbSync/data') -> createOrUpdateReverbListing($product, $do_not_allow_creation);
+        return $listingWrapper;
     }
 
     public function deleteAllListingSyncTasks()
     {
         $resourceSingleton = Mage::getResourceSingleton('reverbSync/task_listing');
         return $resourceSingleton->deleteAllListingSyncTasks();
-    }
-
-    protected function _productIsExcludedFromSync($product)
-    {
-        $revSync = $product -> getRevSync();
-        if (is_null($revSync))
-        {
-            // Default functionality should be to sync product
-            return false;
-        }
-
-        return (empty($revSync));
     }
 
     public function isListingCreationEnabled()
@@ -113,13 +99,7 @@ class Reverb_ReverbSync_Helper_Sync_Product extends Mage_Core_Helper_Data
 
     protected function _verifyModuleIsEnabled()
     {
-        $isEnabled = Mage::getStoreConfig('ReverbSync/extensionOption_group/module_select');
-        if (!$isEnabled)
-        {
-            throw new Reverb_ReverbSync_Model_Exception_Deactivated(self::MODULE_NOT_ENABLED);
-        }
-
-        return true;
+        return Mage::helper('ReverbSync')->verifyModuleIsEnabled();
     }
 
     protected function _setAdminSessionErrorMessage($error_message)
@@ -136,4 +116,4 @@ class Reverb_ReverbSync_Helper_Sync_Product extends Mage_Core_Helper_Data
 
         return $this->_reverbAdminHelper;
     }
-} 
+}

@@ -15,7 +15,7 @@ class Reverb_ReverbSync_Block_Adminhtml_Listings_Index_Syncing extends Mage_Admi
         parent::__construct();
 
         $bulk_sync_process_button = array(
-            'action_url' => Mage::getModel('adminhtml/url')->getUrl('reverbSync/adminhtml_sync/stopBulkSync'),
+            'action_url' => Mage::getModel('adminhtml/url')->getUrl('reverbSync/adminhtml_listings_sync/stopBulkSync'),
             'label' => 'Stop Bulk Sync'
         );
 

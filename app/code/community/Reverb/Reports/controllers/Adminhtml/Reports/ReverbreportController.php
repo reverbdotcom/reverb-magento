@@ -27,8 +27,9 @@ extends Mage_Adminhtml_Controller_Action {
     {
         $module_block_classname = $this->getBlockToShow();
 
-        $this -> loadLayout();
-        $this -> _title(Mage::helper('reverb_reports') -> __('Reverb Reports')) -> _title(Mage::helper('reverb_reports') -> __('Reverb Reports'));
+        $this-> loadLayout();
+        $this->_setActiveMenu('catalog/reverb_listings_sync');
+        $this->_title(Mage::helper('reverb_reports')->__('Reverb Listing Sync'));
         $this->_addContent($this->getLayout()->createBlock($module_block_classname));
 
         $gridBlock = $this->getLayout()->createBlock('reverb_reports/adminhtml_reverbreport');
@@ -58,8 +59,12 @@ extends Mage_Adminhtml_Controller_Action {
     $this -> loadLayout() -> renderLayout();
   }
 
+    public function ajaxGridAction() {
+        $this -> loadLayout() -> renderLayout();
+    }
+
   protected function _isAllowed() {
-    return Mage::getSingleton('admin/session') -> isAllowed('reverb_reports/reverbreport');
+    return Mage::getSingleton('admin/session') -> isAllowed('reverb/reverb_listings_sync');
   }
 
 }

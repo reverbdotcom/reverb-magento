@@ -1,0 +1,37 @@
+<?php /* @var $this Reverb_ProcessQueue_Block_Adminhtml_Task_Index */ ?>
+
+<div class="content-header">
+    <table cellspacing="0">
+        <tr>
+            <td><h3><?php echo $this->getHeaderText() ?></h3></td>
+            <td class="form-buttons">
+                <?php echo $this->getButtonsHtml() ?>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="reverb_processqueue_task_sync_detail">
+    <?php if(!$this->areTasksOutstanding()) { ?>
+        <div class="most_recent_task"><?php echo $this->getMostRecentTaskMessaging(); ?></div>
+    <?php } ?>
+
+    <table class="task_status_counts">
+        <colgroup>
+            <col/>
+            <col/>
+        </colgroup>
+        <?php /* Commenting out the table header for now, but keeping it here in case we want it later
+        <tr>
+            <th>Task Status</th>
+            <th><span  class="task_count"># of Tasks</span></th>
+        </tr>
+        */?>
+        <?php foreach ($this->getTaskCountsByStatusDetailLabel() as $status_label => $task_count) { ?>
+            <tr>
+                <td><span class="status_label">Tasks <?php echo $status_label ?></span></td>
+                <td class="task_count"><span class="task_count"><?php echo $task_count ?> Tasks</span></td>
+            </tr>
+        <?php } ?>
+    </table>
+</div>

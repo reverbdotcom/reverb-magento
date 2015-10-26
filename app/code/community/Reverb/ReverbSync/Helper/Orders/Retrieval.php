@@ -4,14 +4,12 @@
  * Created: 8/22/15
  */
 
-class Reverb_ReverbSync_Helper_Orders_Retrieval extends Reverb_ReverbSync_Helper_Data
+abstract class Reverb_ReverbSync_Helper_Orders_Retrieval extends Reverb_ReverbSync_Helper_Data
 {
-    const EXCEPTION_QUEUE_MAGENTO_ORDER_CREATION = "An exception occurred while attempting to queue Magento order creation for Reverb order: %s.\nThe json_encoded order data object was: %s";
+    const EXCEPTION_QUEUE_MAGENTO_ORDER_ACTION = "Error attempting to queue Magento order %s for Reverb order: %s.\nThe json_encoded order data object was: %s";
     const ORDER_NUMBER_EMPTY = 'An attempt was made to create a Reverb order in Magento without specifying a valid Reverb order number. This order can not be synced.';
-    const EXCEPTION_QUEUE_ORDER_CREATION = 'An exception occurred while trying to queue order creation for Reverb order with number %s: %s';
-    const ERROR_NO_ORDER_CREATION_QUEUE_ROWS_INSERTED = 'No order creation queue rows were inserted for Reverb order with number %s';
-
-    const ORDERS_RETRIEVAL_URL_TEMPLATE = '/api/my/orders/selling/all?created_start_date=%s&created_end_date=%s';
+    const EXCEPTION_QUEUE_ORDER_ACTION = 'Error trying to queue order creation for Reverb order with number %s: %s';
+    const ERROR_NO_ORDER_ACTION_QUEUE_ROWS_INSERTED = 'No order creation queue rows were inserted for Reverb order with number %s';
 
     protected $_moduleName = 'ReverbSync';
 
@@ -19,12 +17,22 @@ class Reverb_ReverbSync_Helper_Orders_Retrieval extends Reverb_ReverbSync_Helper
     protected $_orderTaskResourceSingleton = null;
     protected $_orderSyncHelper = null;
 
-    public function queueReverbOrderCreations()
+    abstract public function getOrderSyncAction();
+
+    abstract public function queueOrderActionByReverbOrderDataObject(stdClass $orderDataObject);
+
+    abstract protected function _getAPICallUrlPathTemplate();
+
+    abstract protected function _getMinutesInPastForAPICall();
+
+    abstract public function getAPICallDescription();
+
+    public function queueReverbOrderSyncActions()
     {
-        if (!$this->_getOrderSyncHelper()->isOrderSyncEnabled())
+        if (!Mage::helper('ReverbSync/orders_sync')->isOrderSyncEnabled())
         {
-            $this->_getOrderSyncHelper()->logOrderSyncDisabledMessage();
-            return false;
+            $exception_message = Mage::helper('ReverbSync/orders_sync')->getOrderSyncIsDisabledMessage();
+            throw new Reverb_ReverbSync_Model_Exception_Deactivated_Order_Sync($exception_message);
         }
 
         $reverbOrdersJsonObject = $this->_retrieveOrdersJsonFromReverb();
@@ -45,11 +53,12 @@ class Reverb_ReverbSync_Helper_Orders_Retrieval extends Reverb_ReverbSync_Helper
         {
             try
             {
-                $this->_attemptToQueueMagentoOrderCreation($orderDataObject);
+                $this->_attemptToQueueMagentoOrderActions($orderDataObject);
             }
             catch(Exception $e)
             {
-                $error_message = $this->__(self::EXCEPTION_QUEUE_MAGENTO_ORDER_CREATION, $e->getMessage(), json_encode($orderDataObject));
+                $order_sync_action = $this->getOrderSyncAction();
+                $error_message = $this->__(self::EXCEPTION_QUEUE_MAGENTO_ORDER_ACTION, $order_sync_action, $e->getMessage(), json_encode($orderDataObject));
                 $this->_logError($error_message);
                 $exceptionToLog = new Exception($error_message);
                 Mage::logException($exceptionToLog);
@@ -59,7 +68,7 @@ class Reverb_ReverbSync_Helper_Orders_Retrieval extends Reverb_ReverbSync_Helper
         return true;
     }
 
-    protected function _attemptToQueueMagentoOrderCreation(stdClass $orderDataObject)
+    protected function _attemptToQueueMagentoOrderActions(stdClass $orderDataObject)
     {
         $order_number = $orderDataObject->order_number;
         if (empty($order_number))
@@ -70,18 +79,17 @@ class Reverb_ReverbSync_Helper_Orders_Retrieval extends Reverb_ReverbSync_Helper
 
         try
         {
-            $row_was_inserted = $this->_getOrderTaskResourceSingleton()
-                                        ->queueOrderCreationByReverbOrderDataObject($orderDataObject);
-            
+            $row_was_inserted = $this->queueOrderActionByReverbOrderDataObject($orderDataObject);
+
             if (empty($row_was_inserted))
             {
-                $error_message = $this->__(self::ERROR_NO_ORDER_CREATION_QUEUE_ROWS_INSERTED, $order_number);
+                $error_message = $this->__(self::ERROR_NO_ORDER_ACTION_QUEUE_ROWS_INSERTED, $order_number);
                 throw new Exception($error_message);
             }
         }
         catch(Exception $e)
         {
-            $error_message = $this->__(self::EXCEPTION_QUEUE_ORDER_CREATION, $order_number, $e->getMessage());
+            $error_message = $this->__(self::EXCEPTION_QUEUE_ORDER_ACTION, $order_number, $e->getMessage());
             throw new Exception($error_message);
         }
 
@@ -92,24 +100,33 @@ class Reverb_ReverbSync_Helper_Orders_Retrieval extends Reverb_ReverbSync_Helper
     {
         $base_url = $this->_getReverbAPIBaseUrl();
 
-        $current_gmt_timestamp = Mage::getSingleton('core/date')->gmtTimestamp();
-        $one_day_ago_timestamp = $current_gmt_timestamp - (60 * 60 * 24 * 100);
-        $current_gmt_datetime = Mage::getSingleton('core/date')->date('c', $current_gmt_timestamp);
-        $one_day_ago_gmt_datetime = Mage::getSingleton('core/date')->date('c', $one_day_ago_timestamp);
+        $api_call_url_path_template = $this->_getAPICallUrlPathTemplate();
+        $minutes_in_past_for_api_call = $this->_getMinutesInPastForAPICall();
 
-        $api_url_path = sprintf(self::ORDERS_RETRIEVAL_URL_TEMPLATE, $one_day_ago_gmt_datetime, $current_gmt_datetime);
+        $local_timezone_timestamp = Mage::getModel('core/date')->timestamp();
+        $past_timestamp_local_timezone = $local_timezone_timestamp - (60 * $minutes_in_past_for_api_call);
+        $past_gmt_datetime = Mage::getModel('core/date')->gmtDate('c', $past_timestamp_local_timezone);
+
+        $api_url_path = sprintf($api_call_url_path_template, $past_gmt_datetime);
         $api_url_path = str_replace('+', '-', $api_url_path);
 
         $api_url = $base_url . $api_url_path;
 
         $curlResource = $this->_getCurlResource($api_url);
-        $status = $curlResource->getRequestHttpCode();
         //Execute the API call
         $json_response = $curlResource->read();
-        $curlResource->close();
+        $status = $curlResource->getRequestHttpCode();
+        // Need to grab any potential errors before closing the resource
+        $curl_error_message = $curlResource->getCurlErrorMessage();
         // Log the Response
         $curlResource->logRequest();
-        $this->_logApiCall($api_url_path, $json_response, 'retrieveOrders', $status);
+        $curlResource->close();
+        $this->_logApiCall($api_url_path, $json_response, $this->getAPICallDescription(), $status);
+
+        if (!empty($curl_error_message))
+        {
+            throw new Exception($curl_error_message);
+        }
 
         $json_decoded_response = json_decode($json_response);
 

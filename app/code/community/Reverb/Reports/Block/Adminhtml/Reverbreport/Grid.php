@@ -90,7 +90,7 @@ class Reverb_Reports_Block_Adminhtml_Reverbreport_Grid
     
    
     public function getGridUrl(){
-        return $this->getUrl('*/*/grid', array('_current'=>true));
+        return $this->getUrl('*/*/ajaxGrid', array('_current'=>true));
   }
     
 

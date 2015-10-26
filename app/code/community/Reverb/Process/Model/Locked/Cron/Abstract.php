@@ -5,8 +5,8 @@ abstract class Reverb_Process_Model_Locked_Cron_Abstract
     implements Reverb_Process_Model_Locked_Cron_Interface
 {
     const ERROR_UNABLE_TO_SECURE_LOCK_FILE = 'Unable to secure a Lock for cron process %s. The cron will not run.';
-    const ERROR_EXECUTING_CRON = 'An uncaught exception occurred while executing cron process %s: %s';
-    const ERROR_RELEASING_LOCK = 'An uncaught exception occurred while attempting to release the Lock from cron process %s: %s';
+    const ERROR_EXECUTING_CRON = 'Error executing cron process %s: %s';
+    const ERROR_RELEASING_LOCK = 'Error attempting to release the Lock from cron process %s: %s';
 
     abstract public function executeCron();
 
@@ -15,6 +15,8 @@ abstract class Reverb_Process_Model_Locked_Cron_Abstract
     abstract public function getParallelThreadCount();
 
     abstract public function attemptLockForThread($thread_number);
+
+    protected $_suppress_failed_lock_attempt_error_messages = false;
 
     public function attemptLock()
     {
@@ -63,7 +65,10 @@ abstract class Reverb_Process_Model_Locked_Cron_Abstract
             $cron_code = $this->getCronCode();
             $error_message = sprintf(self::ERROR_UNABLE_TO_SECURE_LOCK_FILE, $cron_code);
 
-            $this->_logError($error_message);
+            if (!$this->_suppress_failed_lock_attempt_error_messages)
+            {
+                $this->_logError($error_message);
+            }
         }
     }
 }

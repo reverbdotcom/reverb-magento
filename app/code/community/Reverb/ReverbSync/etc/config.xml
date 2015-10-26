@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <config>
-    <modules>
-        <Reverb_ReverbSync>
-            <version>0.1.5</version>
-        </Reverb_ReverbSync>
-    </modules>
-    <global>
-        <models>
-            <reverbSync>
-                <class>Reverb_ReverbSync_Model</class>
-                <resourceModel>reverb_sync_queue_mysql4</resourceModel>
-            </reverbSync>
+  <modules>
+    <Reverb_ReverbSync>
+      <version>0.1.7</version>
+    </Reverb_ReverbSync>
+  </modules>
+  <global>
+    <models>
+      <reverbSync>
+        <class>Reverb_ReverbSync_Model</class>
+        <resourceModel>reverb_sync_queue_mysql4</resourceModel>
+      </reverbSync>
       <reverb_sync_queue_mysql4>
         <class>Reverb_ReverbSync_Model_Mysql4</class>
           <entities>
@@ -76,6 +76,27 @@
         <class>Reverb_ReverbSync_Block</class>
       </ReverbSync>
     </blocks>
+
+    <fieldsets>
+      <sales_convert_quote_item>
+        <reverb_item_link>
+          <to_order_item>*</to_order_item>
+        </reverb_item_link>
+      </sales_convert_quote_item>
+    </fieldsets>
+
+    <events>
+      <sales_order_shipment_track_save_after>
+        <observers>
+          <send_tracking_info_to_reverb_if_necessary>
+            <type>singleton</type>
+            <class>reverbSync/observer_shipment</class>
+            <method>sendTrackingInfoToReverbIfReverbOrder</method>
+          </send_tracking_info_to_reverb_if_necessary>
+        </observers>
+      </sales_order_shipment_track_save_after>
+    </events>
+
   </global>
   <adminhtml>
     <layout>
@@ -109,27 +130,46 @@
     </acl>
 
     <events>
-        <should_reverb_shipping_be_allowed>
-            <observers>
-                <check_for_syncing_reverb_order>
-                    <type>singleton</type>
-                    <class>reverbSync/observer_orders</class>
-                    <method>checkForSyncingReverbOrderForShipping</method>
-                </check_for_syncing_reverb_order>
-            </observers>
-        </should_reverb_shipping_be_allowed>
+      <should_reverb_shipping_be_allowed>
+        <observers>
+          <check_for_syncing_reverb_order>
+            <type>singleton</type>
+            <class>reverbSync/observer_orders</class>
+            <method>checkForSyncingReverbOrderForShipping</method>
+          </check_for_syncing_reverb_order>
+        </observers>
+      </should_reverb_shipping_be_allowed>
 
-        <should_reverb_payment_be_allowed>
-            <observers>
-                <check_for_syncing_reverb_order>
-                    <type>singleton</type>
-                    <class>reverbSync/observer_orders</class>
-                    <method>checkForSyncingReverbOrderForPayment</method>
-                </check_for_syncing_reverb_order>
-            </observers>
-        </should_reverb_payment_be_allowed>
+      <should_reverb_payment_be_allowed>
+        <observers>
+          <check_for_syncing_reverb_order>
+            <type>singleton</type>
+            <class>reverbSync/observer_orders</class>
+            <method>checkForSyncingReverbOrderForPayment</method>
+          </check_for_syncing_reverb_order>
+        </observers>
+      </should_reverb_payment_be_allowed>
+
+      <controller_action_layout_render_before_adminhtml_sales_order_view>
+        <observers>
+          <update_layout_for_reverb_order>
+            <type>singleton</type>
+            <class>reverbSync/observer_orders</class>
+            <method>updateAdminOrderViewForReverbOrders</method>
+          </update_layout_for_reverb_order>
+        </observers>
+      </controller_action_layout_render_before_adminhtml_sales_order_view>
+
+      <controller_action_layout_render_before_adminhtml_sales_order_invoice_view>
+        <observers>
+          <update_layout_for_reverb_order>
+            <type>singleton</type>
+            <class>reverbSync/observer_orders</class>
+            <method>updateAdminOrderViewForReverbOrderInvoices</method>
+          </update_layout_for_reverb_order>
+        </observers>
+      </controller_action_layout_render_before_adminhtml_sales_order_invoice_view>
     </events>
-
   </adminhtml>
 
   <admin>
@@ -153,63 +193,89 @@
     </routers>
   </admin>
 
-    <crontab>
-        <jobs>
-            <reverb_process_queued_listing_sync_tasks>
-                <schedule>
-                    <cron_expr>*/2 * * * *</cron_expr>
-                </schedule>
-                <run>
-                    <model>reverbSync/cron_listings_sync::attemptCronExecution</model>
-                </run>
-            </reverb_process_queued_listing_sync_tasks>
+  <crontab>
+    <jobs>
+      <reverb_process_queued_listing_sync_tasks>
+        <schedule>
+          <cron_expr>*/2 * * * *</cron_expr>
+        </schedule>
+        <run>
+          <model>reverbSync/cron_listings_sync::attemptCronExecution</model>
+        </run>
+      </reverb_process_queued_listing_sync_tasks>
 
-            <reverb_sync_orders>
-                <schedule>
-                    <cron_expr>*/5 * * * *</cron_expr>
-                </schedule>
-                <run>
-                    <model>reverbSync/cron_orders_sync::executeOrderRetrievalAndProcessing</model>
-                </run>
-            </reverb_sync_orders>
-        </jobs>
+      <reverb_process_queued_listing_image_sync_tasks>
+        <schedule>
+          <cron_expr>*/2 * * * *</cron_expr>
+        </schedule>
+        <run>
+          <model>reverbSync/cron_listings_images_sync::attemptCronExecution</model>
+        </run>
+      </reverb_process_queued_listing_image_sync_tasks>
+
+      <reverb_sync_order_creations>
+        <schedule>
+          <cron_expr>2,7,12,17,22,27,32,37,42,47,52,57 * * * *</cron_expr>
+        </schedule>
+        <run>
+          <model>reverbSync/cron_orders_creation::attemptCronExecution</model>
+        </run>
+      </reverb_sync_order_creations>
+
+      <reverb_sync_order_updates>
+        <schedule>
+          <cron_expr>3,8,13,18,23,28,33,38,43,48,53,58 * * * *</cron_expr>
+        </schedule>
+        <run>
+          <model>reverbSync/cron_orders_update::attemptCronExecution</model>
+        </run>
+      </reverb_sync_order_updates>
+    </jobs>
 
     <events>
       <should_reverb_shipping_be_allowed>
-          <observers>
-              <check_for_syncing_reverb_order>
-                  <type>singleton</type>
-                  <class>reverbSync/observer_orders</class>
-                  <method>checkForSyncingReverbOrderForShipping</method>
-              </check_for_syncing_reverb_order>
-          </observers>
+        <observers>
+          <check_for_syncing_reverb_order>
+            <type>singleton</type>
+            <class>reverbSync/observer_orders</class>
+            <method>checkForSyncingReverbOrderForShipping</method>
+          </check_for_syncing_reverb_order>
+        </observers>
       </should_reverb_shipping_be_allowed>
 
-        <should_reverb_payment_be_allowed>
-            <observers>
-                <check_for_syncing_reverb_order>
-                    <type>singleton</type>
-                    <class>reverbSync/observer_orders</class>
-                    <method>checkForSyncingReverbOrderForPayment</method>
-                </check_for_syncing_reverb_order>
-            </observers>
-        </should_reverb_payment_be_allowed>
+      <should_reverb_payment_be_allowed>
+        <observers>
+          <check_for_syncing_reverb_order>
+            <type>singleton</type>
+            <class>reverbSync/observer_orders</class>
+            <method>checkForSyncingReverbOrderForPayment</method>
+          </check_for_syncing_reverb_order>
+        </observers>
+      </should_reverb_payment_be_allowed>
     </events>
-    </crontab>
+  </crontab>
 
   <default>
     <ReverbSync>
       <reverbDefault>
         <enable_listing_creation>0</enable_listing_creation>
+        <enable_image_sync>0</enable_image_sync>
         <revCond>Brand New</revCond>
         <revInvent>1</revInvent>
       </reverbDefault>
       <extension>
         <revUrl>https://sandbox.reverb.com</revUrl>
       </extension>
-        <orders_sync>
-            <enabled>0</enabled>
-        </orders_sync>
+      <listings_update_switches>
+        <title>0</title>
+        <price>0</price>
+        <inventory_qty>1</inventory_qty>
+      </listings_update_switches>
+      <orders_sync>
+        <enabled>0</enabled>
+        <super_mode_enabled>0</super_mode_enabled>
+        <order_sync_reverb_source_url>/api/my/orders/selling/all?created_start_date=%s</order_sync_reverb_source_url>
+      </orders_sync>
     </ReverbSync>
   </default>
 </config>

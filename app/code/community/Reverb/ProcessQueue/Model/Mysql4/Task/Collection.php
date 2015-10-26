@@ -36,6 +36,10 @@ class Reverb_ProcessQueue_Model_Mysql4_Task_Collection extends Mage_Core_Model_M
 
     public function addCodeFilter($code)
     {
+        if (is_array($code))
+        {
+            $code = array('in' => $code);
+        }
         $this->addFieldToFilter('code', $code);
         return $this;
     }
