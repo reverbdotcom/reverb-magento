@@ -2,7 +2,7 @@
 <config>
   <modules>
     <Reverb_ReverbSync>
-      <version>0.1.6</version>
+      <version>0.1.7</version>
     </Reverb_ReverbSync>
   </modules>
   <global>
@@ -19,6 +19,7 @@
       <reverbsync_setup>
         <setup>
           <module>Reverb_ReverbSync</module>
+          <class>Mage_Eav_Model_Entity_Setup</class>
         </setup>
         <connection>
           <use>core_setup</use>
