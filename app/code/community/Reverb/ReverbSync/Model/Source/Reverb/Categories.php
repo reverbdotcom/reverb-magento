@@ -26,7 +26,7 @@ class Reverb_ReverbSync_Model_Source_Reverb_Categories
         return $array_of_orm_data_arrays;
     }
 
-    protected function _addAllSubcategories(&$array_of_orm_data_arrays, $jsonObject, $level = 1)
+    protected function _addAllSubcategories(&$array_of_orm_data_arrays, $jsonObject, $name_prefix_array = array(), $level = 1)
     {
         if ($level != 1)
         {
@@ -47,9 +47,23 @@ class Reverb_ReverbSync_Model_Source_Reverb_Categories
         {
             $subcategory_orm_data_array = $this->_getReverbCategorySingleton()
                                             ->convertJsonObjectArrayToORMDataArray($subcategoryJsonObject);
+            $subcategory_name_array = $name_prefix_array;
+
+            $subcategory_name = $subcategory_orm_data_array['name'];
+            if ($level > 1)
+            {
+                $subcategory_name_array[] = $subcategory_name;
+                $subcategory_name = implode(' > ', $subcategory_name_array);
+                $subcategory_orm_data_array['name'] = $subcategory_name;
+            }
+            else
+            {
+                $subcategory_name_array[] = $subcategory_name;
+            }
+
             $array_of_orm_data_arrays[] = $subcategory_orm_data_array;
 
-            $this->_addAllSubcategories($array_of_orm_data_arrays, $subcategoryJsonObject, $next_level);
+            $this->_addAllSubcategories($array_of_orm_data_arrays, $subcategoryJsonObject, $subcategory_name_array, $next_level);
         }
 
         return $array_of_orm_data_arrays;
