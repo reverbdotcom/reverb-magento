@@ -23,7 +23,7 @@ $reverbCategoryTable =
             array('nullable'  => false),
             'The name of the category'
         )->addColumn(
-            'full_name',
+            'description',
             Varien_Db_Ddl_Table::TYPE_TEXT,
             null,
             array('nullable'  => false),
