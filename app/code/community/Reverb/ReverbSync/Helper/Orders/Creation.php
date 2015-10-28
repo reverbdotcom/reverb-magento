@@ -11,6 +11,9 @@ class Reverb_ReverbSync_Helper_Orders_Creation extends Reverb_ReverbSync_Helper_
     const ERROR_INVALID_SKU = 'An attempt was made to create an order in magento for a Reverb order which had an invalid sku %s';
     const INVALID_CURRENCY_CODE = 'An invalid currency code %s was defined.';
     const EXCEPTION_UPDATE_STORE_NAME = 'An error occurred while setting the store name to %s for order with Reverb Order Id #%s: %s';
+    const EXCEPTION_CONFIGURED_STORE_ID = 'An exception occurred while attempting to load the store with the configured store id of %s: %s';
+
+    const STORE_TO_SYNC_ORDERS_TO_CONFIG_PATH = 'ReverbSync/orders_sync/store_to_sync_order_to';
 
     const REVERB_ORDER_STORE_NAME = 'Reverb';
 
@@ -183,7 +186,13 @@ class Reverb_ReverbSync_Helper_Orders_Creation extends Reverb_ReverbSync_Helper_
 
     protected function _getStoreId()
     {
-        // TODO: Make the Store Id a configurable setting
+        // Check to see if the system configured store id is valid
+        $system_configured_store_id = $this->_getSystemConfigurationStoreId();
+        if ((!is_null($system_configured_store_id)) && ($system_configured_store_id !== false))
+        {
+            // If so return it
+            return $system_configured_store_id;
+        }
 
         // Return the first "real" store Id, falling back to the special Admin store if no stores are defined (unlikely)
         $websites = Mage::app()->getWebsites(true);
@@ -200,5 +209,24 @@ class Reverb_ReverbSync_Helper_Orders_Creation extends Reverb_ReverbSync_Helper_
 
         $website = !is_null($defaultSite) ? $defaultSite : $adminSite;
         return $website->getDefaultGroup()->getDefaultStoreId();
+    }
+
+    protected function _getSystemConfigurationStoreId()
+    {
+        try
+        {
+            $configured_store_id = Mage::getStoreConfig(self::STORE_TO_SYNC_ORDERS_TO_CONFIG_PATH);
+            if (Mage::getSingleton('reverbSync/source_store')->isAValidStoreId($configured_store_id))
+            {
+                return $configured_store_id;
+            }
+        }
+        catch(Exception $e)
+        {
+            $error_message = $this->__(self::EXCEPTION_CONFIGURED_STORE_ID, $configured_store_id, $e->getMessage());
+            Mage::getSingleton('reverbSync/log')->logOrderSyncError($error_message);
+        }
+
+        return false;
     }
 }
