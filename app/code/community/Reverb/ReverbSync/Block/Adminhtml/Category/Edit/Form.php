@@ -28,8 +28,6 @@ class Reverb_ReverbSync_Block_Adminhtml_Category_Edit_Form extends Mage_Adminhtm
         $this->setForm($form);
         $to_return = parent::_prepareForm();
 
-        //$this->setTemplate('ReverbSync/category/mapping/form.phtml');
-
         $this->populateFormFieldset($fieldset);
 
         return $to_return;

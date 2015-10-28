@@ -1,4 +1,8 @@
 <?php
+/**
+ * Author: Sean Dunagan
+ * Created: 9/11/15
+ */
 
 require_once('Reverb/ReverbSync/controllers/Adminhtml/BaseController.php');
 class Reverb_ReverbSync_Adminhtml_Category_SyncController extends Reverb_ReverbSync_Adminhtml_BaseController
@@ -32,8 +36,9 @@ class Reverb_ReverbSync_Adminhtml_Category_SyncController extends Reverb_ReverbS
                                         ? $post_array[$category_map_form_element_name] : null;
             if (!is_array($category_mapping_array) || empty($category_mapping_array))
             {
+                // This shouldn't occur, but account for the fact where it does
                 $error_message = self::ERROR_SUBMISSION_NOT_POST;
-                $this->_setSessionErrorAndRedirect($error_message);
+                throw new Exception($error_message);
             }
 
             $this->_getCategorySyncHelper()->processMagentoReverbCategoryMapping($category_mapping_array);
