@@ -37,12 +37,12 @@ class Reverb_ReverbSync_Block_Adminhtml_Category_Edit_Form extends Mage_Adminhtm
     {
         $magentoCategoryCollection = Mage::getModel('catalog/category')
                                         ->getCollection()
+                                        ->addFieldToFilter('level', array('gt' => 0))
                                         ->addAttributeToSelect('name');
 
-        foreach ($magentoCategoryCollection as $magentoCategory)
+        foreach ($magentoCategoryCollection->getItems() as $magentoCategory)
         {
             $this->addMagentoCategorySelect($fieldset, $magentoCategory);
-
         }
     }
 

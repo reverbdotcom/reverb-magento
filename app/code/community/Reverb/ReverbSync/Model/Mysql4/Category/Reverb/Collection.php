@@ -10,4 +10,10 @@ class Reverb_ReverbSync_Model_Mysql4_Category_Reverb_Collection extends Mage_Cor
     {
         $this->_init('reverbSync/category_reverb');
     }
+
+    public function addReverbCategoryIdFilter(array $reverb_category_ids)
+    {
+        $this->addFieldToFilter('reverb_category_id', $reverb_category_ids);
+        return $this;
+    }
 }

@@ -262,6 +262,7 @@
     <ReverbSync>
       <reverbDefault>
         <enable_listing_creation>0</enable_listing_creation>
+        <require_reverb_category_definition>0</require_reverb_category_definition>
         <enable_image_sync>0</enable_image_sync>
         <revCond>Brand New</revCond>
         <revInvent>1</revInvent>

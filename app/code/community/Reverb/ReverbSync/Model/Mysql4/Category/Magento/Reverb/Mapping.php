@@ -16,6 +16,21 @@ class Reverb_ReverbSync_Model_Mysql4_Category_Magento_Reverb_Mapping extends Mag
         $this->_init('reverbSync/magento_reverb_category_mapping', 'xref_id');
     }
 
+    public function getReverbCategoryIdsByMagentoCategoryIds(array $magento_category_ids)
+    {
+        $readConnection = $this->getReadConnection();
+
+        $where_clause = self::MAGENTO_CATEGORY_ID_FIELD . ' in (?)';
+
+        $select = $readConnection
+                    ->select()
+                    ->from($this->getMainTable(), self::REVERB_CATEGORY_ID_FIELD)
+                    ->where($where_clause, $magento_category_ids);
+
+        $reverb_category_ids = $readConnection->fetchCol($select);
+        return $reverb_category_ids;
+    }
+
     public function redefineCategoryMapping(array $magento_reverb_category_mapping)
     {
         $this->_truncateTable();

@@ -92,6 +92,18 @@
               <source_model>adminhtml/system_config_source_yesno</source_model>
             </enable_listing_creation>
 
+              <require_reverb_category_definition translate="label">
+                  <label>Require Reverb Category Definition</label>
+                  <frontend_type>select</frontend_type>
+                  <sort_order>12</sort_order>
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>1</show_in_store>
+                  <validate>required-entry</validate>
+                  <source_model>adminhtml/system_config_source_yesno</source_model>
+                  <comment>If set to Yes, products which are not included in a Magento category which has been mapped to a Reverb category can not be synced to Reverb.</comment>
+              </require_reverb_category_definition>
+
             <enable_image_sync translate="label">
               <label>Enable Product Image Sync</label>
               <frontend_type>select</frontend_type>
