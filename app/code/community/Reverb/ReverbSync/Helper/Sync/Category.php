@@ -12,6 +12,11 @@ class Reverb_ReverbSync_Helper_Sync_Category
 
     protected $_reverb_category_options_array = null;
 
+    public function getMagentoReverbCategoryMapElementArrayName()
+    {
+        return self::REVERB_CATEGORY_MAP_ELEMENT_NAME;
+    }
+
     public function getReverbCategoryMapFormElementName($field)
     {
         return sprintf(self::FORM_ELEMENT_FIELD_NAME_TEMPLATE, self::REVERB_CATEGORY_MAP_ELEMENT_NAME, $field);
@@ -20,6 +25,25 @@ class Reverb_ReverbSync_Helper_Sync_Category
     public function getNoCategoryChosenOption()
     {
         return self::NO_CATEGORY_CHOSEN_OPTION;
+    }
+
+    public function processMagentoReverbCategoryMapping(array $reverb_magento_category_mapping)
+    {
+        // Filter out all values in the array which are set to the NO_CATEGORY_CHOSEN_OPTION value
+        $defined_category_mapping
+            = array_filter($reverb_magento_category_mapping,
+                             'Reverb_ReverbSync_Helper_Sync_Category::filter_out_no_category_chosen_option');
+
+        if (!empty($defined_category_mapping))
+        {
+            Mage::getResourceSingleton('reverbSync/category_magento_reverb_mapping')
+                ->redefineCategoryMapping($defined_category_mapping);
+        }
+    }
+
+    static public function filter_out_no_category_chosen_option($mapped_value)
+    {
+        return strcmp($mapped_value, self::NO_CATEGORY_CHOSEN_OPTION);
     }
 
     public function getReverbCategorySelectOptionsArray()

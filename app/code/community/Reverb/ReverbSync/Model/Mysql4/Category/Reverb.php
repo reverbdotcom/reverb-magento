@@ -16,7 +16,7 @@ class Reverb_ReverbSync_Model_Mysql4_Category_Reverb extends Mage_Core_Model_Mys
 
     public function initializeReverbCategoriesTable()
     {
-        $this->truncateReverbCategoriesTable();
+        $this->_truncateReverbCategoriesTable();
         $array_of_reverb_categories = $this->getReverbCategoryORMArrays();
         $this->loadReverbCategoriesArrayIntoDatabase($array_of_reverb_categories);
     }
@@ -33,12 +33,7 @@ class Reverb_ReverbSync_Model_Mysql4_Category_Reverb extends Mage_Core_Model_Mys
                                         ->getArrayOfReverbCategoriesForDatabaseLoad();
     }
 
-    public function truncateReverbCategoriesTable()
-    {
-        return Mage::getResourceSingleton('reverbSync/category_reverb')->deleteAllCategories();
-    }
-
-    public function deleteAllCategories()
+    protected function _truncateReverbCategoriesTable()
     {
         $rows_deleted = $this->_getWriteAdapter()->delete($this->getMainTable());
         return $rows_deleted;

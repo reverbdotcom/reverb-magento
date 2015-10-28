@@ -9,6 +9,7 @@ class Reverb_ReverbSync_Block_Adminhtml_Category_Edit_Form extends Mage_Adminhtm
     protected $reverb_category_options_array = null;
     protected $_translationHelper = null;
     protected $_categorySyncHelper = null;
+    protected $_magento_reverb_category_mapping_array = null;
 
     protected function _prepareForm()
     {
@@ -53,11 +54,7 @@ class Reverb_ReverbSync_Block_Adminhtml_Category_Edit_Form extends Mage_Adminhtm
         $magento_category_id = $magentoCategory->getId();
         $element_id = 'magento_category_select_' . $magento_category_id;
         $reverb_category_options_array = $this->_getReverbCategoryOptionsArray();
-        $reverb_category_id = $magentoCategory->getReverbCategoryId();
-        if(empty($reverb_category_id))
-        {
-            $reverb_category_id = $this->_getCategorySyncHelper()->getNoCategoryChosenOption();
-        }
+        $reverb_category_id = $this->_getReverbIdByMagentoCategoryId($magento_category_id);
 
         $helper = $this->_getTranslationHelper();
 
@@ -65,15 +62,6 @@ class Reverb_ReverbSync_Block_Adminhtml_Category_Edit_Form extends Mage_Adminhtm
             'name'  => $this->_getCategorySyncHelper()->getReverbCategoryMapFormElementName($magento_category_id),
             'label' => $helper->__($name),
             'title' => $helper->__($name),
-
-
-            // MUST DO THIS
-
-
-
-
-
-
             'value'  => $reverb_category_id,
             'values'   => $reverb_category_options_array,
             'required' => false
@@ -84,6 +72,24 @@ class Reverb_ReverbSync_Block_Adminhtml_Category_Edit_Form extends Mage_Adminhtm
     {
         $uri_path = $this->getAction()->getUriPathForAction('save');
         return $this->getUrl($uri_path);
+    }
+
+    protected function _getReverbIdByMagentoCategoryId($category_entity_id)
+    {
+        $mapping_array = $this->_getMagentoReverbCategoryMapping();
+        return isset($mapping_array[$category_entity_id]) ? $mapping_array[$category_entity_id] : '';
+    }
+
+    protected function _getMagentoReverbCategoryMapping()
+    {
+        if (is_null($this->_magento_reverb_category_mapping_array))
+        {
+            $this->_magento_reverb_category_mapping_array =
+                Mage::getResourceSingleton('reverbSync/category_magento_reverb_mapping')
+                    ->getArrayMappingMagentoCategoryIdToReverbCategoryId();
+        }
+
+        return $this->_magento_reverb_category_mapping_array;
     }
 
     protected function _getReverbCategoryOptionsArray()
