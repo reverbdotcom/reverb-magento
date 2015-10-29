@@ -58,10 +58,15 @@ class Reverb_ReverbSync_Helper_Sync_Category extends Mage_Core_Helper_Abstract
     {
         $product_reverb_category_objects_array = $this->getReverbCategoryObjectsByProduct($product);
 
-        if (empty($product_reverb_category_objects_array) && $this->reverbCategoriesAreRequiredForListing())
+        if (empty($product_reverb_category_objects_array))
         {
-            $error_message = $this->__(self::ERROR_NO_REVERB_CATEGORIES_MAPPED);
-            throw new Reverb_ReverbSync_Model_Exception_Category_Mapping($error_message);
+            if ($this->reverbCategoriesAreRequiredForListing())
+            {
+                $error_message = $this->__(self::ERROR_NO_REVERB_CATEGORIES_MAPPED);
+                throw new Reverb_ReverbSync_Model_Exception_Category_Mapping($error_message);
+            }
+            // Return without modifying the $fieldsArray
+            return $fieldsArray;
         }
 
         $category_slug_array = array();
@@ -95,6 +100,12 @@ class Reverb_ReverbSync_Helper_Sync_Category extends Mage_Core_Helper_Abstract
         $magento_category_ids = $magentoProduct->getCategoryIds();
         $reverb_category_ids = Mage::getResourceSingleton('reverbSync/category_magento_reverb_mapping')
                                 ->getReverbCategoryIdsByMagentoCategoryIds($magento_category_ids);
+
+        if(empty($reverb_category_ids))
+        {
+            // Return an empty array
+            return array();
+        }
 
         $reverbCategoryCollection = Mage::getModel('reverbSync/category_reverb')
                                         ->getCollection()
