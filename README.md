@@ -4,7 +4,7 @@ This is a Magento app for integrating with Reverb's API including product sync (
 
 ## Features
 
-* Create new listings on Reverb from Magento products (limitation: does not sync category yet)
+* Create new listings on Reverb from Magento products
 * Sync updates for inventory from Magento to Reverb. (soon: Price/title sync can be turned on optionally)
 * Sync orders from Reverb to Magento
 * Sync shipping number from Magento to Reverb

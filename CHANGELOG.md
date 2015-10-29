@@ -1,3 +1,7 @@
+## 0.4.6
+* Set up category mappings to create products
+* Ability to select default store for order creation for multi-store setups
+
 ## 0.4.5
 * Orders are now created in the default store instead of the admin store. The end result is that order numbering should be consistent with existing orders instead of starting from 0001.
 
