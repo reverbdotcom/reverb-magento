@@ -2,7 +2,7 @@
 <config>
   <modules>
     <Reverb_ReverbSync>
-      <version>0.1.6</version>
+      <version>0.1.9</version>
     </Reverb_ReverbSync>
   </modules>
   <global>
@@ -13,6 +13,14 @@
       </reverbSync>
       <reverb_sync_queue_mysql4>
         <class>Reverb_ReverbSync_Model_Mysql4</class>
+          <entities>
+              <reverb_category>
+                  <table>reverb_categories</table>
+              </reverb_category>
+              <magento_reverb_category_mapping>
+                  <table>reverb_magento_categories</table>
+              </magento_reverb_category_mapping>
+          </entities>
       </reverb_sync_queue_mysql4>
     </models>
     <resources>
@@ -254,6 +262,7 @@
     <ReverbSync>
       <reverbDefault>
         <enable_listing_creation>0</enable_listing_creation>
+        <require_reverb_category_definition>0</require_reverb_category_definition>
         <enable_image_sync>0</enable_image_sync>
         <revCond>Brand New</revCond>
         <revInvent>1</revInvent>

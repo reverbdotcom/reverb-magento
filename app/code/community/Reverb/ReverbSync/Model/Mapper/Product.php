@@ -15,6 +15,7 @@ class Reverb_ReverbSync_Model_Mapper_Product
     protected $_condition = null;
     protected $_has_inventory = null;
     protected $_listingsUpdateSyncHelper = null;
+    protected $_categorySyncHelper = null;
 
     //LEGACY CODE: function to Map the Magento and Reverb attributes
     public function getUpdateListingWrapper(Mage_Catalog_Model_Product $product)
@@ -43,6 +44,8 @@ class Reverb_ReverbSync_Model_Mapper_Product
             $stock = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product);
             $fieldsArray['inventory'] = $stock->getQty();
         }
+
+        $this->addCategoryToFieldsArray($fieldsArray, $product);
 
         $reverbListingWrapper->setApiCallContentData($fieldsArray);
         $reverbListingWrapper->setMagentoProduct($product);
@@ -73,11 +76,18 @@ class Reverb_ReverbSync_Model_Mapper_Product
         );
 
         $this->addProductImagesToFieldsArray($fieldsArray, $product);
+        $this->addCategoryToFieldsArray($fieldsArray, $product);
 
         $reverbListingWrapper->setApiCallContentData($fieldsArray);
         $reverbListingWrapper->setMagentoProduct($product);
 
         return $reverbListingWrapper;
+    }
+
+    public function addCategoryToFieldsArray(array &$fieldsArray, $product)
+    {
+        $fieldsArray = $this->_getCategorySyncHelper()->addCategoriesToListingFieldsArray($fieldsArray, $product);
+        return $fieldsArray;
     }
 
     public function addProductImagesToFieldsArray(&$fieldsArray, Mage_Catalog_Model_Product $product)
@@ -108,6 +118,16 @@ class Reverb_ReverbSync_Model_Mapper_Product
         {
             // Do nothing here
         }
+    }
+
+    protected function _getCategorySyncHelper()
+    {
+        if (is_null($this->_categorySyncHelper))
+        {
+            $this->_categorySyncHelper = Mage::helper('ReverbSync/sync_category');
+        }
+
+        return $this->_categorySyncHelper;
     }
 
     protected function _getListingsUpdateSyncHelper()
