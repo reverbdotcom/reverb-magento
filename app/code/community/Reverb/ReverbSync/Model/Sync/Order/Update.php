@@ -8,6 +8,7 @@ class Reverb_ReverbSync_Model_Sync_Order_Update extends Reverb_ProcessQueue_Mode
 {
     const ERROR_ORDER_NOT_CREATED = 'Reverb Order with id %s has not been created in the Magento system yet';
     const EXCEPTION_EXECUTING_STATUS_UPDATE = 'Exception occurred while executing the status update for order with magento entity id %s to status %s: %s';
+    const SUCCESS_ORDER_STATUS_UPDATED = 'The order\'s status has been updated to %s';
 
     public function updateReverbOrderInMagento(stdClass $argumentsObject)
     {
@@ -33,7 +34,7 @@ class Reverb_ReverbSync_Model_Sync_Order_Update extends Reverb_ProcessQueue_Mode
 
         $reverb_order_status = $argumentsObject->status;
 
-        $this->_executeStatusUpdate($magento_order_entity_id, $reverb_order_status);
+        return $this->_executeStatusUpdate($magento_order_entity_id, $reverb_order_status);
     }
 
     protected function _executeStatusUpdate($magento_order_entity_id, $reverb_order_status)
@@ -59,7 +60,7 @@ class Reverb_ReverbSync_Model_Sync_Order_Update extends Reverb_ProcessQueue_Mode
         catch(Reverb_ReverbSync_Model_Exception_Order_Update_Status_Redundant $e)
         {
             // Assume we have already processed this order update
-            return 0;
+            return $this->_returnSuccessCallbackResult('The order has been updated');
         }
         catch(Exception $e)
         {
@@ -69,9 +70,11 @@ class Reverb_ReverbSync_Model_Sync_Order_Update extends Reverb_ProcessQueue_Mode
                                 ->__(self::EXCEPTION_EXECUTING_STATUS_UPDATE, $magento_order_entity_id,
                                         $reverb_order_status, $e->getMessage());
             Mage::getSingleton('reverbSync/log')->logOrderSyncError($error_message);
-            return 0;
+
+            return $this->_returnAbortCallbackResult($error_message);
         }
 
-        return $updated_rows;
+        $success_message = Mage::helper('ReverbSync')->__(self::SUCCESS_ORDER_STATUS_UPDATED, $reverb_order_status);
+        return $this->_returnSuccessCallbackResult($success_message);
     }
 }
