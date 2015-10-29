@@ -217,6 +217,17 @@
               <source_model>adminhtml/system_config_source_yesno</source_model>
               <validate>input-text required-entry</validate>
             </super_mode_enabled>
+            <store_to_sync_order_to translate="label">
+                <label>Magento Store to sync orders to</label>
+                <comment>Orders synced from Reverb will be denoted as having been bought from the store chosen here. This choice will also set the order ID numbers to be in sync with the order ID numbers of the chosen store</comment>
+                <frontend_type>select</frontend_type>
+                <sort_order>50</sort_order>
+                <show_in_default>1</show_in_default>
+                <show_in_website>0</show_in_website>
+                <show_in_store>0</show_in_store>
+                <source_model>reverbSync/source_store</source_model>
+                <validate>input-text required-entry</validate>
+            </store_to_sync_order_to>
           </fields>
         </orders_sync>
       </groups>
