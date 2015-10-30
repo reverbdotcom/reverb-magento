@@ -4,12 +4,11 @@ This is a Magento app for integrating with Reverb's API including product sync (
 
 ## Features
 
-* Create new listings on Reverb from Magento products
-* Sync updates for inventory from Magento to Reverb. (soon: Price/title sync can be turned on optionally)
+* Create new draft listings on Reverb from Magento products, including image & category sync
+* Control whether price/title/inventory syncs individualy.
+* Sync updates for inventory from Magento to Reverb. 
 * Sync orders from Reverb to Magento
 * Sync shipping number from Magento to Reverb
-* Sync images from Magento to Reverb
-* Selectively enable sync for various fields (price/title/inventory)
 
 Only simple products are synced. Configurable products are not synced.
 
@@ -50,7 +49,7 @@ If your crontab does not contain either of these lines, please use `crontab -e` 
 ## Installation: Part 3 - Configuration
 
 * In Magento Admin, go to System -> Configuration -> Reverb Configuration
-* Put in your API Key (grab it from https://reverb.com/my/account/settings)
+* Put in your API Key (grab it from https://reverb.com/my/api_settings)
 * Select Yes for Enable Reverb Module to turn on the sync
 * If you also want to create drafts for skus that don't exist on Reverb, select "Enable Listing Creation" in the Reverb Default section.
 
