@@ -60,6 +60,7 @@ class Reverb_ReverbSync_Model_Sync_Order_Update extends Reverb_ProcessQueue_Mode
         catch(Reverb_ReverbSync_Model_Exception_Order_Update_Status_Redundant $e)
         {
             // Assume we have already processed this order update
+            Mage::getResourceSingleton('sales/order')->rollBack();
             return $this->_returnSuccessCallbackResult('The order has been updated');
         }
         catch(Exception $e)
