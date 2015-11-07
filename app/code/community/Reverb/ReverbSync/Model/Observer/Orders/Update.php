@@ -11,16 +11,37 @@ class Reverb_ReverbSync_Model_Observer_Orders_Update
     public function executeMagentoOrderCancel($observer)
     {
         $magento_order_entity_id = $observer->getData('order_entity_id');
+        $magentoOrder = $this->_initializeMagentoOrder($magento_order_entity_id);
+        $reverb_order_status = $observer->getData('reverb_order_status');
+        Mage::helper('ReverbSync/orders_update_cancel')->executeMagentoOrderCancel($magentoOrder, $reverb_order_status);
+    }
+
+    public function executeMagentoOrderPaid($observer)
+    {
+        $magento_order_entity_id = $observer->getData('order_entity_id');
+        $magentoOrder = $this->_initializeMagentoOrder($magento_order_entity_id);
+        $reverb_order_status = $observer->getData('reverb_order_status');
+        Mage::helper('ReverbSync/orders_update_paid')->executeMagentoOrderPaid($magentoOrder, $reverb_order_status);
+    }
+
+    /**
+     * It is intended that this method throw an Exception which is caught by the catch block in
+     *      Reverb_ReverbSync_Model_Sync_Order_Update::_executeStatusUpdate()
+     *
+     * @param $magento_order_entity_id
+     * @return Mage_Sales_Model_Order
+     * @throws Reverb_ReverbSync_Model_Exception_Data_Order
+     */
+    protected function _initializeMagentoOrder($magento_order_entity_id)
+    {
         $magentoOrder = Mage::getModel('sales/order')->load($magento_order_entity_id);
         if ((!is_object($magentoOrder)) || (!$magentoOrder->getId()))
         {
-
             $error_message = Mage::helper('ReverbSync')
-                                ->__(self::ERROR_INVALID_ORDER_ENTITY_ID, $magento_order_entity_id);
+                                 ->__(self::ERROR_INVALID_ORDER_ENTITY_ID, $magento_order_entity_id);
             throw new Reverb_ReverbSync_Model_Exception_Data_Order($error_message);
         }
 
-        $reverb_order_status = $observer->getData('reverb_order_status');
-        Mage::helper('ReverbSync/orders_update_cancel')->executeMagentoOrderCancel($magentoOrder, $reverb_order_status);
+        return $magentoOrder;
     }
 }
