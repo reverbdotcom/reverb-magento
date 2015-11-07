@@ -1,3 +1,6 @@
+## 0.4.7
+* Orders cancelled on Reverb will also cancel magento orders. If magento order can't be cancelled, an error will be reported in the order update sync grid.
+
 ## 0.4.6
 * Set up category mappings to create products
 * Ability to select default store for order creation for multi-store setups
