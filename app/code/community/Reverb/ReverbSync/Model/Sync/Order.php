@@ -8,6 +8,7 @@ class Reverb_ReverbSync_Model_Sync_Order extends Reverb_ProcessQueue_Model_Task
 {
     const ERROR_ORDER_ALREADY_CREATED = "Reverb Order %s already exists in Magento with entity_id %s";
     const EXCEPTION_CREATING_ORDER = "Error creating Reverb Order %s: %s";
+    const SUCCESS_ORDER_CREATION = 'The Reverb order has successfully been synced as Magento order with increment id %s';
 
     protected $_orderCreationHelper = null;
 
@@ -35,7 +36,7 @@ class Reverb_ReverbSync_Model_Sync_Order extends Reverb_ProcessQueue_Model_Task
 
         try
         {
-            $this->_getOrderCreationHelper()->createMagentoOrder($argumentsObject);
+            $magentoOrder = $this->_getOrderCreationHelper()->createMagentoOrder($argumentsObject);
         }
         catch(Reverb_ReverbSync_Model_Exception_Deactivated_Order_Sync $e)
         {
@@ -49,8 +50,15 @@ class Reverb_ReverbSync_Model_Sync_Order extends Reverb_ProcessQueue_Model_Task
             Mage::getModel('reverbSync/log')->logOrderSyncError($error_message);
             return $this->_returnErrorCallbackResult($error_message);
         }
+
+        $increment_id = $magentoOrder->getIncrementId();
+        $success_message = Mage::helper('ReverbSync')->__(self::SUCCESS_ORDER_CREATION, $increment_id);
+        return $this->_returnSuccessCallbackResult($success_message);
     }
 
+    /**
+     * @return Reverb_ReverbSync_Helper_Orders_Creation
+     */
     protected function _getOrderCreationHelper()
     {
         if (is_null($this->_orderCreationHelper))
