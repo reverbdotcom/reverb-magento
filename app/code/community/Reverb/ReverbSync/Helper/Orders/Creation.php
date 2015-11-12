@@ -17,6 +17,14 @@ class Reverb_ReverbSync_Helper_Orders_Creation extends Reverb_ReverbSync_Helper_
 
     const REVERB_ORDER_STORE_NAME = 'Reverb';
 
+    /**
+     * Creates the Reverb Order in the Magento system
+     *
+     * @param stdClass $reverbOrderObject
+     * @return Mage_Sales_Model_Order
+     * @throws Exception
+     * @throws Reverb_ReverbSync_Model_Exception_Deactivated_Order_Sync
+     */
     public function createMagentoOrder(stdClass $reverbOrderObject)
     {
         // Including this check here just to ensure that orders aren't synced if the setting is disabled
@@ -87,6 +95,8 @@ class Reverb_ReverbSync_Helper_Orders_Creation extends Reverb_ReverbSync_Helper_
 
         $this->_getShippingHelper()->unsetOrderBeingSynced();
         $this->_getPaymentHelper()->unsetOrderBeingSynced();
+
+        return $order;
     }
 
     protected function _getProductToAddToQuote(stdClass $reverbOrderObject)

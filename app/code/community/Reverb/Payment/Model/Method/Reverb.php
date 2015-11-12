@@ -13,25 +13,17 @@ class Reverb_Payment_Model_Method_Reverb extends Mage_Payment_Model_Method_Abstr
     protected $_code = 'reverbpayment';
 
     /*
-     * Currently this is not being used as $this->_isInitializeNeeded is set to false. This is done so that the order
-     *      is invoiced automatically during order sync
+     * Currently this is not being used as $this->_isInitializeNeeded is set to false. In the event that we want to
+     *      prevent the Magento system from notifying the customer of the order, we would need to uncomment this
+     *      method and switch $this->_isInitializeNeeded to true
      *
     public function initialize($paymentAction, $stateObject)
     {
-        $stateObject->setState(Mage_Sales_Model_Order::STATE_PROCESSING);
-        $stateObject->setStatus(Mage_Sales_Model_Order::STATE_PROCESSING);
+        $stateObject->setState(Mage_Sales_Model_Order::STATE_NEW);
+        $stateObject->setStatus(Mage_Sales_Model_Order::STATE_NEW);
         $stateObject->setIsNotified(true);
     }
     */
-
-    public function capture(Varien_Object $payment, $amount)
-    {
-        $to_return = parent::capture($payment, $amount);
-
-        $payment->getOrder()->setCustomerNoteNotify(true);
-
-        return $to_return;
-    }
 
     public function isAvailable($quote = null)
     {
