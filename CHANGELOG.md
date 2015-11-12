@@ -1,3 +1,6 @@
+## 0.4.8
+* Unpaid order are not invoiced in Magento until they are paid
+
 ## 0.4.7
 * Orders cancelled on Reverb will also cancel magento orders. If magento order can't be cancelled, an error will be reported in the order update sync grid.
 
