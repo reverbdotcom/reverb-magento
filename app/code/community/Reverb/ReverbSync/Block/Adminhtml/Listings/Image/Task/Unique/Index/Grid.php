@@ -63,7 +63,7 @@ class Reverb_ReverbSync_Block_Adminhtml_Listings_Image_Task_Unique_Index_Grid
             'renderer'  => 'ReverbSync/adminhtml_widget_grid_column_renderer_listings_image_task_action',
             'filter'    => false,
             'sortable'  => false,
-            'task_controller' => 'adminhtml_orders_sync_unique'
+            'task_controller' => 'ReverbSync_orders_sync_unique'
         ));
 
         return parent::_prepareColumns();

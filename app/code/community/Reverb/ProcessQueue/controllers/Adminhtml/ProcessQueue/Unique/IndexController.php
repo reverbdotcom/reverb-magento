@@ -4,9 +4,9 @@
  * Created: 9/14/15
  */
 
-require_once('Reverb/ProcessQueue/controllers/Adminhtml/IndexController.php');
-class Reverb_ProcessQueue_Adminhtml_Unique_IndexController
-    extends Reverb_ProcessQueue_Adminhtml_IndexController
+require_once('Reverb/ProcessQueue/controllers/Adminhtml/ProcessQueue/IndexController.php');
+class Reverb_ProcessQueue_Adminhtml_ProcessQueue_Unique_IndexController
+    extends Reverb_ProcessQueue_Adminhtml_ProcessQueue_IndexController
     implements Reverb_Base_Controller_Adminhtml_Form_Interface
 {
     public function getControllerActiveMenuPath()
@@ -44,13 +44,8 @@ class Reverb_ProcessQueue_Adminhtml_Unique_IndexController
         return 'adminhtml_task_unique';
     }
 
-    public function getFormActionsController()
+    public function getIndexActionsController()
     {
-        return 'adminhtml_unique_index';
-    }
-
-    public function getFormBackControllerActionPath()
-    {
-        return 'adminhtml_unique_index/index';
+        return 'ProcessQueue_unique_index';
     }
 }

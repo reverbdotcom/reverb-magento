@@ -18,6 +18,7 @@ class Reverb_ReverbSync_Block_Adminhtml_Listings_Image_Task_Unique_Index
         $this->_headerText = Mage::helper($module_groupname)->__($module_instance_description);
         parent::__construct();
 
+        $this->_removeButton('add');
         $this->_blockGroup = $this->getAction()->getBlockModuleGroupname();
     }
 

@@ -5,7 +5,7 @@
  */
 
 require_once('Reverb/ReverbSync/controllers/Adminhtml/BaseController.php');
-class Reverb_ReverbSync_Adminhtml_Category_SyncController extends Reverb_ReverbSync_Adminhtml_BaseController
+class Reverb_ReverbSync_Adminhtml_ReverbSync_Category_SyncController extends Reverb_ReverbSync_Adminhtml_BaseController
 {
     const BULK_SYNC_EXCEPTION = 'An uncaught exception occurred while executing the Reverb Bulk Product Sync via the admin panel: %s';
     const SUCCESS_BULK_SYNC_COMPLETED = 'Reverb Bulk product sync process completed.';
@@ -66,7 +66,7 @@ class Reverb_ReverbSync_Adminhtml_Category_SyncController extends Reverb_ReverbS
 
     public function getUriPathForAction($action)
     {
-        $uri_path = sprintf('%s/%s/%s', 'reverbSync', 'adminhtml_category_sync', $action);
+        $uri_path = sprintf('%s/%s/%s', 'adminhtml', 'ReverbSync_category_sync', $action);
         return $uri_path;
     }
 

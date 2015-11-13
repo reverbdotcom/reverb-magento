@@ -7,7 +7,7 @@ class Reverb_ReverbSync_Block_Adminhtml_Orders_Unique_Index extends Reverb_Rever
         parent::__construct();
 
         $sync_shipment_tracking_action_url = Mage::getModel('adminhtml/url')
-                                                ->getUrl('reverbSync/adminhtml_orders_sync_unique/syncShipmentTracking');
+                                                ->getUrl('adminhtml/ReverbSync_orders_sync_unique/syncShipmentTracking');
 
         $this->_addButton('sync_shipment_tracking', array(
                 'label' => Mage::helper('ReverbSync')->__('Sync Shipment Tracking Data With Reverb'),
@@ -29,7 +29,7 @@ class Reverb_ReverbSync_Block_Adminhtml_Orders_Unique_Index extends Reverb_Rever
 
     protected function _getBulkSyncUrlParams()
     {
-        return array('redirect_controller' => 'adminhtml_orders_sync_unique');
+        return array('redirect_controller' => 'ReverbSync_orders_sync_unique');
     }
 
     protected function _getHeaderTextTemplate()

@@ -8,7 +8,16 @@ class Reverb_ReverbSync_Helper_Orders_Retrieval_Update extends Reverb_ReverbSync
 {
     const ORDERS_UPDATE_RETRIEVAL_URL_TEMPLATE = '/api/my/orders/selling/all?updated_start_date=%s';
     // Choosing 11 minutes to account for the fact that this cron process may not run exactly on the minute
-    const MINUTES_IN_PAST_FOR_UPDATE_QUERY = 11;
+
+
+
+
+    const MINUTES_IN_PAST_FOR_UPDATE_QUERY = 110000;
+
+
+
+
+
 
     protected $_orderUpdateTaskResourceSingleton = null;
 
