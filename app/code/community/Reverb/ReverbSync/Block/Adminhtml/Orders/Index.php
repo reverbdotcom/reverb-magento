@@ -29,12 +29,12 @@ class Reverb_ReverbSync_Block_Adminhtml_Orders_Index extends Mage_Adminhtml_Bloc
         $this->setTemplate('ReverbSync/sales/order/index/container.phtml');
 
         $bulk_orders_sync_process_button = array(
-            'action_url' => Mage::getModel('adminhtml/url')->getUrl('reverbSync/adminhtml_orders_sync/bulkSync', $this->_getBulkSyncUrlParams()),
+            'action_url' => Mage::getModel('adminhtml/url')->getUrl('adminhtml/ReverbSync_orders_sync/bulkSync', $this->_getBulkSyncUrlParams()),
             'label' => $this->_retrieveAndProcessTasksButtonLabel()
         );
 
         $process_downloaded_tasks_button = array(
-            'action_url' => Mage::getModel('adminhtml/url')->getUrl('reverbSync/adminhtml_orders_sync/syncDownloaded', $this->_getBulkSyncUrlParams()),
+            'action_url' => Mage::getModel('adminhtml/url')->getUrl('adminhtml/ReverbSync_orders_sync/syncDownloaded', $this->_getBulkSyncUrlParams()),
             'label' => $this->_processDownloadedTasksButtonLabel()
         );
 

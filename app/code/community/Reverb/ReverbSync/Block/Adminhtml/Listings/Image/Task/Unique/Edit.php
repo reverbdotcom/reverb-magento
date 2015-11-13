@@ -15,6 +15,7 @@ class Reverb_ReverbSync_Block_Adminhtml_Listings_Image_Task_Unique_Edit
         $this->_blockGroup = 'ReverbSync';
 
         $this->_removeButton('delete');
+        $this->_removeButton('add');
 
         if (!$this->getAction()->canAdminUpdateStatus())
         {

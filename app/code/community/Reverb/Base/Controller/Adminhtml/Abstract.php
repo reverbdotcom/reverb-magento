@@ -17,6 +17,8 @@ abstract class Reverb_Base_Controller_Adminhtml_Abstract
 
     abstract public function getIndexBlockName();
 
+    abstract public function getIndexActionsController();
+
     // The following is accessible via accessor method getModuleHelper()
     protected $_moduleHelper = null;
 
@@ -109,6 +111,11 @@ abstract class Reverb_Base_Controller_Adminhtml_Abstract
     public function getAclPath()
     {
         return $this->getControllerActiveMenuPath();
+    }
+
+    public function getModuleRouterFrontname()
+    {
+        return 'adminhtml';
     }
 
     public function getModuleHelper()

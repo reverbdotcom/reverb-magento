@@ -4,8 +4,7 @@
  * Created: 9/14/15
  */
 
-
-class Reverb_ProcessQueue_Adminhtml_IndexController
+class Reverb_ProcessQueue_Adminhtml_ProcessQueue_IndexController
     extends Reverb_Base_Controller_Adminhtml_Form_Abstract
     implements Reverb_Base_Controller_Adminhtml_Form_Interface
 {
@@ -74,13 +73,8 @@ class Reverb_ProcessQueue_Adminhtml_IndexController
         return 'adminhtml_task';
     }
 
-    public function getFormActionsController()
+    public function getIndexActionsController()
     {
-        return 'adminhtml_index';
-    }
-
-    public function getFormBackControllerActionPath()
-    {
-        return 'adminhtml_index/index';
+        return 'ProcessQueue_index';
     }
 }

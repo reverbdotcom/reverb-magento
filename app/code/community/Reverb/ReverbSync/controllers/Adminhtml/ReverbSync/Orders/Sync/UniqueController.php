@@ -4,9 +4,9 @@
  * Created: 9/16/15
  */
 
-require_once('Reverb/ProcessQueue/controllers/Adminhtml/Unique/IndexController.php');
-class Reverb_ReverbSync_Adminhtml_Orders_Sync_UniqueController
-    extends Reverb_ProcessQueue_Adminhtml_Unique_IndexController
+require_once('Reverb/ProcessQueue/controllers/Adminhtml/ProcessQueue/Unique/IndexController.php');
+class Reverb_ReverbSync_Adminhtml_ReverbSync_Orders_Sync_UniqueController
+    extends Reverb_ProcessQueue_Adminhtml_ProcessQueue_Unique_IndexController
 {
     const EXCEPTION_LOAD_UNIQUE_TASK = 'An exception occurred while attempting to load a unique order task to manually act on the task: %s';
     const EXCEPTION_ACT_ON_TASK = 'An error occurred while acting on the task for the order with Reverb Order Id %s: %s';
@@ -114,12 +114,6 @@ class Reverb_ReverbSync_Adminhtml_Orders_Sync_UniqueController
         return 'adminhtml_orders_task_unique_index';
     }
 
-    public function getUriPathForAction($action)
-    {
-        $uri_path = sprintf('%s/%s/%s', 'reverbSync', $this->getFormActionsController(), $action);
-        return $uri_path;
-    }
-
     public function getControllerDescription()
     {
         return "Reverb Order Creation and Shipment Tracking Creation Sync";
@@ -145,19 +139,9 @@ class Reverb_ReverbSync_Adminhtml_Orders_Sync_UniqueController
         return 'Sync Task';
     }
 
-    public function getFormActionsController()
+    public function getIndexActionsController()
     {
-        return 'adminhtml_orders_sync_unique';
-    }
-
-    public function getFullBackControllerActionPath()
-    {
-        return ('reverbSync/' . $this->getFormBackControllerActionPath());
-    }
-
-    public function getFormBackControllerActionPath()
-    {
-        return 'adminhtml_orders_sync_unique/index';
+        return 'ReverbSync_orders_sync_unique';
     }
 
     protected function _getModuleBlockGroupname()
