@@ -28,8 +28,6 @@ abstract class Reverb_Base_Controller_Adminhtml_Form_Abstract
 
     abstract public function getFormBlockName();
 
-    abstract public function getFormActionsController();
-
     // This class will set this field. It's accessor is given below as getObjectToEdit()
     protected $_objectToEdit = null;
 
@@ -201,18 +199,24 @@ abstract class Reverb_Base_Controller_Adminhtml_Form_Abstract
 
     public function getUriPathForAction($action)
     {
-        $uri_path = sprintf('%s/%s/%s', $this->getModuleGroupname(), $this->getFormActionsController(), $action);
+        $uri_path = sprintf('%s/%s/%s', $this->getModuleRouterFrontname(), $this->getFormActionsController(), $action);
         return $uri_path;
+    }
+
+    public function getFormActionsController()
+    {
+        return $this->getIndexActionsController();
     }
 
     public function getFormBackControllerActionPath()
     {
-        return 'index/index';
+        $index_actions_controller = $this->getFormActionsController();
+        return ($index_actions_controller . '/index');
     }
 
     public function getFullBackControllerActionPath()
     {
-        $module_router = $this->getModuleGroupname();
+        $module_router = $this->getModuleRouterFrontname();
         return ($module_router . '/' . $this->getFormBackControllerActionPath());
     }
 

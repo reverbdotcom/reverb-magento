@@ -41,6 +41,19 @@ class Reverb_ReverbSync_Model_Sync_Order_Update extends Reverb_ProcessQueue_Mode
     {
         try
         {
+
+
+
+
+            $reverb_order_status = 'paid';
+
+
+
+
+
+
+
+
             // Start a database transaction
             Mage::getResourceSingleton('sales/order')->beginTransaction();
 

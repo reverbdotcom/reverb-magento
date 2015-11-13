@@ -6,6 +6,8 @@
 
 abstract class Reverb_ReverbSync_Adminhtml_BaseController extends Mage_Adminhtml_Controller_Action
 {
+    protected $_adminHelper = null;
+
     abstract public function getBlockToShow();
 
     abstract public function getControllerActiveMenuPath();

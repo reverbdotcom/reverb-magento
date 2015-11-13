@@ -17,7 +17,7 @@ class Reverb_ReverbSync_Block_Adminhtml_Listings_Index extends Mage_Adminhtml_Bl
         parent::__construct();
 
         $bulk_sync_process_button = array(
-            'action_url' => Mage::getModel('adminhtml/url')->getUrl('reverbSync/adminhtml_listings_sync/bulkSync'),
+            'action_url' => Mage::getModel('adminhtml/url')->getUrl('adminhtml/ReverbSync_listings_sync/bulkSync'),
             'label' => 'Bulk Product Sync'
         );
 

@@ -203,15 +203,6 @@
           </modules>
         </args>
       </adminhtml>
-
-      <reverb_sync>
-        <use>admin</use>
-        <args>
-          <module>Reverb_ReverbSync</module>
-          <frontName>reverbSync</frontName>
-        </args>
-      </reverb_sync>
-
     </routers>
   </admin>
 
