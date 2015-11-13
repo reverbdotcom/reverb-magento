@@ -34,11 +34,11 @@ class Reverb_ReverbSync_Model_Mysql4_Category_Magento_Reverb_Mapping extends Mag
     public function redefineCategoryMapping(array $magento_reverb_category_mapping)
     {
         $this->_truncateTable();
-        array_walk($magento_reverb_category_mapping, 'Reverb_ReverbSync_Model_Mysql4_Category_Magento_Reverb_Mapping::testStuff');
+        array_walk($magento_reverb_category_mapping, 'Reverb_ReverbSync_Model_Mysql4_Category_Magento_Reverb_Mapping::convertToArray');
         return $this->loadMagentoReverbCategoryMappingArrayIntoDatabase($magento_reverb_category_mapping);
     }
 
-    public static function testStuff(&$array_item, $key)
+    public static function convertToArray(&$array_item, $key)
     {
         $value = intval($array_item);
         $array_item = array(self::MAGENTO_CATEGORY_ID_FIELD => $key, self::REVERB_CATEGORY_ID_FIELD => $value);
