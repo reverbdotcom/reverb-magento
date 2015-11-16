@@ -16,6 +16,7 @@ class Reverb_ReverbSync_Model_Mapper_Product
     protected $_has_inventory = null;
     protected $_listingsUpdateSyncHelper = null;
     protected $_categorySyncHelper = null;
+    protected $_reverbConditionSourceModel = null;
 
     //LEGACY CODE: function to Map the Magento and Reverb attributes
     public function getUpdateListingWrapper(Mage_Catalog_Model_Product $product)
@@ -46,6 +47,7 @@ class Reverb_ReverbSync_Model_Mapper_Product
         }
 
         $this->addCategoryToFieldsArray($fieldsArray, $product);
+        $this->addProductConditionIfSet($fieldsArray, $product);
 
         $reverbListingWrapper->setApiCallContentData($fieldsArray);
         $reverbListingWrapper->setMagentoProduct($product);
@@ -62,14 +64,12 @@ class Reverb_ReverbSync_Model_Mapper_Product
         $name = $product->getName();
         $description = $product->getDescription();
         $sku = $product->getSku();
-        $condition = $this->_getCondition();
         $hasInventory = $this->_getHasInventory();
 
         $fieldsArray = array(
             'title'=> $name,
             'sku'=> $sku,
             'description'=>$description,
-            'condition' => $condition,
             "has_inventory"=>$hasInventory,
             "inventory"=>$qty,
             "price"=>$price
@@ -77,11 +77,23 @@ class Reverb_ReverbSync_Model_Mapper_Product
 
         $this->addProductImagesToFieldsArray($fieldsArray, $product);
         $this->addCategoryToFieldsArray($fieldsArray, $product);
+        $this->addProductConditionIfSet($fieldsArray, $product);
 
         $reverbListingWrapper->setApiCallContentData($fieldsArray);
         $reverbListingWrapper->setMagentoProduct($product);
 
         return $reverbListingWrapper;
+    }
+
+    public function addProductConditionIfSet(array &$fieldsArray, $product)
+    {
+        $product_condition = $product->getReverbCondition();
+        if (!empty($product_condition) && $this->_getReverbConditionSourceModel()->isValidConditionValue($product_condition))
+        {
+            $fieldsArray['condition'] = $product_condition;
+        }
+
+        return $fieldsArray;
     }
 
     public function addCategoryToFieldsArray(array &$fieldsArray, $product)
@@ -118,6 +130,16 @@ class Reverb_ReverbSync_Model_Mapper_Product
         {
             // Do nothing here
         }
+    }
+
+    protected function _getReverbConditionSourceModel()
+    {
+        if (is_null($this->_reverbConditionSourceModel))
+        {
+            $this->_reverbConditionSourceModel = Mage::getSingleton('reverbSync/source_listing_condition');
+        }
+
+        return $this->_reverbConditionSourceModel;
     }
 
     protected function _getCategorySyncHelper()
