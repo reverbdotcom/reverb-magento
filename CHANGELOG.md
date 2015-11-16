@@ -1,3 +1,9 @@
+## 0.4.9
+* Local pickup orders are correctly handled with a fake "Local Pickup" address (Magento requires addresses on orders)
+* Condition can be set on a per-item basis with a dropdown
+* Addresses with whitespace no longer cause issues
+* Admin routing updated to comply with Magento Security Patch SUPEE-6788 / APPSEC-1034
+
 ## 0.4.8
 * Unpaid order are not invoiced in Magento until they are paid
 
