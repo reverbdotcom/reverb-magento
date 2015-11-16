@@ -21,7 +21,7 @@ class Reverb_ReverbSync_Block_Adminhtml_Widget_Grid_Column_Renderer_Order_Task_A
         $action_array['confirm'] = sprintf(self::CONFIRM_TEMPLATE, $task_action_text);
 
         $task_controller = $this->getColumn()->getTaskController();
-        $action_url = $this->getUrl('reverbSync/' . $task_controller . '/actOnTask', array('task_id' => $row->getId()));
+        $action_url = $this->getUrl('adminhtml/' . $task_controller . '/actOnTask', array('task_id' => $row->getId()));
         $action_array['url'] = $action_url;
 
         return $this->_toLinkHtml($action_array, $row);

@@ -48,16 +48,4 @@
             </reverb_process_queue_setup>
         </resources>
     </global>
-
-    <admin>
-        <routers>
-            <reverb_process_queue>
-                <use>admin</use>
-                <args>
-                    <module>Reverb_ProcessQueue</module>
-                    <frontName>reverb_process_queue</frontName>
-                </args>
-            </reverb_process_queue>
-        </routers>
-    </admin>
 </config>

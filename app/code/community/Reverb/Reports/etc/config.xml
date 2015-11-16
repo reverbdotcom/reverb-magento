@@ -75,18 +75,10 @@
             <adminhtml>
                 <args>
                     <modules>
-                        <Reverb_Reports before="Mage_Adminhtml">Reverb_Reports_Adminhtml</Reverb_Reports>
+                        <reverb_reports before="Mage_Adminhtml">Reverb_Reports_Adminhtml</reverb_reports>
                     </modules>
                 </args>
             </adminhtml>
-
-            <reverb_reports>
-                <use>admin</use>
-                <args>
-                    <module>Reverb_Reports</module>
-                    <frontName>reverbReports</frontName>
-                </args>
-            </reverb_reports>
         </routers>
     </admin>
 </config>

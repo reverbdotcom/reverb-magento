@@ -59,4 +59,14 @@ interface Reverb_Base_Controller_Adminhtml_Interface
      * @return string
      */
     public function getIndexBlockName();
+
+    /**
+     * Should be the controller that will process the index actions
+     * e.g. if the url for the index action is admin/{controller}/index
+     *              then this method should return the {controller} value
+     *
+     *
+     * @return string
+     */
+    public function getIndexActionsController();
 }

@@ -1,8 +1,11 @@
 <?php
+/**
+ * Author: Sean Dunagan
+ */
 
-require_once('Reverb/ProcessQueue/controllers/Adminhtml/Unique/IndexController.php');
-class Reverb_ReverbSync_Adminhtml_Listings_Image_SyncController
-    extends Reverb_ProcessQueue_Adminhtml_Unique_IndexController
+require_once('Reverb/ProcessQueue/controllers/Adminhtml/ProcessQueue/Unique/IndexController.php');
+class Reverb_ReverbSync_Adminhtml_ReverbSync_Listings_Image_SyncController
+    extends Reverb_ProcessQueue_Adminhtml_ProcessQueue_Unique_IndexController
 {
     const CONST_INVALID_TASK_ID = 'An invalid Unique Task id was passed to the Reverb Listings Image Sync Controller: %s';
     const EXCEPTION_ACT_ON_TASK = 'An error occurred while acting on the listings image sync with id %s: %s';
@@ -79,12 +82,6 @@ class Reverb_ReverbSync_Adminhtml_Listings_Image_SyncController
         return 'adminhtml_listings_image_task_unique_index';
     }
 
-    public function getUriPathForAction($action)
-    {
-        $uri_path = sprintf('%s/%s/%s', 'reverbSync', $this->getFormActionsController(), $action);
-        return $uri_path;
-    }
-
     public function getControllerDescription()
     {
         return "Reverb Listings Image Sync";
@@ -110,19 +107,9 @@ class Reverb_ReverbSync_Adminhtml_Listings_Image_SyncController
         return 'Sync Task';
     }
 
-    public function getFormActionsController()
+    public function getIndexActionsController()
     {
-        return 'adminhtml_listings_image_sync';
-    }
-
-    public function getFullBackControllerActionPath()
-    {
-        return ('reverbSync/' . $this->getFormBackControllerActionPath());
-    }
-
-    public function getFormBackControllerActionPath()
-    {
-        return 'adminhtml_listings_image_sync/index';
+        return 'ReverbSync_listings_image_sync';
     }
 
     public function getBlockModuleGroupname()

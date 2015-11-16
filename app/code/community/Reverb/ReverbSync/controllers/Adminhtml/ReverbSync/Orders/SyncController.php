@@ -1,8 +1,8 @@
 <?php
 
-require_once('Reverb/ProcessQueue/controllers/Adminhtml/IndexController.php');
-class Reverb_ReverbSync_Adminhtml_Orders_SyncController
-    extends Reverb_ProcessQueue_Adminhtml_IndexController
+require_once('Reverb/ProcessQueue/controllers/Adminhtml/ProcessQueue/IndexController.php');
+class Reverb_ReverbSync_Adminhtml_ReverbSync_Orders_SyncController
+    extends Reverb_ProcessQueue_Adminhtml_ProcessQueue_IndexController
 {
     const EXCEPTION_LOAD_TASK = 'An exception occurred while attempting to load an order task to manually act on the task: %s';
     const EXCEPTION_BULK_ORDERS_SYNC = 'Error executing a Reverb bulk orders sync: %s';
@@ -38,7 +38,7 @@ class Reverb_ReverbSync_Adminhtml_Orders_SyncController
             $error_message = sprintf(self::ERROR_DENIED_ORDER_CREATION_STATUS_UPDATE);
             Mage::getSingleton('adminhtml/session')->addError($this->__($error_message));
             $exception = new Reverb_ReverbSync_Controller_Varien_Exception();
-            $exception->prepareRedirect('reverbSync/adminhtml_orders_sync/edit', array($task_param_name => $task_id));
+            $exception->prepareRedirect('adminhtml/ReverbSync_orders_sync/edit', array($task_param_name => $task_id));
             throw $exception;
         }
 
@@ -151,10 +151,10 @@ class Reverb_ReverbSync_Adminhtml_Orders_SyncController
         $redirect_controller = $this->getRequest()->getParam('redirect_controller');
         if (empty($redirect_controller))
         {
-            $redirect_controller = 'adminhtml_orders_sync';
+            $redirect_controller = 'ReverbSync_orders_sync';
         }
 
-        return 'reverbSync/' . $redirect_controller . '/index';
+        return 'adminhtml/' . $redirect_controller . '/index';
     }
 
     public function canAdminUpdateStatus()
@@ -170,12 +170,6 @@ class Reverb_ReverbSync_Adminhtml_Orders_SyncController
     public function getIndexBlockName()
     {
         return 'adminhtml_orders_task_index';
-    }
-
-    public function getUriPathForAction($action)
-    {
-        $uri_path = sprintf('%s/%s/%s', 'reverbSync', $this->getFormActionsController(), $action);
-        return $uri_path;
     }
 
     public function getControllerDescription()
@@ -203,19 +197,9 @@ class Reverb_ReverbSync_Adminhtml_Orders_SyncController
         return 'Order Update Sync Task';
     }
 
-    public function getFormActionsController()
+    public function getIndexActionsController()
     {
-        return 'adminhtml_orders_sync';
-    }
-
-    public function getFullBackControllerActionPath()
-    {
-        return ('reverbSync/' . $this->getFormBackControllerActionPath());
-    }
-
-    public function getFormBackControllerActionPath()
-    {
-        return 'adminhtml_orders_sync/index';
+        return 'ReverbSync_orders_sync';
     }
 
     protected function _getModuleBlockGroupname()

@@ -16,17 +16,13 @@ class Reverb_ReverbSync_Block_Adminhtml_Category_Edit extends Mage_Adminhtml_Blo
         parent::__construct();
 
         $this->_removeButton('delete');
+        $this->_removeButton('back');
     }
 
     public function getFormActionUrl()
     {
         $uri_path = $this->getAction()->getUriPathForAction('save');
         return $this->getUrl($uri_path);
-    }
-
-    public function getBackUrl()
-    {
-        return ('reverbSync/' . 'adminhtml_category_sync/index');
     }
 
     public function getHeaderText()
