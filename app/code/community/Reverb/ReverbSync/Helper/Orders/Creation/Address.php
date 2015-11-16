@@ -90,6 +90,7 @@ class Reverb_ReverbSync_Helper_Orders_Creation_Address extends Reverb_ReverbSync
 
         $street_address = $shippingAddressObject->street_address;
         $extended_address = $shippingAddressObject->extended_address;
+
         $street_array = array($street_address, $extended_address);
 
         $region = $shippingAddressObject->region;
@@ -110,9 +111,30 @@ class Reverb_ReverbSync_Helper_Orders_Creation_Address extends Reverb_ReverbSync
             'telephone' => $shippingAddressObject->phone,
         );
 
+        $address_data_array = $this->_trimAddressFields($address_data_array);
+
         $customerAddress = Mage::getModel('customer/address');
         $customerAddress->addData($address_data_array);
 
         return $customerAddress;
+    }
+
+    protected function _trimAddressFields(array $address_data_array)
+    {
+        foreach ($address_data_array as $field => $value)
+        {
+            if (is_array($value))
+            {
+                $value = $this->_trimAddressFields($value);
+            }
+            elseif(!is_object($value))
+            {
+                $value = trim($value);
+            }
+
+            $address_data_array[$field] = $value;
+        }
+
+        return $address_data_array;
     }
 } 
