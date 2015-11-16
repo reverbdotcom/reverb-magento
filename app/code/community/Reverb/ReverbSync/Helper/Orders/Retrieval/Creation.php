@@ -7,7 +7,7 @@
 class Reverb_ReverbSync_Helper_Orders_Retrieval_Creation
     extends Reverb_ReverbSync_Helper_Orders_Retrieval
 {
-    const MINUTES_IN_PAST_FOR_CREATION_QUERY = 1440;
+    const MINUTES_IN_PAST_FOR_CREATION_QUERY = 4320; # 3 days
     const EXCEPTION_CHECK_IF_ORDER_ALREADY_SYNCED = 'Error checking to see if order with reverb id %s had already been created in Magento: %s';
 
     public function queueOrderActionByReverbOrderDataObject(stdClass $orderDataObject)
