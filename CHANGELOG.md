@@ -1,3 +1,6 @@
+## 0.5.0
+* Don't sync categories on update to prevent mismapped category errors from impacting other updates
+
 ## 0.4.9
 * Local pickup orders are correctly handled with a fake "Local Pickup" address (Magento requires addresses on orders)
 * Condition can be set on a per-item basis with a dropdown
