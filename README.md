@@ -53,13 +53,17 @@ If your crontab does not contain either of these lines, please use `crontab -e` 
 * Select Yes for Enable Reverb Module to turn on the sync
 * If you also want to create drafts for skus that don't exist on Reverb, select "Enable Listing Creation" in the Reverb Default section.
 
-## Usage
+## Usage - Listing Sync
 
-The sync to Reverb can be triggered in two ways:
+The listing sync to Reverb can be triggered in two ways:
 
 1. When you Save any Product in Magento, it will automaticaly sync to Reverb. Make sure you set "Sync to Reverb" to "Yes" on the bottom of the product page, and enable the Reverb Module in your global settings (see Part 3 of installation).
 
 2. Bulk Sync. Under the Reverb menu item, select listing or order sync and use the Bulk Sync button in the upper right. The page will update with progress over time. Please note that very large catalogs (thousands of skus) may take an hour or more to fully sync. Please refresh the page to see the sync report.
+
+## Usage - Order Sync
+
+Orders are automatically synced on a one minute cron timer. If you aren't seeing orders, please visit the Order Creation tab under Reverb and click the button to manually sync them. Please report any issues with periodic syncing to the [Reverb Magento Support Group](https://groups.google.com/forum/#!forum/reverb-magento)
 
 ## Notes on Bulk Sync
 
