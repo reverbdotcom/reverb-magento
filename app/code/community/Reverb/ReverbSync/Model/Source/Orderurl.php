@@ -9,7 +9,7 @@ class Reverb_ReverbSync_Model_Source_Orderurl
     const ALL_ORDERS_URL = '/api/my/orders/selling/all?created_start_date=%s';
     const ALL_ORDERS_LABEL = 'All (including Unpaid Accepted Offers)';
 
-    // Not for awaiting shipment, we are using the updated timestamp because
+    // Note: for awaiting shipment, we are using the updated timestamp because
     // Orders may be created at time X but be awaiting shipment at X+Y.
     //
     // Thus it is safer to use the updated timestamp to make sure we don't miss any that were created
