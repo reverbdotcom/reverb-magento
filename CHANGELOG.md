@@ -1,7 +1,3 @@
-## 0.5.1
-* Cron for order retrieval now functioning
-* Category mapping to subcategories is now correct
-
 ## 0.5.0
 * Don't sync categories on update to prevent mismapped category errors from impacting other updates
 
