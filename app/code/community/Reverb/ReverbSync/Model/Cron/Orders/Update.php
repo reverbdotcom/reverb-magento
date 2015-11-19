@@ -19,6 +19,7 @@ class Reverb_ReverbSync_Model_Cron_Orders_Update
                 return false;
             }
 
+            Mage::helper('ReverbSync/orders_retrieval_update')->queueReverbOrderSyncActions();
             Mage::helper('reverb_process_queue/task_processor')->processQueueTasks('order_update');
         }
         catch(Exception $e)
