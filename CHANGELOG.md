@@ -1,3 +1,6 @@
+## 0.5.2
+* Fix order retrieval to run on a cron timer - it was only working when the sync button was pressed
+
 ## 0.5.0
 * Don't sync categories on update to prevent mismapped category errors from impacting other updates
 
