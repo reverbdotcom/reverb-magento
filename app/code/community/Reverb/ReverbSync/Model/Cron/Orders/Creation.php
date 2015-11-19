@@ -19,6 +19,7 @@ class Reverb_ReverbSync_Model_Cron_Orders_Creation
                 return false;
             }
 
+            Mage::helper('ReverbSync/orders_retrieval_creation')->queueReverbOrderSyncActions();
             Mage::helper('ReverbSync/orders_creation_task_processor')->processQueueTasks('order_creation');
         }
         catch(Exception $e)
