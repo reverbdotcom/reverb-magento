@@ -69,41 +69,62 @@ class Reverb_ReverbSync_Helper_Sync_Category extends Mage_Core_Helper_Abstract
             return $fieldsArray;
         }
 
-        $deepestReverbCategory = $this->getDeepestReverbCategory($product_reverb_category_objects_array);
+        $sorted_reverb_categories_desc = $this->sortReverbCategoriesByLevelDescending($product_reverb_category_objects_array);
+        // Get the deepest category
+        $deepestReverbCategory = array_shift($sorted_reverb_categories_desc);
         $product_type_slug = $deepestReverbCategory->getData('reverb_product_type_slug');
         $category_slug = $deepestReverbCategory->getData('reverb_category_slug');
 
-        // We expect category slug to be populated, but check just in case
+        // If the only categories mapped are top-level Reverb categories, there will be no category slug
         if (!empty($category_slug))
         {
             $fieldsArray[self::CATEGORY_FIELD_NAME] = array($category_slug);
         }
-        // If the only categories mapped are top-level Reverb categories, there will be no product type slug
+        // We expect product type slug to be populated, but check just in case
         if (!empty($product_type_slug))
         {
             $fieldsArray[self::PRODUCT_TYPE_FIELD_NAME] = $product_type_slug;
         }
 
-        return $fieldsArray;
-    }
-
-    public function getDeepestReverbCategory(array $product_reverb_category_objects_array)
-    {
-        $deepest_level = 0;
-        $deepestReverbCategory = null;
-        foreach ($product_reverb_category_objects_array as $reverbCategory)
+        // See if there is a second category to be mapped to
+        if (!empty($sorted_reverb_categories_desc))
         {
-            $category_name = $reverbCategory->getName();
-            $categories_in_hierarchy = explode(' > ', $category_name);
-            $category_levels = count($categories_in_hierarchy);
-            if ($category_levels > $deepest_level)
+            $secondDeepestReverbCategory = array_shift($sorted_reverb_categories_desc);
+            $second_category_slug = $secondDeepestReverbCategory->getData('reverb_category_slug');
+            if (!empty($second_category_slug))
             {
-                $deepest_level = $category_levels;
-                $deepestReverbCategory = $reverbCategory;
+                if (isset($fieldsArray[self::CATEGORY_FIELD_NAME]) && is_array($fieldsArray[self::CATEGORY_FIELD_NAME]))
+                {
+                    $fieldsArray[self::CATEGORY_FIELD_NAME][] = $second_category_slug;
+                }
+                else
+                {
+                    // We shouldn't reach this point, but account for the case where we do
+                    $fieldsArray[self::CATEGORY_FIELD_NAME] = array($second_category_slug);
+                }
             }
         }
 
-        return $deepestReverbCategory;
+        return $fieldsArray;
+    }
+
+    public function sortReverbCategoriesByLevelDescending(array $product_reverb_category_objects_array)
+    {
+        usort($product_reverb_category_objects_array, 'Reverb_ReverbSync_Helper_Sync_Category::compareReverbCategoryLevelDescending');
+        return $product_reverb_category_objects_array;
+    }
+
+    static public function compareReverbCategoryLevelDescending($reverbCategoryA, $reverbCategoryB)
+    {
+        $category_name_a = $reverbCategoryA->getName();
+        $categories_in_hierarchy_a = explode(' > ', $category_name_a);
+        $category_a_levels = count($categories_in_hierarchy_a);
+
+        $category_name_b = $reverbCategoryB->getName();
+        $categories_in_hierarchy_b = explode(' > ', $category_name_b);
+        $category_b_levels = count($categories_in_hierarchy_b);
+
+        return ($category_a_levels < $category_b_levels);
     }
 
     public function getReverbCategoryObjectsByProduct(Mage_Catalog_Model_Product $magentoProduct)
