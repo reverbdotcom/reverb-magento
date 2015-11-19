@@ -69,22 +69,14 @@ class Reverb_ReverbSync_Helper_Sync_Category extends Mage_Core_Helper_Abstract
             return $fieldsArray;
         }
 
-        $category_slug_array = array();
-        $product_type_slug = null;
-
-        foreach($product_reverb_category_objects_array as $reverbCategory)
-        {
-            $category_slug_array[] = $reverbCategory->getReverbCategorySlug();
-            if (empty($product_type_slug))
-            {
-                $product_type_slug = $reverbCategory->getReverbProductTypeSlug();
-            }
-        }
+        $deepestReverbCategory = $this->getDeepestReverbCategory($product_reverb_category_objects_array);
+        $product_type_slug = $deepestReverbCategory->getData('reverb_product_type_slug');
+        $category_slug = $deepestReverbCategory->getData('reverb_category_slug');
 
         // We expect category slug to be populated, but check just in case
-        if (!empty($category_slug_array))
+        if (!empty($category_slug))
         {
-            $fieldsArray[self::CATEGORY_FIELD_NAME] = $category_slug_array;
+            $fieldsArray[self::CATEGORY_FIELD_NAME] = array($category_slug);
         }
         // If the only categories mapped are top-level Reverb categories, there will be no product type slug
         if (!empty($product_type_slug))
@@ -93,6 +85,25 @@ class Reverb_ReverbSync_Helper_Sync_Category extends Mage_Core_Helper_Abstract
         }
 
         return $fieldsArray;
+    }
+
+    public function getDeepestReverbCategory(array $product_reverb_category_objects_array)
+    {
+        $deepest_level = 0;
+        $deepestReverbCategory = null;
+        foreach ($product_reverb_category_objects_array as $reverbCategory)
+        {
+            $category_name = $reverbCategory->getName();
+            $categories_in_hierarchy = explode(' > ', $category_name);
+            $category_levels = count($categories_in_hierarchy);
+            if ($category_levels > $deepest_level)
+            {
+                $deepest_level = $category_levels;
+                $deepestReverbCategory = $reverbCategory;
+            }
+        }
+
+        return $deepestReverbCategory;
     }
 
     public function getReverbCategoryObjectsByProduct(Mage_Catalog_Model_Product $magentoProduct)
