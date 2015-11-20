@@ -46,12 +46,7 @@ class Reverb_ReverbSync_Model_Mapper_Product
             $fieldsArray['inventory'] = $stock->getQty();
         }
 
-
-        // We are not syncing categories on update because the category sync is buggy
-        // and is sending over top level categories in the "categories" field, which should
-        // be subcategories. Until that is fixed, we have taken out this call:
-        //
-        // $this->addCategoryToFieldsArray($fieldsArray, $product);
+        $this->addCategoryToFieldsArray($fieldsArray, $product);
 
         $this->addProductConditionIfSet($fieldsArray, $product);
 
