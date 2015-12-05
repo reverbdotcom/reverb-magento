@@ -68,21 +68,30 @@ class Reverb_ReverbSync_Helper_Sync_Category extends Mage_Core_Helper_Abstract
             // Return without modifying the $fieldsArray
             return $fieldsArray;
         }
-
+        // If the user has mapped a product to both a subcategory and a toplevel category, the subcategory information wins.
         $sorted_reverb_categories_desc = $this->sortReverbCategoriesByLevelDescending($product_reverb_category_objects_array);
-        // Get the deepest category
         $deepestReverbCategory = array_shift($sorted_reverb_categories_desc);
         $product_type_slug = $deepestReverbCategory->getData('reverb_product_type_slug');
         $category_slug = $deepestReverbCategory->getData('reverb_category_slug');
 
-        // If the only categories mapped are top-level Reverb categories, there will be no category slug
-        if (!empty($category_slug))
+        if (empty($product_type_slug))
         {
-            $fieldsArray[self::CATEGORY_FIELD_NAME] = array($category_slug);
+            // If the user maps to a toplevel category (which has only "slug" and no "product_type_slug"), then the
+            //      "slug" becomes the "product_type" in the request to reverb and "categories" is blank.
+            $fieldsArray[self::CATEGORY_FIELD_NAME] = array();
+            $fieldsArray[self::PRODUCT_TYPE_FIELD_NAME] = $category_slug;
+            // We do not want to send multiple top-level categories. Since the first category shifted off of
+            //  $sorted_reverb_categories_desc was a top-level category, we can assume that any additional categories
+            //  would also be top-level categories
+            return $fieldsArray;
         }
-        // We expect product type slug to be populated, but check just in case
-        if (!empty($product_type_slug))
+        else
         {
+            /*
+             * If the user maps to a subcategory (which has "slug" and "product_type_slug"), then "slug" goes into
+             *  "categories" and "product_type_slug" goes into "product_type" in the request to reverb.
+             */
+            $fieldsArray[self::CATEGORY_FIELD_NAME] = array($category_slug);
             $fieldsArray[self::PRODUCT_TYPE_FIELD_NAME] = $product_type_slug;
         }
 
@@ -90,17 +99,17 @@ class Reverb_ReverbSync_Helper_Sync_Category extends Mage_Core_Helper_Abstract
         if (!empty($sorted_reverb_categories_desc))
         {
             $secondDeepestReverbCategory = array_shift($sorted_reverb_categories_desc);
-            $second_category_slug = $secondDeepestReverbCategory->getData('reverb_category_slug');
-            if (!empty($second_category_slug))
+            if (Reverb_ReverbSync_Helper_Sync_Category::isReverbCategoryASubcategory($secondDeepestReverbCategory))
             {
-                if (isset($fieldsArray[self::CATEGORY_FIELD_NAME]) && is_array($fieldsArray[self::CATEGORY_FIELD_NAME]))
-                {
+                // If there are two subcategories, both should be sent in the "categories" field as long as they have
+                //  the same product_type_slug
+                $second_product_type_slug = $secondDeepestReverbCategory->getData('reverb_product_type_slug');
+                if (!strcmp($second_product_type_slug, $product_type_slug)) {
+                    $second_category_slug = $secondDeepestReverbCategory->getData('reverb_category_slug');
                     $fieldsArray[self::CATEGORY_FIELD_NAME][] = $second_category_slug;
-                }
-                else
-                {
-                    // We shouldn't reach this point, but account for the case where we do
-                    $fieldsArray[self::CATEGORY_FIELD_NAME] = array($second_category_slug);
+                } else {
+                    // If someone for some reason mapped their product into multiple subcategories with different parent
+                    //      product types, we should just take the first one. So we do nothing here
                 }
             }
         }
@@ -116,15 +125,23 @@ class Reverb_ReverbSync_Helper_Sync_Category extends Mage_Core_Helper_Abstract
 
     static public function compareReverbCategoryLevelDescending($reverbCategoryA, $reverbCategoryB)
     {
-        $category_name_a = $reverbCategoryA->getName();
-        $categories_in_hierarchy_a = explode(' > ', $category_name_a);
-        $category_a_levels = count($categories_in_hierarchy_a);
+        $category_a_is_subcategory = Reverb_ReverbSync_Helper_Sync_Category::isReverbCategoryASubcategory($reverbCategoryA);
+        $category_b_is_subcategory = Reverb_ReverbSync_Helper_Sync_Category::isReverbCategoryASubcategory($reverbCategoryB);
 
-        $category_name_b = $reverbCategoryB->getName();
-        $categories_in_hierarchy_b = explode(' > ', $category_name_b);
-        $category_b_levels = count($categories_in_hierarchy_b);
+        return ($category_a_is_subcategory < $category_b_is_subcategory);
+    }
 
-        return ($category_a_levels < $category_b_levels);
+    /**
+     * Subcategories are identified by the fact that they ... have both "slug" and "product_type_slug".
+     * They also have a " > " in their title, but that's not a reliable way to check for them being subcategories.
+     *
+     * @param $reverbCategoryA
+     * @return int
+     */
+    static public function isReverbCategoryASubcategory($reverbCategoryA)
+    {
+        $reverb_product_type_slug = $reverbCategoryA->getData('reverb_product_type_slug');
+        return (empty($reverb_product_type_slug) ? 0 : 1);
     }
 
     public function getReverbCategoryObjectsByProduct(Mage_Catalog_Model_Product $magentoProduct)
