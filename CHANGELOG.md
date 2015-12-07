@@ -1,3 +1,7 @@
+## 0.6.0
+* Categories and subcategories are now correctly assigned from the mapping screen
+* Syncs categories on updates
+
 ## 0.5.2
 * Fix order retrieval to run on a cron timer - it was only working when the sync button was pressed
 
