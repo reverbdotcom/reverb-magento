@@ -53,11 +53,9 @@ class Reverb_ReverbSync_Helper_Sync_Category extends Mage_Core_Helper_Abstract
     {
         return strcmp($mapped_value, self::NO_CATEGORY_CHOSEN_OPTION);
     }
-
     public function addCategoriesToListingFieldsArray(array $fieldsArray, Mage_Catalog_Model_Product $product)
     {
         $product_reverb_category_objects_array = $this->getReverbCategoryObjectsByProduct($product);
-
         if (empty($product_reverb_category_objects_array))
         {
             if ($this->reverbCategoriesAreRequiredForListing())
@@ -73,10 +71,9 @@ class Reverb_ReverbSync_Helper_Sync_Category extends Mage_Core_Helper_Abstract
         $deepestReverbCategory = array_shift($sorted_reverb_categories_desc);
         $product_type_slug = $deepestReverbCategory->getData('reverb_product_type_slug');
         $category_slug = $deepestReverbCategory->getData('reverb_category_slug');
-
         if (empty($product_type_slug))
         {
-            // If the user maps to a toplevel category (which has only "slug" and no "product_type_slug"), then the
+            // If the user maps to a top-level category (which has only "slug" and no "product_type_slug"), then the
             //      "slug" becomes the "product_type" in the request to reverb and "categories" is blank.
             $fieldsArray[self::CATEGORY_FIELD_NAME] = array();
             $fieldsArray[self::PRODUCT_TYPE_FIELD_NAME] = $category_slug;
@@ -94,7 +91,6 @@ class Reverb_ReverbSync_Helper_Sync_Category extends Mage_Core_Helper_Abstract
             $fieldsArray[self::CATEGORY_FIELD_NAME] = array($category_slug);
             $fieldsArray[self::PRODUCT_TYPE_FIELD_NAME] = $product_type_slug;
         }
-
         // See if there is a second category to be mapped to
         if (!empty($sorted_reverb_categories_desc))
         {
@@ -113,7 +109,6 @@ class Reverb_ReverbSync_Helper_Sync_Category extends Mage_Core_Helper_Abstract
                 }
             }
         }
-
         return $fieldsArray;
     }
 

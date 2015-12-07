@@ -7,7 +7,7 @@
 class Reverb_ReverbSync_Model_Mysql4_Category_Reverb extends Mage_Core_Model_Mysql4_Abstract
 {
     protected $_database_insert_columns_array
-                = array('name', 'description', 'reverb_category_slug', 'reverb_product_type_slug');
+                = array('name', 'description', 'reverb_product_type_slug', 'reverb_category_slug');
 
     public function _construct()
     {
