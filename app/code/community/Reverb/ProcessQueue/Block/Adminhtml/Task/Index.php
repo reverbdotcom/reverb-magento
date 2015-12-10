@@ -7,6 +7,8 @@
 class Reverb_ProcessQueue_Block_Adminhtml_Task_Index
     extends Reverb_Base_Block_Adminhtml_Widget_Grid_Container
 {
+    const BUTTON_ACTION_TEMPLATE = "confirmSetLocation('%s', '%s')";
+
     /**
      * Should return the task job codes for this page
      *
@@ -22,9 +24,16 @@ class Reverb_ProcessQueue_Block_Adminhtml_Task_Index
         return $this->getAction()->getFullBackControllerActionPath();
     }
 
-    public function getActionButtonsToRender()
+    public function __construct()
     {
-        $buttons_to_render = parent::getActionButtonsToRender();
+        parent::__construct();
+
+        $this->_addClearTasksButtons();
+    }
+
+    public function _addClearTasksButtons()
+    {
+        $buttons_to_render = array();
 
         $task_codes = $this->getTaskJobCodes();
         if (is_array($task_codes) && (!empty($task_codes)))
@@ -43,7 +52,8 @@ class Reverb_ProcessQueue_Block_Adminhtml_Task_Index
                                                                         array('task_codes' => $task_code_param,
                                                                         'redirect_route' => $encoded_redirect_route)
                                                                     ),
-            'label' => 'Clear All Tasks'
+            'label' => 'Clear All Tasks',
+            'confirm_message' => 'Are you sure you want to clear all tasks?'
         );
 
         $clear_successful_tasks_button = array(
@@ -51,12 +61,27 @@ class Reverb_ProcessQueue_Block_Adminhtml_Task_Index
                                                                         array('task_codes' => $task_code_param,
                                                                         'redirect_route' => $encoded_redirect_route)
                                                                     ),
-            'label' => 'Clear Successful Sync Tasks'
+            'label' => 'Clear Successful Sync Tasks',
+            'confirm_message' => 'Are you sure you want to clear all successful tasks?'
         );
 
         $buttons_to_render['clear_all_sync_tasks'] = $clear_all_tasks_button;
         $buttons_to_render['clear_successful_sync_tasks'] = $clear_successful_tasks_button;
 
-        return $buttons_to_render;
+        foreach ($buttons_to_render as $button_id => $button)
+        {
+            $label = $this->getAction()->getModuleHelper()->__($button['label']);
+            $confirm_message = $this->getAction()->getModuleHelper()->__($button['confirm_message']);
+            $action_url = $button['action_url'];
+            $onclick = sprintf(self::BUTTON_ACTION_TEMPLATE, $confirm_message, $action_url);
+
+            $this->_addButton(
+                $button_id, array(
+                    'label' => $this->getAction()->getModuleHelper()->__($label),
+                    'onclick' => $onclick,
+                    'level' => -1
+                )
+            );
+        }
     }
 }
