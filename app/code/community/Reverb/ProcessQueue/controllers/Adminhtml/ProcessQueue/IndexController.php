@@ -48,8 +48,7 @@ class Reverb_ProcessQueue_Adminhtml_ProcessQueue_IndexController
         $redirect_route = $this->getRequest()->getParam('redirect_route');
         try
         {
-            $rows_deleted = Mage::getResourceSingleton('reverb_process_queue/task')
-                                ->deleteAllTasks($task_codes);
+            $rows_deleted = $this->_getTaskProcessor()->deleteAllTasks($task_codes);
         }
         catch(Exception $e)
         {
@@ -78,8 +77,7 @@ class Reverb_ProcessQueue_Adminhtml_ProcessQueue_IndexController
         $redirect_route = $this->getRequest()->getParam('redirect_route');
         try
         {
-            $rows_deleted = Mage::getResourceSingleton('reverb_process_queue/task')
-                                ->deleteSuccessfulTasks($task_codes);
+            $rows_deleted = $this->_getTaskProcessor()->deleteSuccessfulTasks($task_codes);
         }
         catch(Exception $e)
         {
@@ -160,6 +158,11 @@ class Reverb_ProcessQueue_Adminhtml_ProcessQueue_IndexController
     public function getIndexActionsController()
     {
         return 'ProcessQueue_index';
+    }
+
+    protected function _getTaskProcessor()
+    {
+        return Mage::helper('reverb_process_queue/task_processor');
     }
 
     /**

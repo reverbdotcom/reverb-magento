@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Reverb_ProcessQueue>
-            <version>0.0.5</version>
+            <version>0.0.6</version>
         </Reverb_ProcessQueue>
     </modules>
 
@@ -61,6 +61,7 @@
         </routers>
     </admin>
 
+    <!--
     <crontab>
         <jobs>
             <reverb_process_queue_delete_stale_successful>
@@ -73,4 +74,5 @@
             </reverb_process_queue_delete_stale_successful>
         </jobs>
     </crontab>
+    -->
 </config>

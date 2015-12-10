@@ -22,7 +22,9 @@ class Reverb_ProcessQueue_Helper_Task extends Mage_Core_Helper_Data
 
         $rows_deleted = Mage::getResourceSingleton('reverb_process_queue/task')
                             ->deleteSuccessfulTasks($task_code, $stale_date);
+        $unique_rows_deleted = Mage::getResourceSingleton('reverb_process_queue/task_unique')
+                                ->deleteSuccessfulTasks($task_code, $stale_date);
 
-        return $rows_deleted;
+        return ($rows_deleted + $unique_rows_deleted);
     }
 }

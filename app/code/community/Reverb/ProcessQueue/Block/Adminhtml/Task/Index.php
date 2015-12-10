@@ -47,8 +47,10 @@ class Reverb_ProcessQueue_Block_Adminhtml_Task_Index
         }
         $encoded_redirect_route = urlencode($this->getRedirectRoute());
 
+        $clear_all_tasks_action = $this->getAction()->getUriPathForIndexAction('clearAllTasks');
+
         $clear_all_tasks_button = array(
-            'action_url' => Mage::getModel('adminhtml/url')->getUrl('adminhtml/ProcessQueue_index/clearAllTasks',
+            'action_url' => Mage::getModel('adminhtml/url')->getUrl($clear_all_tasks_action,
                                                                         array('task_codes' => $task_code_param,
                                                                         'redirect_route' => $encoded_redirect_route)
                                                                     ),
@@ -56,8 +58,9 @@ class Reverb_ProcessQueue_Block_Adminhtml_Task_Index
             'confirm_message' => 'Are you sure you want to clear all tasks?'
         );
 
+        $clear_successful_tasks_action = $this->getAction()->getUriPathForIndexAction('clearSuccessfulTasks');
         $clear_successful_tasks_button = array(
-            'action_url' => Mage::getModel('adminhtml/url')->getUrl('adminhtml/ProcessQueue_index/clearSuccessfulTasks',
+            'action_url' => Mage::getModel('adminhtml/url')->getUrl($clear_successful_tasks_action,
                                                                         array('task_codes' => $task_code_param,
                                                                         'redirect_route' => $encoded_redirect_route)
                                                                     ),
