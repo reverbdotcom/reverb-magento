@@ -4,16 +4,15 @@
  * Created: 12/9/15
  */
 
-class Reverb_ProcessQueue_Model_Cron_Delete_Stale_Successful
+class Reverb_Reports_Model_Cron_Delete_Stale_Successful
 {
-    const CRON_UNCAUGHT_EXCEPTION = 'Error deleting stale success tasks from the Reverb Process Queue: %s';
+    const CRON_UNCAUGHT_EXCEPTION = 'Error deleting stale success reports from the Reverb Reports Table: %s';
 
-    public function deleteStaleSuccessfulQueueTasks()
+    public function deleteStaleSuccessfulReports()
     {
         try
         {
-            Mage::helper('reverb_process_queue/task')->deleteStaleSuccessfulTasks();
-
+            Mage::getResourceSingleton('reverb_reports/Reverbreport')->deleteStaleSuccessfulReports();
         }
         catch(Exception $e)
         {
