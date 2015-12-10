@@ -8,6 +8,15 @@ class Reverb_ProcessQueue_Adminhtml_ProcessQueue_IndexController
     extends Reverb_Base_Controller_Adminhtml_Form_Abstract
     implements Reverb_Base_Controller_Adminhtml_Form_Interface
 {
+    const ERROR_CLEARING_ALL_TASKS = 'An error occurred while clearing all tasks with job code %s: %s';
+    const ERROR_CLEARING_SUCCESSFUL_TASKS = 'An error occurred while clearing all successful tasks with job code %s: %s';
+    const SUCCESS_CLEARED_ALL_TASKS_WITH_CODE = 'Successfully cleared all tasks with code %s';
+    const SUCCESS_CLEARED_SUCCESSFUL_TASKS_WITH_CODE = 'Successfully cleared all successful tasks with code %s';
+    const SUCCESS_CLEARED_ALL_TASKS = 'Successfully cleared all tasks';
+    const SUCCESS_CLEARED_SUCCESSFUL_TASKS = 'Successfully cleared all successful tasks';
+
+    protected $_adminHelper = null;
+
     /**
      * Allow Queue Tasks to be created via these forms
      *
@@ -31,6 +40,81 @@ class Reverb_ProcessQueue_Adminhtml_ProcessQueue_IndexController
         }
 
         return $objectToUpdate;
+    }
+
+    public function clearAllTasksAction()
+    {
+        $task_codes = $this->_getTaskCodesParam();
+        $redirect_route = $this->getRequest()->getParam('redirect_route');
+        try
+        {
+            $rows_deleted = Mage::getResourceSingleton('reverb_process_queue/task')
+                                ->deleteAllTasks($task_codes);
+        }
+        catch(Exception $e)
+        {
+            $task_codes_string = implode(', ', $task_codes);
+            $error_message = $this->__(self::ERROR_CLEARING_ALL_TASKS, $task_codes_string, $e->getMessage());
+            Mage::getSingleton('reverb_process_queue/log')->logQueueProcessorError($error_message);
+            $this->_getAdminHelper()->throwRedirectException($error_message, $redirect_route);
+        }
+
+        if (!empty($task_code))
+        {
+            $success_message = $this->__(self::SUCCESS_CLEARED_ALL_TASKS_WITH_CODE, $task_code);
+        }
+        else
+        {
+            $success_message = $this->__(self::SUCCESS_CLEARED_ALL_TASKS);
+        }
+
+        $this->_getAdminHelper()->addAdminSuccessMessage($success_message);
+        $this->_redirect($redirect_route);
+    }
+
+    public function clearSuccessfulTasksAction()
+    {
+        $task_codes = $this->_getTaskCodesParam();
+        $redirect_route = $this->getRequest()->getParam('redirect_route');
+        try
+        {
+            $rows_deleted = Mage::getResourceSingleton('reverb_process_queue/task')
+                                ->deleteSuccessfulTasks($task_codes);
+        }
+        catch(Exception $e)
+        {
+            $task_codes_string = implode(', ', $task_codes);
+            $error_message = $this->__(self::ERROR_CLEARING_SUCCESSFUL_TASKS, $task_codes_string, $e->getMessage());
+            Mage::getSingleton('reverb_process_queue/log')->logQueueProcessorError($error_message);
+            $this->_getAdminHelper()->throwRedirectException($error_message, $redirect_route);
+        }
+
+        if (!empty($task_code))
+        {
+            $success_message = $this->__(self::SUCCESS_CLEARED_SUCCESSFUL_TASKS_WITH_CODE, $task_code);
+        }
+        else
+        {
+            $success_message = $this->__(self::SUCCESS_CLEARED_SUCCESSFUL_TASKS);
+        }
+
+        $this->_getAdminHelper()->addAdminSuccessMessage($success_message);
+        $this->_redirect($redirect_route);
+    }
+
+    /**
+     * @return array|null
+     */
+    protected function _getTaskCodesParam()
+    {
+        $task_codes_param = $this->getRequest()->getParam('task_codes', null);
+        $task_codes = explode(';', $task_codes_param);
+        if (!is_array($task_codes) || empty($task_codes))
+        {
+            return null;
+        }
+
+        return $task_codes;
     }
 
     public function getModuleGroupname()
@@ -76,5 +160,18 @@ class Reverb_ProcessQueue_Adminhtml_ProcessQueue_IndexController
     public function getIndexActionsController()
     {
         return 'ProcessQueue_index';
+    }
+
+    /**
+     * @return Reverb_ReverbSync_Helper_Admin
+     */
+    protected function _getAdminHelper()
+    {
+        if (is_null($this->_adminHelper))
+        {
+            $this->_adminHelper = Mage::helper('ReverbSync/admin');
+        }
+
+        return $this->_adminHelper;
     }
 }

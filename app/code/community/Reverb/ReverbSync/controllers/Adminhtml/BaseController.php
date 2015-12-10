@@ -75,6 +75,9 @@ abstract class Reverb_ReverbSync_Adminhtml_BaseController extends Mage_Adminhtml
         return $this;
     }
 
+    /**
+     * @return Reverb_ReverbSync_Helper_Admin
+     */
     protected function _getAdminHelper()
     {
         if (is_null($this->_adminHelper))

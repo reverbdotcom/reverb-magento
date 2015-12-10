@@ -49,7 +49,10 @@ class Reverb_Base_Block_Adminhtml_Widget_Grid_Container
 
     // OPTIONAL
 
-    // Subclass may override this class
+    // Subclass may override this method
+    /**
+     * @return array
+     */
     public function getActionButtonsToRender()
     {
         return array();
