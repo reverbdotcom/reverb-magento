@@ -86,6 +86,12 @@ class Reverb_ReverbSync_Helper_Sync_Product extends Mage_Core_Helper_Data
         return $resourceSingleton->deleteAllListingSyncTasks();
     }
 
+    public function deleteAllReverbReportRows()
+    {
+        $resourceSingleton = Mage::getResourceSingleton('reverb_reports/reverbreport');
+        return $resourceSingleton->deleteAllReverbReportRows();
+    }
+
     public function isListingCreationEnabled()
     {
         if (is_null($this->_listing_creation_is_enabled))

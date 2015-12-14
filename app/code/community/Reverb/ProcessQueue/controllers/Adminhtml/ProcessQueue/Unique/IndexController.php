@@ -9,6 +9,11 @@ class Reverb_ProcessQueue_Adminhtml_ProcessQueue_Unique_IndexController
     extends Reverb_ProcessQueue_Adminhtml_ProcessQueue_IndexController
     implements Reverb_Base_Controller_Adminhtml_Form_Interface
 {
+    protected function _getTaskProcessor()
+    {
+        return Mage::helper('reverb_process_queue/task_processor_unique');
+    }
+
     public function getControllerActiveMenuPath()
     {
         return 'system/reverb_process_queue_unique';

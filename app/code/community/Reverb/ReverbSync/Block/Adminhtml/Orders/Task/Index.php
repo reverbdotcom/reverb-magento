@@ -15,4 +15,9 @@ class Reverb_ReverbSync_Block_Adminhtml_Orders_Task_Index
 
         $this->removeButton('add');
     }
+
+    public function getTaskJobCodes()
+    {
+        return array('order_update');
+    }
 } 

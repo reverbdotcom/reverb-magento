@@ -108,6 +108,12 @@ abstract class Reverb_Base_Controller_Adminhtml_Abstract
         return true;
     }
 
+    public function getUriPathForIndexAction($action)
+    {
+        $uri_path = sprintf('%s/%s/%s', $this->getModuleRouterFrontname(), $this->getIndexActionsController(), $action);
+        return $uri_path;
+    }
+
     public function getAclPath()
     {
         return $this->getControllerActiveMenuPath();

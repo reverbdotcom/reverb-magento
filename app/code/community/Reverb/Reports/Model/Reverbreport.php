@@ -9,6 +9,8 @@
  */
 class Reverb_Reports_Model_Reverbreport extends Mage_Core_Model_Abstract
 {
+    const STATUS_SUCCESS = 1;
+
     // Table Field Name Constants
     const PRODUCT_ID_FIELD = 'product_id';
     const TITLE_FIELD = 'title';

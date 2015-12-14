@@ -6,6 +6,8 @@
 
 class Reverb_ReverbSync_Model_Mysql4_Task_Listing extends Mage_Core_Model_Mysql4_Abstract
 {
+    const LISTING_TASK_CODE = 'listing_sync';
+
     const SERIALIZED_ARGUMENTS_OBJECT = 'O:8:"stdClass":1:{s:10:"product_id";i:##PRODUCT_ID##;}';
 
     public function _construct()
@@ -37,9 +39,14 @@ class Reverb_ReverbSync_Model_Mysql4_Task_Listing extends Mage_Core_Model_Mysql4
 
     public function deleteAllListingSyncTasks()
     {
-        $where_condition_array = array('code=?' => 'listing_sync');
+        $where_condition_array = array('code=?' => self::LISTING_TASK_CODE);
         $rows_deleted = $this->_getWriteAdapter()->delete($this->getMainTable(), $where_condition_array);
         return $rows_deleted;
+    }
+
+    public function deleteSuccessfulTasks()
+    {
+        return Mage::getResourceSingleton('reverb_process_queue/task')->deleteSuccessfulTasks(self::LISTING_TASK_CODE);
     }
 
     protected function _getInsertColumnsArray()
@@ -50,7 +57,7 @@ class Reverb_ReverbSync_Model_Mysql4_Task_Listing extends Mage_Core_Model_Mysql4
     protected function _getInsertDataArrayTemplate()
     {
         return array(
-            'code' => 'listing_sync',
+            'code' => self::LISTING_TASK_CODE,
             'status' => Reverb_ProcessQueue_Model_Task::STATUS_PENDING,
             'object' => 'reverbSync/sync_product',
             'method' => 'executeQueuedIndividualProductDataSync'

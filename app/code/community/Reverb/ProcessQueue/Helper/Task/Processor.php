@@ -16,6 +16,7 @@ class Reverb_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
 
     protected $_moduleName = 'reverb_process_queue';
     protected $_task_model_classname = 'reverb_process_queue/task';
+    protected $_taskResourceSingleton = null;
     protected $_logModel = null;
 
     // TODO Refactor this
@@ -197,9 +198,31 @@ class Reverb_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
         return $rows_updated;
     }
 
+    public function deleteAllTasks($task_codes)
+    {
+        $rows_deleted = $this->_getTaskResourceSingleton()->deleteAllTasks($task_codes);
+        return $rows_deleted;
+    }
+
+    public function deleteSuccessfulTasks($task_codes)
+    {
+        $rows_deleted = $this->_getTaskResourceSingleton()->deleteSuccessfulTasks($task_codes);
+        return $rows_deleted;
+    }
+
     protected function _getTaskCollectionModel()
     {
         return Mage::getModel($this->_task_model_classname)->getCollection();
+    }
+
+    protected function _getTaskResourceSingleton()
+    {
+        if (is_null($this->_taskResourceSingleton))
+        {
+            $this->_taskResourceSingleton = Mage::getResourceSingleton($this->_task_model_classname);
+        }
+
+        return $this->_taskResourceSingleton;
     }
 
     protected function _logError($error_message)
