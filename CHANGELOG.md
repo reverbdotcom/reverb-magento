@@ -1,3 +1,6 @@
+## 0.6.1
+* Buttons to delete successful sync tasks
+
 ## 0.6.0
 * Categories and subcategories are now correctly assigned from the mapping screen
 * Syncs categories on updates
