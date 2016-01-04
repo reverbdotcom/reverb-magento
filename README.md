@@ -10,7 +10,11 @@ This is a Magento app for integrating with Reverb's API including product sync (
 * Sync orders from Reverb to Magento
 * Sync shipping number from Magento to Reverb
 
-Only simple products are synced. Configurable products are not synced.
+## Caveats
+
+* Make & Model are guessed from the title. We can help your developers implement correct make & model parsing if you have structured fields on your side, or these can be corrected in bulk using Reverb's CSV import/export capabilities.
+
+* Only simple products are synced. Configurable products are not synced.
 
 ## Installation: Part 1 - Install the App
 
