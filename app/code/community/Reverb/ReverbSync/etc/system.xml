@@ -7,7 +7,7 @@
   </tabs>
   <sections>
     <ReverbSync translate="label" module="ReverbSync">
-      <label>Reverb Configuration</label>
+      <label>Reverb Configuration (v0.6.1)</label>
       <tab>ReverbSync</tab>
       <sort_order>1</sort_order>
       <show_in_default>2</show_in_default>
