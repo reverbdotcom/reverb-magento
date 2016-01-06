@@ -1,3 +1,6 @@
+## 0.6.2
+* Magento version displayed in referrer string and settings screen so Reverb Support can identify customer version
+
 ## 0.6.1
 * Buttons to delete successful sync tasks
 
