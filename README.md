@@ -12,7 +12,7 @@ This is a Magento app for integrating with Reverb's API including product sync (
 
 ## Caveats
 
-* Make & Model are guessed from the title. We can help your developers implement correct make & model parsing if you have structured fields on your side, or these can be corrected in bulk using Reverb's CSV import/export capabilities.
+* **Make & Model are guessed from the title**. We can help your developers implement correct make & model parsing if you have structured fields on your side, or these can be corrected in bulk using Reverb's CSV import/export capabilities. In order to set make and model, you have to [modify the code here](https://github.com/reverbdotcom/reverb-magento/blob/master/app/code/community/Reverb/ReverbSync/Model/Mapper/Product.php#L71)
 
 * Only simple products are synced. Configurable products are not synced.
 
