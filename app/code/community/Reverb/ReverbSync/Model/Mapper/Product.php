@@ -68,6 +68,8 @@ class Reverb_ReverbSync_Model_Mapper_Product
         $hasInventory = $this->_getHasInventory();
 
         $fieldsArray = array(
+            // "make"=> [Substitute your vendor/make field if you have a structured field]
+            // "model"=> [Substitute your model field if you have one]
             'title'=> $name,
             'sku'=> $sku,
             'description'=>$description,
