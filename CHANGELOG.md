@@ -1,3 +1,6 @@
+## 0.6.3
+* Fixes incorrect ordering of category mappings resulting in categories not syncing to Reverb. Note that this release will wipe out your category mappings, and you'll have to reassign the mappings. Since they weren't working correctly to begin with, this should not be an issue.
+
 ## 0.6.2
 * Magento version displayed in referrer string and settings screen so Reverb Support can identify customer version
 
