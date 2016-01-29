@@ -1,3 +1,6 @@
+## 0.7.0
+* Fix issues with Magento Enterprise Edition related to curl library incompatibility
+
 ## 0.6.3
 * Fixes incorrect ordering of category mappings resulting in categories not syncing to Reverb. Note that this release will wipe out your category mappings, and you'll have to reassign the mappings. Since they weren't working correctly to begin with, this should not be an issue.
 
