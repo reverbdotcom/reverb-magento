@@ -10,6 +10,7 @@
 class Reverb_ReverbSync_Model_Mapper_Product
 {
     const LISTING_CREATION_ENABLED_CONFIG_PATH = 'ReverbSync/reverbDefault/enable_image_sync';
+    const REVERB_LISTING_FIELD_PRODUCT_ATTRIBUTE_CONFIG = 'ReverbSync/listings_field_attributes/%s';
 
     protected $_image_sync_is_enabled = null;
     protected $_condition = null;
@@ -17,6 +18,9 @@ class Reverb_ReverbSync_Model_Mapper_Product
     protected $_listingsUpdateSyncHelper = null;
     protected $_categorySyncHelper = null;
     protected $_reverbConditionSourceModel = null;
+    protected $_reverb_field_product_attributes = array();
+
+    protected $_reverb_fields_mapped_to_magento_attributes = array('make', 'model');
 
     //LEGACY CODE: function to Map the Magento and Reverb attributes
     public function getUpdateListingWrapper(Mage_Catalog_Model_Product $product)
@@ -34,7 +38,7 @@ class Reverb_ReverbSync_Model_Mapper_Product
 
         if ($this->_getListingsUpdateSyncHelper()->isPriceUpdateEnabled())
         {
-            $fieldsArray['price'] = $product->getPrice();
+            $fieldsArray['price'] = $this->getProductPrice($product);
         }
 
         if ($this->_getListingsUpdateSyncHelper()->isInventoryQtyUpdateEnabled())
@@ -61,15 +65,13 @@ class Reverb_ReverbSync_Model_Mapper_Product
         $reverbListingWrapper = Mage::getModel('reverbSync/wrapper_listing');
         $stock = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product);
         $qty = $stock->getQty();
-        $price = $product->getPrice();
+        $price = $this->getProductPrice($product);
         $name = $product->getName();
         $description = $product->getDescription();
         $sku = $product->getSku();
         $hasInventory = $this->_getHasInventory();
 
         $fieldsArray = array(
-            // "make"=> [Substitute your vendor/make field if you have a structured field]
-            // "model"=> [Substitute your model field if you have one]
             'title'=> $name,
             'sku'=> $sku,
             'description'=>$description,
@@ -77,6 +79,15 @@ class Reverb_ReverbSync_Model_Mapper_Product
             "inventory"=>$qty,
             "price"=>$price
         );
+
+        foreach($this->_reverb_fields_mapped_to_magento_attributes as $reverb_field)
+        {
+            $product_value = $this->getProductValueForListing($product, $reverb_field);
+            if ((!is_null($product_value)) && ($product_value !== ''))
+            {
+                $fieldsArray[$reverb_field] = $product_value;
+            }
+        }
 
         $this->addProductImagesToFieldsArray($fieldsArray, $product);
         $this->addCategoryToFieldsArray($fieldsArray, $product);
@@ -86,6 +97,41 @@ class Reverb_ReverbSync_Model_Mapper_Product
         $reverbListingWrapper->setMagentoProduct($product);
 
         return $reverbListingWrapper;
+    }
+
+    public function getProductPrice($product)
+    {
+        $attribute_for_reverb_price = $this->getMagentoProductAttributeForReverbField('price');
+        if (!empty($attribute_for_reverb_price))
+        {
+            $reverb_price = $product->getData($attribute_for_reverb_price);
+            if (!empty($reverb_price))
+            {
+                return $reverb_price;
+            }
+        }
+        return $product->getPrice();
+    }
+
+    public function getProductValueForListing($product, $reverb_field)
+    {
+        $product_attribute = $this->getMagentoProductAttributeForReverbField($reverb_field);
+        if (!empty($product_attribute))
+        {
+            return $product->getData($product_attribute);
+        }
+        return null;
+    }
+
+    public function getMagentoProductAttributeForReverbField($reverb_field)
+    {
+        if (!isset($this->_reverb_field_product_attributes[$reverb_field]))
+        {
+            $config_value = sprintf(self::REVERB_LISTING_FIELD_PRODUCT_ATTRIBUTE_CONFIG, $reverb_field);
+            $this->_reverb_field_product_attributes[$reverb_field] = Mage::getStoreConfig($config_value);
+        }
+
+        return $this->_reverb_field_product_attributes[$reverb_field];
     }
 
     public function addProductConditionIfSet(array &$fieldsArray, $product)
