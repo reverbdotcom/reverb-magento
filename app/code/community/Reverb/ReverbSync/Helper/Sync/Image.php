@@ -37,14 +37,7 @@ class Reverb_ReverbSync_Helper_Sync_Image extends Mage_Core_Helper_Data
             return $images_queued_for_sync;
         }
 
-        if ($only_new_images)
-        {
-            $gallery_image_items = $this->_getOnlyNewGalleryImageObjects($galleryImagesCollection);
-        }
-        else
-        {
-            $gallery_image_items = $galleryImagesCollection->getItems();
-        }
+        $gallery_image_items = $galleryImagesCollection->getItems();
 
         $sku = $product->getSku();
         $errors_to_throw = array();
