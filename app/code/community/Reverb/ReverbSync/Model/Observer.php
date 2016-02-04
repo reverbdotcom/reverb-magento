@@ -53,7 +53,7 @@ class Reverb_ReverbSync_Model_Observer
                 if ($listingWrapper->wasCallSuccessful())
                 {
                     $product = $listingWrapper->getMagentoProduct();
-                    Mage::helper('ReverbSync/sync_image')->queueImageSyncForProductGalleryImages($product, true);
+                    Mage::helper('ReverbSync/sync_image')->queueImageSyncForProductGalleryImages($product);
                 }
             }
         }

@@ -11,6 +11,27 @@ class Reverb_Base_Helper_Product extends Mage_Core_Helper_Abstract
     protected $_configurableProductTypeModel = null;
 
     /**
+     * @param $product
+     * @return Mage_Catalog_Model_Product|null
+     */
+    public function getParentProductIfChild($product)
+    {
+        if ($product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)
+        {
+            return null;
+        }
+        $parent_id_array = $this->_getConfigurableProductTypeModel()->getParentIdsByChild($product->getId());
+        if (!empty($parent_id_array))
+        {
+            $parent_id = reset($parent_id_array);
+            $parentProduct = Mage::getModel('catalog/product')->load($parent_id);
+            return $parentProduct;
+        }
+
+        return null;
+    }
+
+    /**
      * @param Mage_Catalog_Model_Product $configurableProduct
      * @return array
      * @throws Exception
