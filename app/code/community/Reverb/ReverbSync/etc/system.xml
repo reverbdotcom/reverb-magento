@@ -186,6 +186,46 @@
           </fields>
         </listings_update_switches>
 
+          <listings_field_attributes>
+              <label>Listings Field Attributes</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>175</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>0</show_in_website>
+              <show_in_store>0</show_in_store>
+              <expanded>1</expanded>
+              <comment>The fields mapped here will be synced to Reverb using the values of the attributes on the products</comment>
+              <fields>
+                  <make translate="label">
+                      <label>Make</label>
+                      <frontend_type>select</frontend_type>
+                      <sort_order>10</sort_order>
+                      <show_in_default>1</show_in_default>
+                      <show_in_website>0</show_in_website>
+                      <show_in_store>0</show_in_store>
+                      <source_model>reverbSync/source_product_attribute</source_model>
+                  </make>
+                  <model translate="label">
+                      <label>Model</label>
+                      <frontend_type>select</frontend_type>
+                      <sort_order>20</sort_order>
+                      <show_in_default>1</show_in_default>
+                      <show_in_website>0</show_in_website>
+                      <show_in_store>0</show_in_store>
+                      <source_model>reverbSync/source_product_attribute</source_model>
+                  </model>
+                  <price translate="label">
+                      <label>Price</label>
+                      <frontend_type>select</frontend_type>
+                      <sort_order>30</sort_order>
+                      <show_in_default>1</show_in_default>
+                      <show_in_website>0</show_in_website>
+                      <show_in_store>0</show_in_store>
+                      <source_model>reverbSync/source_product_attribute</source_model>
+                  </price>
+              </fields>
+          </listings_field_attributes>
+
         <orders_sync translate="label">
           <label>Order Sync</label>
           <frontend_type>text</frontend_type>
