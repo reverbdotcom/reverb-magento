@@ -1,3 +1,6 @@
+## 0.8.0
+* Map make/model/price fields in the configuration screen to any attributes from Magento
+
 ## 0.7.0
 * Fix issues with Magento Enterprise Edition related to curl library incompatibility
 
