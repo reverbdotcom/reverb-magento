@@ -3,11 +3,9 @@
 $installer = $this;
 $installer->startSetup();
 
-$installer = $this;
-$eavSetup = Mage::getModel('catalog/resource_eav_mysql4_setup', 'reverbsync_setup');
+$eavSetup = Mage::getResourceModel('catalog/setup', 'catalog_setup');
 
 $entity_type_id = 'catalog_product';
-
 $attribute_code = 'reverb_condition';
 
 $eavSetup->removeAttribute($entity_type_id, $attribute_code);

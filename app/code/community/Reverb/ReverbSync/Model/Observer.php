@@ -12,10 +12,10 @@ class Reverb_ReverbSync_Model_Observer
           $product = $observer->getProduct();
           $product_id = $product->getId();
 
-          $syncToReverb = $product->getData('rev_sync');
+          $syncToReverb = $product->getData('reverb_sync');
           if (is_null($syncToReverb)) {
               // TODO: This will potentially generate one SQL query per product saved.  Revamp this to queue the check and process in async batches.
-              $syncToReverb = Mage::getResourceModel('catalog/product')->getAttributeRawValue($product_id, 'rev_sync');
+              $syncToReverb = Mage::getResourceModel('catalog/product')->getAttributeRawValue($product_id, 'reverb_sync');
           }
 
           if (!$syncToReverb) {
