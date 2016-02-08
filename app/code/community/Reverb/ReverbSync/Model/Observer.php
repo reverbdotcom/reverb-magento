@@ -24,7 +24,7 @@ class Reverb_ReverbSync_Model_Observer
           }
 
           $productSyncHelper = Mage::helper('ReverbSync/sync_product');
-          $listingWrapper = $productSyncHelper->executeIndividualProductDataSync($product_id);
+          $array_of_listingWrapper = $productSyncHelper->executeIndividualProductDataSync($product_id);
         }
         catch(Reverb_ReverbSync_Model_Exception_Product_Excluded $e)
         {
@@ -46,12 +46,15 @@ class Reverb_ReverbSync_Model_Observer
 
         try
         {
-            $product = $observer->getProduct();
-            // If we have reached this point, and the create/update performed above was successful, and the admin
-            //      uploaded any new images, queue image syncs for each of the new images
-            if ($listingWrapper->wasCallSuccessful())
+            foreach($array_of_listingWrapper as $listingWrapper)
             {
-                Mage::helper('ReverbSync/sync_image')->queueImageSyncForProductGalleryImages($product, true);
+                // If we have reached this point, and the create/update performed above was successful, and the admin
+                //      uploaded any new images, queue image syncs for each of the new images
+                if ($listingWrapper->wasCallSuccessful())
+                {
+                    $product = $listingWrapper->getMagentoProduct();
+                    Mage::helper('ReverbSync/sync_image')->queueImageSyncForProductGalleryImages($product);
+                }
             }
         }
         catch(Exception $e)
@@ -72,8 +75,11 @@ class Reverb_ReverbSync_Model_Observer
             {
                 try
                 {
-                    $product_id = $item->getProductId();
-                    $productSyncHelper->executeIndividualProductDataSync($product_id, true);
+                    if ($item->getProductType() == Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)
+                    {
+                        $product_id = $item->getProductId();
+                        $productSyncHelper->executeIndividualProductDataSync($product_id, true);
+                    }
                 }
                 catch(Reverb_ReverbSync_Model_Exception_Product_Excluded $e)
                 {

@@ -27,6 +27,7 @@ class Reverb_ReverbSync_Helper_Data
      * $fieldsArray should eventually be a model
      *
      * @param $listingWrapper
+     * @return Reverb_ReverbSync_Model_Wrapper_Listing
      */
     public function createOrUpdateReverbListing($product, $do_not_allow_creation = false)
     {
