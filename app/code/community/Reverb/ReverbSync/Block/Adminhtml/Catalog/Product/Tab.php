@@ -55,7 +55,7 @@ class Reverb_ReverbSync_Block_Adminhtml_Catalog_Product_Tab extends Mage_Adminht
         try {
             $productId = Mage::registry('current_product') -> getId();
             $targetProductId = Mage::getModel('catalog/product') -> load($productId);
-            $revProductId = $targetProductId -> getReverbProductId();
+            $reverbProductId = $targetProductId -> getReverbProductId();
         } catch (Exception $e) {
             $excp = 'Message: ' . $e -> getMessage();
             Mage::log($excp);
@@ -66,7 +66,7 @@ class Reverb_ReverbSync_Block_Adminhtml_Catalog_Product_Tab extends Mage_Adminht
         try {
             $productId = Mage::registry('current_product') -> getId();
             $targetProductId = Mage::getModel('catalog/product') -> load($productId);
-            $revProductUrl = $targetProductId -> getReverbProductUrl();
+            $reverbProductUrl = $targetProductId -> getReverbProductUrl();
         } catch (Exception $e) {
             $excp = 'Message: ' . $e -> getMessage();
             Mage::log($excp);
