@@ -1,3 +1,6 @@
+## 0.8.1
+* Prior to this release, you could only use simple products with the Reverb extension. Now, configurable products are correctly supported. The associated simple product children of your configurable product will be pushed to Reverb as individual listings.
+
 ## 0.8.0
 * Map make/model/price fields in the configuration screen to any attributes from Magento
 
