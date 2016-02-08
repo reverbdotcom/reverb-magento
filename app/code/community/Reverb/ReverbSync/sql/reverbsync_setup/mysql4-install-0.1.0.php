@@ -2,13 +2,12 @@
 
 $installer  = $this;
 $installer->startSetup();
-$conn = $installer->getConnection();
+
+$reverbInstaller = Mage::getResourceModel('catalog/setup', 'catalog_setup');
 
 try
 {
-    $setup = new Mage_Eav_Model_Entity_Setup('core_setup');
-
-    $setup->addAttribute(Mage_Catalog_Model_Product::ENTITY, 'rev_product_url', array(
+    $reverbInstaller->addAttribute(Mage_Catalog_Model_Product::ENTITY, 'rev_product_url', array(
         'group' => 'General',
         'backend' => '',
         'frontend' => '',
@@ -29,9 +28,7 @@ catch (Exception $excp)
 }
 try
 {
-    $setup = new Mage_Eav_Model_Entity_Setup('core_setup');
-
-    $setup->addAttribute(Mage_Catalog_Model_Product::ENTITY, 'rev_product_id', array(
+    $reverbInstaller->addAttribute(Mage_Catalog_Model_Product::ENTITY, 'rev_product_id', array(
         'group' => 'General',
         'backend' => '',
         'frontend' => '',
@@ -51,7 +48,7 @@ catch (Exception $excp)
     Mage::log($excp->getMessage());
 }
 try{
-    $setup->addAttribute(Mage_Catalog_Model_Product::ENTITY, 'rev_sync', array(
+    $reverbInstaller->addAttribute(Mage_Catalog_Model_Product::ENTITY, 'rev_sync', array(
         'group' => 'General',
         'type' => 'int',
         'backend' => '',
