@@ -9,14 +9,14 @@ This is a Magento app for integrating with Reverb's API including product sync (
 * Sync updates for inventory from Magento to Reverb. 
 * Sync orders from Reverb to Magento
 * Sync shipping number from Magento to Reverb
+* Configurable products - children are synced as individual listings on Reverb
+* Make/model/price can be mapped to attributes in your magento installation
 
 ## Caveats
 
 * **Make & Model are guessed from the title unless you map those fields **. Use the configuration screen to map make/model fields to attribute fields in your Magento installation. If you don't have structured make/model fields, we will attempt to guess them from the title, but this is not reliable.
 
 * **Orders are synced only 24 hours into the past** if you just installed the extension and want to sync older orders, please edit the file at app/code/community/Reverb/ReverbSync/Helper/Orders/Retrieval/Creation.php and change MINUTES_IN_PAST_FOR_CREATION_QUERY to the number in minutes you want to go into the past. For 3 days, use 3 * 60 * 24 = 4320
-
-* Only simple products are synced. Configurable products are not synced.
 
 ## Installation: Part 1 - Install the App
 
@@ -27,13 +27,13 @@ Please follow the instructions below to download and install the app. This assum
 export MAGENTO_PATH=/path/to/magento
 
 # Download the release
-cd /tmp && wget https://github.com/reverbdotcom/magento/archive/0.8.0.tar.gz
+cd /tmp && wget https://github.com/reverbdotcom/magento/archive/0.8.1.tar.gz
 
 # Unzip the release
-tar zxvf 0.8.0.tar.gz
+tar zxvf 0.8.1.tar.gz
 
 # Copy everything from the app folder into your magento app
-rsync -avzp magento-0.8.0/app/* $MAGENTO_PATH/htdocs/app/
+rsync -avzp magento-0.8.1/app/* $MAGENTO_PATH/htdocs/app/
 
 # Clear your cache
 rm -rf $MAGENTO_PATH/htdocs/var/cache

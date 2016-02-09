@@ -18,13 +18,13 @@ class Reverb_ReverbSync_Helper_Sync_Image extends Mage_Core_Helper_Data
      * @return int - The number of images queued for sync
      * @throws Reverb_ReverbSync_Model_Exception_Listing_Image_Sync
      */
-    public function queueImageSyncForProductGalleryImages(Mage_Catalog_Model_Product $product, $only_new_images = false)
+    public function queueImageSyncForProductGalleryImages(Mage_Catalog_Model_Product $product)
     {
         $images_queued_for_sync = 0;
 
         try
         {
-            $galleryImagesCollection = $product->getMediaGalleryImages();
+            $gallery_image_items = $this->_getGalleryImageItemsForProductListing($product);
         }
         catch(Exception $e)
         {
@@ -32,18 +32,9 @@ class Reverb_ReverbSync_Helper_Sync_Image extends Mage_Core_Helper_Data
             return $images_queued_for_sync;
         }
 
-        if (!is_object($galleryImagesCollection) || ($galleryImagesCollection->count() < 1))
+        if (empty($gallery_image_items))
         {
             return $images_queued_for_sync;
-        }
-
-        if ($only_new_images)
-        {
-            $gallery_image_items = $this->_getOnlyNewGalleryImageObjects($galleryImagesCollection);
-        }
-        else
-        {
-            $gallery_image_items = $galleryImagesCollection->getItems();
         }
 
         $sku = $product->getSku();
@@ -72,18 +63,47 @@ class Reverb_ReverbSync_Helper_Sync_Image extends Mage_Core_Helper_Data
         return $images_queued_for_sync;
     }
 
-    protected function _getOnlyNewGalleryImageObjects(Varien_Data_Collection $galleryImagesCollection)
+    protected function _getGalleryImageItemsForProductListing(Mage_Catalog_Model_Product $product)
     {
-        $new_gallery_image_objects = array();
-        foreach ($galleryImagesCollection->getItems() as $galleryImageObject)
+        $gallery_image_items = $this->_getGalleryImageItems($product);
+
+        if (empty($gallery_image_items))
         {
-            if (!($galleryImageObject->getValueId() && $galleryImageObject->getId()))
+            // See if this is a child product whose parent product has images
+            $parentProduct = Mage::helper('reverb_base/product')->getParentProductIfChild($product);
+            if ((!is_object($parentProduct)) || (!$parentProduct->getId()))
             {
-                $new_gallery_image_objects[] = $galleryImageObject;
+                return $gallery_image_items;
             }
+
+            $gallery_image_items = $this->_getGalleryImageItems($parentProduct);
         }
 
-        return $new_gallery_image_objects;
+        return $gallery_image_items;
+    }
+
+    /**
+     * @param Mage_Catalog_Model_Product $product
+     * @return array
+     */
+    protected function _getGalleryImageItems(Mage_Catalog_Model_Product $product)
+    {
+        try
+        {
+            $galleryImagesCollection = $product->getMediaGalleryImages();
+        }
+        catch(Exception $e)
+        {
+            // Do nothing here under the assumption that this product has no gallery images
+            return array();
+        }
+
+        if (!is_object($galleryImagesCollection) || ($galleryImagesCollection->count() < 1))
+        {
+            return array();
+        }
+
+        return $galleryImagesCollection->getItems();
     }
 
     public function getSkuForTask(Reverb_ProcessQueue_Model_Task $uniqueQueueTask)
