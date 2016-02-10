@@ -7,8 +7,9 @@
 class Reverb_ReverbSync_Model_Source_Listing_Condition
     extends Mage_Eav_Model_Entity_Attribute_Source_Abstract
 {
+    // TODO: These IDs shouldn't be varchars.
     const NONE = '';
-    const NON_FUNCTIONING = 'Non functioning';
+    const NON_FUNCTIONING = 'Non Functioning';
     const POOR = 'Poor';
     const FAIR = 'Fair';
     const GOOD = 'Good';
@@ -76,4 +77,16 @@ class Reverb_ReverbSync_Model_Source_Listing_Condition
         }
         return $this->_options;
     }
+
+
+    /**
+     * Get options array for system configuration
+     *
+     * @return array
+     */
+    public function toOptionArray()
+    {
+        return $this->getAllOptions();
+    }
+ 
 }
