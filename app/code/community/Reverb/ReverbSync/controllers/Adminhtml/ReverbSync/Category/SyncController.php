@@ -82,7 +82,7 @@ class Reverb_ReverbSync_Adminhtml_ReverbSync_Category_SyncController extends Rev
 
     public function getControllerActiveMenuPath()
     {
-        return 'catalog/reverb_category_sync';
+        return 'reverb/reverb_category_sync';
     }
 
     public function getModuleBlockGroupname()
