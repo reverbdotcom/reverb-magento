@@ -129,13 +129,12 @@
 
             <revCond translate="label">
               <label>Default Item Condition</label>
-              <comment>Brand New, Excellent, Very good, Good, Fair, Poor, Non functioning</comment>
-              <frontend_type>text</frontend_type>
+              <frontend_type>select</frontend_type>
               <sort_order>30</sort_order>
               <show_in_default>1</show_in_default>
               <show_in_website>1</show_in_website>
               <show_in_store>1</show_in_store>
-              <validate>input-text required-entry</validate>
+              <source_model>reverbSync/source_listing_condition</source_model>
             </revCond>
 
           </fields>
