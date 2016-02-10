@@ -55,22 +55,22 @@ class Reverb_ReverbSync_Block_Adminhtml_Catalog_Product_Tab extends Mage_Adminht
         try {
             $productId = Mage::registry('current_product') -> getId();
             $targetProductId = Mage::getModel('catalog/product') -> load($productId);
-            $revProductId = $targetProductId -> getRevProductId();
+            $reverbProductId = $targetProductId -> getReverbProductId();
         } catch (Exception $e) {
             $excp = 'Message: ' . $e -> getMessage();
             Mage::log($excp);
         }
-        return $revProductId;
+        return $reverbProductId;
     }
     public function getTargetProductUrl() {
         try {
             $productId = Mage::registry('current_product') -> getId();
             $targetProductId = Mage::getModel('catalog/product') -> load($productId);
-            $revProductUrl = $targetProductId -> getRevProductUrl();
+            $reverbProductUrl = $targetProductId -> getReverbProductUrl();
         } catch (Exception $e) {
             $excp = 'Message: ' . $e -> getMessage();
             Mage::log($excp);
         }
-        return $revProductUrl;
+        return $reverbProductUrl;
     }
 }

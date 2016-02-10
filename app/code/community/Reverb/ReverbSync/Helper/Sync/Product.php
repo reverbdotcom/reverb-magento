@@ -56,7 +56,7 @@ class Reverb_ReverbSync_Helper_Sync_Product extends Mage_Core_Helper_Data
         $products = Mage::getModel('catalog/product')
                         ->getCollection()
                         ->addFieldToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)
-                        ->addFieldToFilter('rev_sync', true);
+                        ->addFieldToFilter('reverb_sync', true);
         $ids = $products->getAllIds();
 
         return $ids;
@@ -83,7 +83,7 @@ class Reverb_ReverbSync_Helper_Sync_Product extends Mage_Core_Helper_Data
             $error_message = sprintf(self::ERROR_INVALID_PRODUCT_TYPE, $allowed_product_types);
             throw new Reverb_ReverbSync_Model_Exception_Product_Excluded($error_message);
         }
-        if (!$product->getRevSync())
+        if (!$product->getReverbSync())
         {
             throw new Reverb_ReverbSync_Model_Exception_Product_Excluded(self::PRODUCT_EXCLUDED_FROM_SYNC);
         }
