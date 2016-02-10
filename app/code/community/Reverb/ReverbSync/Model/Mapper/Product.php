@@ -66,8 +66,8 @@ class Reverb_ReverbSync_Model_Mapper_Product
         $stock = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product);
         $qty = $stock->getQty();
         $price = $this->getProductPrice($product);
+        $description = $this->getProductDescription($product);
         $name = $product->getName();
-        $description = $product->getDescription();
         $sku = $product->getSku();
         $hasInventory = $this->_getHasInventory();
 
@@ -111,6 +111,20 @@ class Reverb_ReverbSync_Model_Mapper_Product
             }
         }
         return $product->getPrice();
+    }
+
+    public function getProductDescription($product)
+    {
+        $attribute_for_reverb_description = $this->getMagentoProductAttributeForReverbField('description');
+        if (!empty($attribute_for_reverb_description))
+        {
+            $reverb_description = $product->getData($attribute_for_reverb_description);
+            if (!empty($reverb_description))
+            {
+                return $reverb_description;
+            }
+        }
+        return $product->getDescription();
     }
 
     public function getProductValueForListing($product, $reverb_field)
