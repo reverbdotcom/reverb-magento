@@ -115,12 +115,20 @@ class Reverb_ReverbSync_Model_Mapper_Product
 
     public function getProductValueForListing($product, $reverb_field)
     {
-        $product_attribute = $this->getMagentoProductAttributeForReverbField($reverb_field);
-        if (!empty($product_attribute))
-        {
-            return $product->getData($product_attribute);
-        }
-        return null;
+        $_attribute_code = $this->getMagentoProductAttributeForReverbField($reverb_field);
+
+        if (empty($_attribute_code))
+            return null;
+
+        $_attribute_value = $product->getResource()
+            ->getAttribute($_attribute_code)
+            ->getFrontend()
+            ->getValue($product);
+
+        if (empty($_attribute_value))
+            $_attribute_value = $product->getData($_attribute_code);
+
+        return $_attribute_value;
     }
 
     public function getMagentoProductAttributeForReverbField($reverb_field)
