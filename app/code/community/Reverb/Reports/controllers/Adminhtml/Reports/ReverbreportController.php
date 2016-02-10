@@ -28,7 +28,7 @@ extends Mage_Adminhtml_Controller_Action {
         $module_block_classname = $this->getBlockToShow();
 
         $this-> loadLayout();
-        $this->_setActiveMenu('catalog/reverb_listings_sync');
+        $this->_setActiveMenu('reverb/reverb_listings_sync');
         $this->_title(Mage::helper('reverb_reports')->__('Reverb Listing Sync'));
         $this->_addContent($this->getLayout()->createBlock($module_block_classname));
 
