@@ -10,6 +10,7 @@
 class Reverb_ReverbSync_Model_Mapper_Product
 {
     const LISTING_CREATION_ENABLED_CONFIG_PATH = 'ReverbSync/reverbDefault/enable_image_sync';
+    const LISTING_DEFAULT_CONDITION_CONFIG_PATH = 'ReverbSync/reverbDefault/revCond';
     const REVERB_LISTING_FIELD_PRODUCT_ATTRIBUTE_CONFIG = 'ReverbSync/listings_field_attributes/%s';
 
     protected $_image_sync_is_enabled = null;
@@ -136,11 +137,14 @@ class Reverb_ReverbSync_Model_Mapper_Product
 
     public function addProductConditionIfSet(array &$fieldsArray, $product)
     {
-        $product_condition = $product->getReverbCondition();
-        if (!empty($product_condition) && $this->_getReverbConditionSourceModel()->isValidConditionValue($product_condition))
-        {
-            $fieldsArray['condition'] = $product_condition;
-        }
+        $_product_condition = $product->getAttributeText('reverb_condition');
+
+        // Get default value if condition is not set
+        if (empty($_product_condition))
+            $_product_condition = Mage::getStoreConfig(self::LISTING_DEFAULT_CONDITION_CONFIG_PATH);
+
+        if (!empty($_product_condition) && $this->_getReverbConditionSourceModel()->isValidConditionValue($_product_condition))
+            $fieldsArray['condition'] = $_product_condition;
 
         return $fieldsArray;
     }
