@@ -51,7 +51,7 @@ class Reverb_ReverbSync_Model_Mapper_Product
             $fieldsArray['inventory'] = $stock->getQty();
         }
 
-
+        $this->_addMappedAttributes($fieldsArray, $product);
         $this->addCategoryToFieldsArray($fieldsArray, $product);
         $this->addProductConditionIfSet($fieldsArray, $product);
 
@@ -81,15 +81,7 @@ class Reverb_ReverbSync_Model_Mapper_Product
             "price"=>$price
         );
 
-        foreach($this->_reverb_fields_mapped_to_magento_attributes as $reverb_field)
-        {
-            $product_value = $this->getProductValueForListing($product, $reverb_field);
-            if ((!is_null($product_value)) && ($product_value !== ''))
-            {
-                $fieldsArray[$reverb_field] = $product_value;
-            }
-        }
-
+        $this->_addMappedAttributes($fieldsArray, $product);
         $this->addProductImagesToFieldsArray($fieldsArray, $product);
         $this->addCategoryToFieldsArray($fieldsArray, $product);
         $this->addProductConditionIfSet($fieldsArray, $product);
@@ -251,5 +243,17 @@ class Reverb_ReverbSync_Model_Mapper_Product
         }
 
         return $this->_has_inventory;
+    }
+
+    protected function _addMappedAttributes(&$fieldsArray, $product)
+    {
+        foreach($this->_reverb_fields_mapped_to_magento_attributes as $reverb_field)
+        {
+            $product_value = $this->getProductValueForListing($product, $reverb_field);
+            if ((!is_null($product_value)) && ($product_value !== ''))
+            {
+                $fieldsArray[$reverb_field] = $product_value;
+            }
+        }
     }
 }
