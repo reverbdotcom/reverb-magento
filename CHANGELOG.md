@@ -1,3 +1,11 @@
+## 0.8.2
+* Configurable product support (from 0.8.1)
+* Make and model are synced on both create and update
+* Make and model mapping can now successfully map to dropdowns and send the value of the dropdown
+* If condition is not set, use the default condition
+* Condition is chosen from a dropdown
+* All nav correctly highlights the Reverb tab instead of Catalog tab
+
 ## 0.8.1
 * Prior to this release, you could only use simple products with the Reverb extension. Now, configurable products are correctly supported. The associated simple product children of your configurable product will be pushed to Reverb as individual listings.
 
