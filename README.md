@@ -14,7 +14,9 @@ This is a Magento app for integrating with Reverb's API including product sync (
 
 ## Caveats
 
-* **Make & Model are guessed from the title unless you map those fields **. Use the configuration screen to map make/model fields to attribute fields in your Magento installation. If you don't have structured make/model fields, we will attempt to guess them from the title, but this is not reliable.
+* **Make & Model are guessed from the title unless you map those fields **. Use the configuration screen (System->Configuration->Reverb Configuration) to map make/model fields to attribute fields in your Magento installation. If you don't have structured make/model fields, we will attempt to guess them from the title, but this is not reliable.
+
+* If you don't already have make & model fields in your magento installation, you can add them by using the Catalog->Attributes section to add two new fields (for example, "reverb_make" and "reverb_model"). Then go to Catalog->Attributes->Attribute Sets and add those fields into your default attribute set so they appear on every product. Finally, go to (System->Configuration->Reverb Configuration) and map the make and model fields to your newly created fields.
 
 * **Orders are synced only 24 hours into the past** if you just installed the extension and want to sync older orders, please edit the file at app/code/community/Reverb/ReverbSync/Helper/Orders/Retrieval/Creation.php and change MINUTES_IN_PAST_FOR_CREATION_QUERY to the number in minutes you want to go into the past. For 3 days, use 3 * 60 * 24 = 4320
 
