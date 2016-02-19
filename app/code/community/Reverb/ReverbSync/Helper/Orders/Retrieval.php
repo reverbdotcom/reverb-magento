@@ -11,8 +11,6 @@ abstract class Reverb_ReverbSync_Helper_Orders_Retrieval extends Reverb_ReverbSy
     const EXCEPTION_QUEUE_ORDER_ACTION = 'Error trying to queue order creation for Reverb order with number %s: %s';
     const ERROR_NO_ORDER_ACTION_QUEUE_ROWS_INSERTED = 'No order creation queue rows were inserted for Reverb order with number %s';
 
-    const NEXT_PAGE_OF_RESULTS_FIELD = '_links.next.href';
-
     protected $_moduleName = 'ReverbSync';
 
     protected $_logModel = null;
@@ -91,10 +89,9 @@ abstract class Reverb_ReverbSync_Helper_Orders_Retrieval extends Reverb_ReverbSy
      */
     protected function _getNextPageOfResultsUrlPath($reverbOrdersJsonObject)
     {
-        $next_page_of_results_field = self::NEXT_PAGE_OF_RESULTS_FIELD;
-        if(property_exists($reverbOrdersJsonObject, $next_page_of_results_field))
+        if(isset($reverbOrdersJsonObject->_links->next->href))
         {
-            $next_page_of_results_url_path = $reverbOrdersJsonObject->$next_page_of_results_field;
+            $next_page_of_results_url_path = $reverbOrdersJsonObject->_links->next->href;
             return $next_page_of_results_url_path;
         }
         return null;
