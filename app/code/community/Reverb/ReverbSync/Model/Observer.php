@@ -2,6 +2,8 @@
 
 class Reverb_ReverbSync_Model_Observer
 {
+    const ERROR_MASS_ATTRIBUTE_PRODUCT_SYNC = 'An exception occurred while queueing up product listing syncs after a mass product attribute update: %s';
+
     protected $_logSingleton = null;
 
     //function to create the product in reverb
@@ -100,6 +102,27 @@ class Reverb_ReverbSync_Model_Observer
         catch(Exception $e)
         {
             Mage::logException($e);
+        }
+    }
+
+    public function triggerProductSyncOffMassAttributeUpdate($observer)
+    {
+        try
+        {
+            $product_ids_to_sync = $observer->getData('product_ids');
+            $productSyncHelper = Mage::helper('ReverbSync/sync_product');
+            /* @var $productSyncHelper Reverb_ReverbSync_Helper_Sync_Product */
+            $productSyncHelper->deleteAllListingSyncTasks();
+            $number_of_syncs_queued_up = $productSyncHelper->queueUpProductDataSync($product_ids_to_sync);
+        }
+        catch(Reverb_ReverbSync_Model_Exception_Deactivated $deactivatedException)
+        {
+            // Do nothing in this event
+        }
+        catch(Exception $e)
+        {
+            $error_message = Mage::helper('ReverbSync')->__(self::ERROR_MASS_ATTRIBUTE_PRODUCT_SYNC, $e->getMessage());
+            Mage::getSingleton('reverbSync/log')->logListingSyncError($error_message);
         }
     }
 

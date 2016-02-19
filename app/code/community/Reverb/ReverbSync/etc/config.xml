@@ -191,6 +191,16 @@
           </update_layout_for_reverb_order>
         </observers>
       </controller_action_layout_render_before_adminhtml_sales_order_invoice_view>
+
+        <catalog_product_attribute_update_before>
+            <observers>
+                <queue_bulk_product_sync>
+                    <type>singleton</type>
+                    <class>reverbSync/observer</class>
+                    <method>triggerProductSyncOffMassAttributeUpdate</method>
+                </queue_bulk_product_sync>
+            </observers>
+        </catalog_product_attribute_update_before>
     </events>
   </adminhtml>
 

@@ -43,6 +43,7 @@ class Reverb_ReverbSync_Model_Sync_Product extends Reverb_ProcessQueue_Model_Tas
             Mage::getSingleton('reverb_process_queue/log')->logQueueProcessorError($error_message);
 
             $taskExecutionResult->setTaskStatus(Reverb_ProcessQueue_Model_Task::STATUS_ERROR);
+            $taskExecutionResult->setTaskStatusMessage($error_message);
             return $taskExecutionResult;
         }
 
