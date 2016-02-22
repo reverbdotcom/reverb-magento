@@ -192,25 +192,15 @@
         </observers>
       </controller_action_layout_render_before_adminhtml_sales_order_invoice_view>
 
-        <catalog_product_attribute_update_before>
+        <controller_action_postdispatch_adminhtml_catalog_product_action_attribute_save>
             <observers>
                 <queue_bulk_product_sync>
                     <type>singleton</type>
                     <class>reverbSync/observer</class>
-                    <method>triggerProductSyncOffMassAttributeUpdate</method>
+                    <method>triggerProductSyncOffMassProductUpdate</method>
                 </queue_bulk_product_sync>
             </observers>
-        </catalog_product_attribute_update_before>
-
-        <catalog_product_stock_item_mass_change>
-            <observers>
-                <queue_bulk_product_sync>
-                    <type>singleton</type>
-                    <class>reverbSync/observer</class>
-                    <method>triggerProductSyncOffMassInventoryUpdate</method>
-                </queue_bulk_product_sync>
-            </observers>
-        </catalog_product_stock_item_mass_change>
+        </controller_action_postdispatch_adminhtml_catalog_product_action_attribute_save>
     </events>
   </adminhtml>
 

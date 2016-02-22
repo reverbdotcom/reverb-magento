@@ -12,7 +12,11 @@ class Reverb_ReverbSync_Helper_Sync_Listings_Update
 
     protected $_reverb_listing_update_fields = array('sku', 'reverb_sync');
 
-    protected $_mass_product_update_trigger_listings_sync = false;
+    public function shouldMassProductUpdateTriggerProductListingsSync($attribute_data, $inventory_data)
+    {
+        return ($this->shouldMassAttributeUpdateTriggerProductListingsSync($attribute_data)
+                || $this->shouldMassInventoryUpdateTriggerProductListingsSync($inventory_data));
+    }
 
     /**
      * @param $attributes_data
@@ -25,23 +29,15 @@ class Reverb_ReverbSync_Helper_Sync_Listings_Update
         $attributes_being_updated = array_keys($mass_attribute_update_data);
         $magento_attributes_being_updated = array_intersect($magento_attributes, $attributes_being_updated);
 
-        if (!empty($magento_attributes_being_updated))
-        {
-            $this->_mass_product_update_trigger_listings_sync = true;
-            return true;
-        }
-
-        return false;
+        return (!empty($magento_attributes_being_updated));
     }
 
-    public function shouldMassInventoryUpdateTriggerProductListingsSync()
+    public function shouldMassInventoryUpdateTriggerProductListingsSync($inventory_data)
     {
-        if ((!$this->_mass_product_update_trigger_listings_sync) && $this->isInventoryQtyUpdateEnabled())
+        if ($this->isInventoryQtyUpdateEnabled())
         {
-            $inventory_update_array = Mage::app()->getRequest()->getParam('inventory', array());
-            if (isset($inventory_update_array['qty']))
+            if (isset($inventory_data['qty']))
             {
-                $this->_mass_product_update_trigger_listings_sync = true;
                 return true;
             }
         }
