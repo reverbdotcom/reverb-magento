@@ -126,6 +126,6 @@ class Reverb_ReverbSync_Adminhtml_ReverbSync_Listings_SyncController extends Rev
 
     public function getControllerActiveMenuPath()
     {
-        return 'catalog/reverb_sync';
+        return 'reverb/reverb_listings_sync';
     }
 }

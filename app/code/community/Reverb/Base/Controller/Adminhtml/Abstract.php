@@ -100,12 +100,7 @@ abstract class Reverb_Base_Controller_Adminhtml_Abstract
 
     protected function _isAllowed()
     {
-        if(!Mage::getSingleton('admin/session')->isAllowed($this->getAclPath()))
-        {
-            return false;
-        }
-
-        return true;
+        return Mage::getSingleton('admin/session')->isAllowed($this->getAclPath());
     }
 
     public function getUriPathForIndexAction($action)
