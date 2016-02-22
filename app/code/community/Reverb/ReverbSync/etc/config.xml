@@ -201,6 +201,16 @@
                 </queue_bulk_product_sync>
             </observers>
         </catalog_product_attribute_update_before>
+
+        <catalog_product_stock_item_mass_change>
+            <observers>
+                <queue_bulk_product_sync>
+                    <type>singleton</type>
+                    <class>reverbSync/observer</class>
+                    <method>triggerProductSyncOffMassInventoryUpdate</method>
+                </queue_bulk_product_sync>
+            </observers>
+        </catalog_product_stock_item_mass_change>
     </events>
   </adminhtml>
 

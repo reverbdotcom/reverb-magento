@@ -109,11 +109,41 @@ class Reverb_ReverbSync_Model_Observer
     {
         try
         {
-            $product_ids_to_sync = $observer->getData('product_ids');
-            $productSyncHelper = Mage::helper('ReverbSync/sync_product');
-            /* @var $productSyncHelper Reverb_ReverbSync_Helper_Sync_Product */
-            $productSyncHelper->deleteAllListingSyncTasks();
-            $number_of_syncs_queued_up = $productSyncHelper->queueUpProductDataSync($product_ids_to_sync);
+            $listingsUpdateHelper = Mage::helper('ReverbSync/sync_listings_update');
+            /* @var $listingsUpdateHelper Reverb_ReverbSync_Helper_Sync_Listings_Update */
+            $attributes_data = $observer->getData('attributes_data');
+            if ($listingsUpdateHelper->shouldMassAttributeUpdateTriggerProductListingsSync($attributes_data))
+            {
+                $product_ids_to_sync = $observer->getData('product_ids');
+                $productSyncHelper = Mage::helper('ReverbSync/sync_product');
+                /* @var $productSyncHelper Reverb_ReverbSync_Helper_Sync_Product */
+                $number_of_syncs_queued_up = $productSyncHelper->queueUpProductDataSync($product_ids_to_sync);
+            }
+        }
+        catch(Reverb_ReverbSync_Model_Exception_Deactivated $deactivatedException)
+        {
+            // Do nothing in this event
+        }
+        catch(Exception $e)
+        {
+            $error_message = Mage::helper('ReverbSync')->__(self::ERROR_MASS_ATTRIBUTE_PRODUCT_SYNC, $e->getMessage());
+            Mage::getSingleton('reverbSync/log')->logListingSyncError($error_message);
+        }
+    }
+
+    public function triggerProductSyncOffMassInventoryUpdate($observer)
+    {
+        try
+        {
+            $listingsUpdateHelper = Mage::helper('ReverbSync/sync_listings_update');
+            /* @var $listingsUpdateHelper Reverb_ReverbSync_Helper_Sync_Listings_Update */
+            if ($listingsUpdateHelper->shouldMassInventoryUpdateTriggerProductListingsSync())
+            {
+                $product_ids_to_sync = $observer->getData('products');
+                $productSyncHelper = Mage::helper('ReverbSync/sync_product');
+                /* @var $productSyncHelper Reverb_ReverbSync_Helper_Sync_Product */
+                $number_of_syncs_queued_up = $productSyncHelper->queueUpProductDataSync($product_ids_to_sync);
+            }
         }
         catch(Reverb_ReverbSync_Model_Exception_Deactivated $deactivatedException)
         {
