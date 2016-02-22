@@ -10,32 +10,40 @@
                         <children>
                             <!-- Listings Sync -->
                             <reverb_listings_sync translate="title" module="ReverbSync">
-                                <title>ListingSync</title>
+                                <title>Listing Sync</title>
+                                <sort_order>5</sort_order>
                             </reverb_listings_sync>
                             <!-- Image Sync -->
                             <reverb_listings_image_sync translate="title" module="ReverbSync">
                                 <title>Image Sync</title>
+                                <sort_order>15</sort_order>
                             </reverb_listings_image_sync>
                             <reverb_listings_image_sync_update translate="title" module="ReverbSync">
-                                <title>Image Sync</title>
+                                <title>Change Image Sync Task Status</title>
+                                <sort_order>25</sort_order>
                             </reverb_listings_image_sync_update>
                             <!-- Order Creation and Shipment Tracking Sync -->
                             <reverb_order_unique_task_sync translate="title" module="ReverbSync">
                                 <title>New Orders and Shipment Tracking</title>
+                                <sort_order>35</sort_order>
                             </reverb_order_unique_task_sync>
                             <reverb_order_unique_task_sync_update translate="title" module="ReverbSync">
-                                <title>Re-try order creates and shipment tracking sync</title>
+                                <title>Change Order Creation and Shipment Tracking Task Status</title>
+                                <sort_order>45</sort_order>
                             </reverb_order_unique_task_sync_update>
                             <!-- Order Update Sync -->
                             <reverb_order_task_sync translate="title" module="ReverbSync">
                                 <title>Order Updates</title>
+                                <sort_order>55</sort_order>
                             </reverb_order_task_sync>
                             <reverb_order_task_sync_update translate="title" module="ReverbSync">
-                                <title>Re-try order updates</title>
+                                <title>Change Order Update Task Status</title>
+                                <sort_order>65</sort_order>
                             </reverb_order_task_sync_update>
                             <!-- Category Mapping -->
                             <reverb_category_sync translate="title" module="ReverbSync">
                                 <title>Category Mapping</title>
+                                <sort_order>75</sort_order>
                             </reverb_category_sync>
                         </children>
                     </reverb>
