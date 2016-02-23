@@ -285,6 +285,9 @@
         <price>0</price>
         <inventory_qty>1</inventory_qty>
       </listings_update_switches>
+      <listings_field_attributes>
+        <description>description</description>
+      </listings_field_attributes>
       <orders_sync>
         <enabled>0</enabled>
         <super_mode_enabled>0</super_mode_enabled>
