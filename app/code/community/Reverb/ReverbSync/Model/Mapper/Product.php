@@ -11,6 +11,7 @@ class Reverb_ReverbSync_Model_Mapper_Product
 {
     const LISTING_CREATION_ENABLED_CONFIG_PATH = 'ReverbSync/reverbDefault/enable_image_sync';
     const LISTING_DEFAULT_CONDITION_CONFIG_PATH = 'ReverbSync/reverbDefault/revCond';
+    const LISTING_DEFAULT_OFFER_ENABLED_CONFIG_PATH = 'ReverbSync/reverbDefault/offers_enabled';
     const REVERB_LISTING_FIELD_PRODUCT_ATTRIBUTE_CONFIG = 'ReverbSync/listings_field_attributes/%s';
 
     protected $_image_sync_is_enabled = null;
@@ -52,6 +53,7 @@ class Reverb_ReverbSync_Model_Mapper_Product
         }
 
         $this->_addMappedAttributes($fieldsArray, $product);
+        $this->_addProductAcceptOffers($fieldsArray, $product);
         $this->addCategoryToFieldsArray($fieldsArray, $product);
         $this->addProductConditionIfSet($fieldsArray, $product);
 
@@ -82,6 +84,7 @@ class Reverb_ReverbSync_Model_Mapper_Product
         );
 
         $this->_addMappedAttributes($fieldsArray, $product);
+        $this->_addProductAcceptOffers($fieldsArray, $product);
         $this->addProductImagesToFieldsArray($fieldsArray, $product);
         $this->addCategoryToFieldsArray($fieldsArray, $product);
         $this->addProductConditionIfSet($fieldsArray, $product);
@@ -255,5 +258,26 @@ class Reverb_ReverbSync_Model_Mapper_Product
                 $fieldsArray[$reverb_field] = $product_value;
             }
         }
+    }
+
+    protected function _addProductAcceptOffers(&$fieldsArray, $product)
+    {
+        $_offers_enabled = $product->getData('reverb_offers_enabled');
+        $_reverb_offers_enabled = false;
+
+        if (!empty($_offers_enabled)){
+            // Accept offers set on product
+            if (1 == $_offers_enabled) {
+                $_reverb_offers_enabled = true;
+            }
+
+            if (2 == $_offers_enabled) {
+                $_reverb_offers_enabled = false;
+            }
+        } else {
+            $_reverb_offers_enabled = Mage::getStoreConfig(self::LISTING_DEFAULT_OFFER_ENABLED_CONFIG_PATH);
+        }
+
+        return $fieldsArray['offers_enabled'] = $_reverb_offers_enabled;
     }
 }
