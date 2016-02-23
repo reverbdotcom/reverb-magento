@@ -35,37 +35,66 @@ abstract class Reverb_ReverbSync_Helper_Orders_Retrieval extends Reverb_ReverbSy
             throw new Reverb_ReverbSync_Model_Exception_Deactivated_Order_Sync($exception_message);
         }
 
-        $reverbOrdersJsonObject = $this->_retrieveOrdersJsonFromReverb();
+        return $this->_retrieveAndQueueOrders();
+    }
 
-        if (!is_object($reverbOrdersJsonObject))
+    protected function _retrieveAndQueueOrders()
+    {
+        $api_url_path_to_call = $this->_getDefaultOrderRetrievalApiUrlPath();
+
+        do
         {
-            return false;
-        }
+            $reverbOrdersJsonObject = $this->_retrieveOrdersJsonFromReverb($api_url_path_to_call);
 
-        $orders_array = $reverbOrdersJsonObject->orders;
-
-        if (!is_array($orders_array))
-        {
-            return false;
-        }
-
-        foreach ($orders_array as $orderDataObject)
-        {
-            try
+            if (!is_object($reverbOrdersJsonObject))
             {
-                $this->_attemptToQueueMagentoOrderActions($orderDataObject);
+                return false;
             }
-            catch(Exception $e)
+
+            $orders_array = $reverbOrdersJsonObject->orders;
+
+            if (!is_array($orders_array))
             {
-                $order_sync_action = $this->getOrderSyncAction();
-                $error_message = $this->__(self::EXCEPTION_QUEUE_MAGENTO_ORDER_ACTION, $order_sync_action, $e->getMessage(), json_encode($orderDataObject));
-                $this->_logError($error_message);
-                $exceptionToLog = new Exception($error_message);
-                Mage::logException($exceptionToLog);
+                return false;
             }
+
+            foreach ($orders_array as $orderDataObject)
+            {
+                try
+                {
+                    $this->_attemptToQueueMagentoOrderActions($orderDataObject);
+                }
+                catch(Exception $e)
+                {
+                    $order_sync_action = $this->getOrderSyncAction();
+                    $error_message = $this->__(self::EXCEPTION_QUEUE_MAGENTO_ORDER_ACTION, $order_sync_action, $e->getMessage(), json_encode($orderDataObject));
+                    $this->_logError($error_message);
+                    $exceptionToLog = new Exception($error_message);
+                    Mage::logException($exceptionToLog);
+                }
+            }
+
+            $api_url_path_to_call = $this->_getNextPageOfResultsUrlPath($reverbOrdersJsonObject);
         }
+        while(!empty($api_url_path_to_call));
 
         return true;
+    }
+
+    /**
+     * Returns the url path for the next page of orders results if more results exist
+     *
+     * @param stdClass $reverbOrdersJsonObject
+     * @return string
+     */
+    protected function _getNextPageOfResultsUrlPath($reverbOrdersJsonObject)
+    {
+        if(isset($reverbOrdersJsonObject->_links->next->href))
+        {
+            $next_page_of_results_url_path = $reverbOrdersJsonObject->_links->next->href;
+            return $next_page_of_results_url_path;
+        }
+        return null;
     }
 
     protected function _attemptToQueueMagentoOrderActions(stdClass $orderDataObject)
@@ -96,20 +125,9 @@ abstract class Reverb_ReverbSync_Helper_Orders_Retrieval extends Reverb_ReverbSy
         return true;
     }
 
-    protected function _retrieveOrdersJsonFromReverb()
+    protected function _retrieveOrdersJsonFromReverb($api_url_path)
     {
         $base_url = $this->_getReverbAPIBaseUrl();
-
-        $api_call_url_path_template = $this->_getAPICallUrlPathTemplate();
-        $minutes_in_past_for_api_call = $this->_getMinutesInPastForAPICall();
-
-        $local_timezone_timestamp = Mage::getModel('core/date')->timestamp();
-        $past_timestamp_local_timezone = $local_timezone_timestamp - (60 * $minutes_in_past_for_api_call);
-        $past_gmt_datetime = Mage::getModel('core/date')->gmtDate('c', $past_timestamp_local_timezone);
-
-        $api_url_path = sprintf($api_call_url_path_template, $past_gmt_datetime);
-        $api_url_path = str_replace('+', '-', $api_url_path);
-
         $api_url = $base_url . $api_url_path;
 
         $curlResource = $this->_getCurlResource($api_url);
@@ -131,6 +149,21 @@ abstract class Reverb_ReverbSync_Helper_Orders_Retrieval extends Reverb_ReverbSy
         $json_decoded_response = json_decode($json_response);
 
         return $json_decoded_response;
+    }
+
+    protected function _getDefaultOrderRetrievalApiUrlPath()
+    {
+        $api_call_url_path_template = $this->_getAPICallUrlPathTemplate();
+
+        $local_timezone_timestamp = Mage::getModel('core/date')->timestamp();
+        $minutes_in_past_for_api_call = $this->_getMinutesInPastForAPICall();
+        $past_timestamp_local_timezone = $local_timezone_timestamp - (60 * $minutes_in_past_for_api_call);
+        $past_gmt_datetime = Mage::getModel('core/date')->gmtDate('c', $past_timestamp_local_timezone);
+
+        $api_url_path = sprintf($api_call_url_path_template, $past_gmt_datetime);
+        $api_url_path = str_replace('+', '-', $api_url_path);
+
+        return $api_url_path;
     }
 
     protected function _getOrderTaskResourceSingleton()
