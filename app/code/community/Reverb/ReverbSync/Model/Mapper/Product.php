@@ -68,7 +68,7 @@ class Reverb_ReverbSync_Model_Mapper_Product
         $qty = $stock->getQty();
         $price = $this->getProductPrice($product);
         $name = $product->getName();
-        $description = $product->getDescription();
+        $description = $this->getProductDescription($product);
         $sku = $product->getSku();
         $hasInventory = $this->_getHasInventory();
 
@@ -104,6 +104,14 @@ class Reverb_ReverbSync_Model_Mapper_Product
             }
         }
         return $product->getPrice();
+    }
+
+    public function getProductDescription($product)
+    {
+        $_reverb_allowed_tags = '<ul>,<ol>,<li>,<strong>,<b>,<em>,<i>,<u>,<div>,<p>,<br>';
+        $_descr = Mage::helper('core')->stripTags($this->getProductValueForListing($product, 'description'), $_reverb_allowed_tags);
+        
+        return $_descr;
     }
 
     public function getProductValueForListing($product, $reverb_field)
