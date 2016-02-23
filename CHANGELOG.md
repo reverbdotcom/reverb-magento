@@ -1,3 +1,9 @@
+## 0.8.3
+* Accept offers can be set to yes/no on a per product basis
+* Map description field to any field on your products
+* Order pagination fix - if you have more than 24 orders per syncing period, we will now find them
+* Mass updates now trigger reverb syncs
+
 ## 0.8.2
 * Configurable product support (from 0.8.1)
 * Make and model are synced on both create and update
