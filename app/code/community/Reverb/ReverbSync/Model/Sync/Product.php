@@ -14,22 +14,23 @@ class Reverb_ReverbSync_Model_Sync_Product extends Reverb_ProcessQueue_Model_Tas
      *
      * @param $argumentsObject - Expected to be of type Varien_Object and have field 'product_id' set in its $_data
      *                              instance field array
+     * @return Reverb_ProcessQueue_Model_Task_Result_Interface
      */
     public function executeQueuedIndividualProductDataSync(stdClass $argumentsObject)
     {
         $taskExecutionResult = Mage::getModel('reverb_process_queue/task_result');
-
+        /* @var $taskExecutionResult Reverb_ProcessQueue_Model_Task_Result */
 
         $product_id = $argumentsObject->product_id;
-
         $product_sku = Mage::getResourceSingleton('reverbSync/catalog_product')->getSkuById($product_id);
 
         if (empty($product_sku))
         {
-            $error_message = Mage::helper('ReverbSync')->__(self::ERROR_PRODUCT_ID_INVALID, $product_id, serialize($argumentsObject));
+            $error_message = Mage::helper('ReverbSync')->__(self::ERROR_PRODUCT_ID_INVALID, __CLASS__, __METHOD__, $product_id, serialize($argumentsObject));
             Mage::getSingleton('reverb_process_queue/log')->logQueueProcessorError($error_message);
 
             $taskExecutionResult->setTaskStatus(Reverb_ProcessQueue_Model_Task::STATUS_ERROR);
+            $taskExecutionResult->setTaskStatusMessage($error_message);
             return $taskExecutionResult;
         }
 
@@ -43,6 +44,7 @@ class Reverb_ReverbSync_Model_Sync_Product extends Reverb_ProcessQueue_Model_Tas
             Mage::getSingleton('reverb_process_queue/log')->logQueueProcessorError($error_message);
 
             $taskExecutionResult->setTaskStatus(Reverb_ProcessQueue_Model_Task::STATUS_ERROR);
+            $taskExecutionResult->setTaskStatusMessage($error_message);
             return $taskExecutionResult;
         }
 

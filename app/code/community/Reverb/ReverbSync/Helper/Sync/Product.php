@@ -27,6 +27,13 @@ class Reverb_ReverbSync_Helper_Sync_Product extends Mage_Core_Helper_Data
         return Mage::helper('ReverbSync/task_processor')->queueListingsSyncByProductIds($product_ids_in_system);
     }
 
+    public function queueUpProductDataSync(array $product_ids_to_queue)
+    {
+        $this->_verifyModuleIsEnabled();
+
+        return Mage::helper('ReverbSync/task_processor')->queueListingsSyncByProductIds($product_ids_to_queue);
+    }
+
     public function executeBulkProductDataSync()
     {
         $errors_array = array();

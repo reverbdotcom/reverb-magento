@@ -14,6 +14,8 @@ class Reverb_ReverbSync_Model_Mapper_Product
     const LISTING_DEFAULT_OFFER_ENABLED_CONFIG_PATH = 'ReverbSync/reverbDefault/offers_enabled';
     const REVERB_LISTING_FIELD_PRODUCT_ATTRIBUTE_CONFIG = 'ReverbSync/listings_field_attributes/%s';
 
+    const REVERB_CONDITION_PRODUCT_ATTRIBUTE = 'reverb_condition';
+
     protected $_image_sync_is_enabled = null;
     protected $_condition = null;
     protected $_has_inventory = null;
@@ -97,7 +99,7 @@ class Reverb_ReverbSync_Model_Mapper_Product
 
     public function getProductPrice($product)
     {
-        $attribute_for_reverb_price = $this->getMagentoProductAttributeForReverbField('price');
+        $attribute_for_reverb_price = $this->getMagentoPriceAttributeToMapToReverbPrice();
         if (!empty($attribute_for_reverb_price))
         {
             $reverb_price = $product->getData($attribute_for_reverb_price);
@@ -148,7 +150,7 @@ class Reverb_ReverbSync_Model_Mapper_Product
 
     public function addProductConditionIfSet(array &$fieldsArray, $product)
     {
-        $_product_condition = $product->getAttributeText('reverb_condition');
+        $_product_condition = $product->getAttributeText(self::REVERB_CONDITION_PRODUCT_ATTRIBUTE);
 
         // Get default value if condition is not set
         if (empty($_product_condition))
@@ -194,6 +196,14 @@ class Reverb_ReverbSync_Model_Mapper_Product
         {
             // Do nothing here
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getReverbConditionAttribute()
+    {
+        return self::REVERB_CONDITION_PRODUCT_ATTRIBUTE;
     }
 
     protected function _getReverbConditionSourceModel()
@@ -254,6 +264,28 @@ class Reverb_ReverbSync_Model_Mapper_Product
         }
 
         return $this->_has_inventory;
+    }
+
+    public function getMagentoAttributesMappedToReverbAttributes()
+    {
+        $magento_attribute_codes = array();
+
+        foreach($this->_reverb_fields_mapped_to_magento_attributes as $reverb_field)
+        {
+            $attribute_code = $this->getMagentoProductAttributeForReverbField($reverb_field);
+            if (!empty($attribute_code))
+            {
+                $magento_attribute_codes[] = $attribute_code;
+            }
+        }
+
+        return $magento_attribute_codes;
+    }
+
+    public function getMagentoPriceAttributeToMapToReverbPrice()
+    {
+        $price_attribute_code = $this->getMagentoProductAttributeForReverbField('price');
+        return (!empty($price_attribute_code)) ? $price_attribute_code : 'price';
     }
 
     protected function _addMappedAttributes(&$fieldsArray, $product)
