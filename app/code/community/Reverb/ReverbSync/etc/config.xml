@@ -276,6 +276,7 @@
         <enable_image_sync>0</enable_image_sync>
         <revCond>Brand New</revCond>
         <revInvent>1</revInvent>
+        <offers_enabled>1</offers_enabled>
       </reverbDefault>
       <extension>
         <revUrl>https://sandbox.reverb.com</revUrl>
