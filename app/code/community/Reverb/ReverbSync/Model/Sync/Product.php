@@ -36,7 +36,9 @@ class Reverb_ReverbSync_Model_Sync_Product extends Reverb_ProcessQueue_Model_Tas
 
         try
         {
-            $listings_wrapper_array = Mage::helper('ReverbSync/sync_product')->executeIndividualProductDataSync($product_id);
+            $reverbSyncProductHelper = Mage::helper('ReverbSync/sync_product');
+            /* @var $reverbSyncProductHelper Reverb_ReverbSync_Helper_Sync_Product */
+            $listings_wrapper_array = $reverbSyncProductHelper->executeIndividualProductDataSync($product_id);
         }
         catch(Exception $e)
         {

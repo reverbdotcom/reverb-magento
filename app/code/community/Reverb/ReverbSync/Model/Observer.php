@@ -43,7 +43,7 @@ class Reverb_ReverbSync_Model_Observer
                     if ($item->getProductType() == Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)
                     {
                         $product_id = $item->getProductId();
-                        $productSyncHelper->executeIndividualProductDataSync($product_id, true);
+                        $reverbSyncTaskProcessor->queueListingsSyncByProductIds(array($product_id));
                     }
                 }
                 catch(Reverb_ReverbSync_Model_Exception_Product_Excluded $e)
