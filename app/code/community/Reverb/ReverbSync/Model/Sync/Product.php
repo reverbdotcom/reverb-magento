@@ -36,7 +36,7 @@ class Reverb_ReverbSync_Model_Sync_Product extends Reverb_ProcessQueue_Model_Tas
 
         try
         {
-            Mage::helper('ReverbSync/sync_product')->executeIndividualProductDataSync($product_id);
+            $listings_wrapper_array = Mage::helper('ReverbSync/sync_product')->executeIndividualProductDataSync($product_id);
         }
         catch(Exception $e)
         {
@@ -46,6 +46,26 @@ class Reverb_ReverbSync_Model_Sync_Product extends Reverb_ProcessQueue_Model_Tas
             $taskExecutionResult->setTaskStatus(Reverb_ProcessQueue_Model_Task::STATUS_ERROR);
             $taskExecutionResult->setTaskStatusMessage($error_message);
             return $taskExecutionResult;
+        }
+
+        try
+        {
+            foreach($listings_wrapper_array as $listingWrapper)
+            {
+                /* @var $listingWrapper Reverb_ReverbSync_Model_Wrapper_Listing */
+
+                // If we have reached this point, and the create/update performed above was successful, and the admin
+                //      uploaded any new images, queue image syncs for each of the new images
+                if ($listingWrapper->wasCallSuccessful())
+                {
+                    $product = $listingWrapper->getMagentoProduct();
+                    Mage::helper('ReverbSync/sync_image')->queueImageSyncForProductGalleryImages($product);
+                }
+            }
+        }
+        catch(Exception $e)
+        {
+            // Exceptions during image sync should NOT prevent product save
         }
 
         $taskExecutionResult->setTaskStatus(Reverb_ProcessQueue_Model_Task::STATUS_COMPLETE);

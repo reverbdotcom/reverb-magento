@@ -131,8 +131,9 @@ class Reverb_ReverbSync_Helper_Sync_Product extends Mage_Core_Helper_Data
         if ($productType == Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)
         {
             //pass the data to create or update the product in Reverb
-            $listingWrapper = Mage::helper('ReverbSync/data')
-                                ->createOrUpdateReverbListing($simpleProduct, $do_not_allow_creation);
+            $reverbSyncHelper = Mage::helper('ReverbSync/data');
+            /* @var $reverbSyncHelper Reverb_ReverbSync_Helper_Data */
+            $listingWrapper = $reverbSyncHelper->createOrUpdateReverbListing($simpleProduct, $do_not_allow_creation);
             return $listingWrapper;
         }
 

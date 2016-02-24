@@ -9,59 +9,19 @@ class Reverb_ReverbSync_Model_Observer
     //function to create the product in reverb
     public function productSave($observer)
     {
-      try
-      {
-          $product = $observer->getProduct();
-          $product_id = $product->getId();
-
-          $syncToReverb = $product->getData('reverb_sync');
-          if (is_null($syncToReverb)) {
-              // TODO: This will potentially generate one SQL query per product saved.  Revamp this to queue the check and process in async batches.
-              $syncToReverb = Mage::getResourceModel('catalog/product')->getAttributeRawValue($product_id, 'reverb_sync');
-          }
-
-          if (!$syncToReverb) {
-            // Sync To Reverb is disabled for this product
-            return;
-          }
-
-          $productSyncHelper = Mage::helper('ReverbSync/sync_product');
-          $array_of_listingWrapper = $productSyncHelper->executeIndividualProductDataSync($product_id);
-        }
-        catch(Reverb_ReverbSync_Model_Exception_Product_Excluded $e)
+        try
         {
-            // If the product has been listed as being excluded from the sync, don't prevent product save
-            $this->_getLogSingleton()->setSessionErrorIfAdminIsLoggedIn($e->getMessage());
-            return;
-        }
-        catch(Reverb_ReverbSync_Model_Exception_Deactivated $e)
-        {
-            // If the module is deactivated, don't prevent product save
-            $this->_getLogSingleton()->setSessionErrorIfAdminIsLoggedIn($e->getMessage());
-            return;
+            $product = $observer->getProduct();
+            $product_id = $product->getId();
+
+            $reverbSyncTaskProcessor = Mage::helper('ReverbSync/task_processor');
+            /* @var $reverbSyncTaskProcessor Reverb_ReverbSync_Helper_Task_Processor */
+            $reverbSyncTaskProcessor->queueListingsSyncByProductIds(array($product_id));
         }
         catch(Exception $e)
         {
             // Any other Exception is understood to prevent product save
             throw $e;
-        }
-
-        try
-        {
-            foreach($array_of_listingWrapper as $listingWrapper)
-            {
-                // If we have reached this point, and the create/update performed above was successful, and the admin
-                //      uploaded any new images, queue image syncs for each of the new images
-                if ($listingWrapper->wasCallSuccessful())
-                {
-                    $product = $listingWrapper->getMagentoProduct();
-                    Mage::helper('ReverbSync/sync_image')->queueImageSyncForProductGalleryImages($product);
-                }
-            }
-        }
-        catch(Exception $e)
-        {
-            // Exceptions during image sync should NOT prevent product save
         }
     }
 
@@ -72,6 +32,9 @@ class Reverb_ReverbSync_Model_Observer
         {
             $productSyncHelper = Mage::helper('ReverbSync/sync_product');
             $order = $observer -> getEvent() -> getOrder();
+
+            $reverbSyncTaskProcessor = Mage::helper('ReverbSync/task_processor');
+            /* @var $reverbSyncTaskProcessor Reverb_ReverbSync_Helper_Task_Processor */
 
             foreach ($order->getAllItems() as $item)
             {
