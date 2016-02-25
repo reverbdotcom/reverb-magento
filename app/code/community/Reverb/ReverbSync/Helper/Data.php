@@ -33,6 +33,7 @@ class Reverb_ReverbSync_Helper_Data
     {
         // Create empty wrapper in the event an exception is thrown
         $listingWrapper = Mage::getModel('reverbSync/wrapper_listing');
+        /* @var $listingWrapper Reverb_ReverbSync_Model_Wrapper_Listing */
         $listingWrapper->setMagentoProduct($product);
 
         try

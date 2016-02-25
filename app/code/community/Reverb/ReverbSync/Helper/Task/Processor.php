@@ -32,6 +32,9 @@ class Reverb_ReverbSync_Helper_Task_Processor extends Mage_Core_Helper_Data
         return $number_of_successfully_queued_syncs;
     }
 
+    /**
+     * @return Reverb_ReverbSync_Model_Mysql4_Task_Listing
+     */
     protected function _getListingsSyncProcessQueueResource()
     {
         if (is_null($this->_listingsSyncProcessQueueResource))
