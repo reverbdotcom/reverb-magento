@@ -2,26 +2,33 @@
 
 class Reverb_ReverbSync_Model_Observer
 {
-    const ERROR_MASS_ATTRIBUTE_PRODUCT_SYNC = 'An exception occurred while queueing up product listing syncs after a mass product attribute update: %s';
+    const EXCEPTION_MASS_ATTRIBUTE_PRODUCT_SYNC = 'An exception occurred while queueing up product listing syncs after a mass product attribute update: %s';
+    const EXCEPTION_LISTING_SYNC_ON_ORDER_PLACEMENT = 'An exception was thrown when attempting to queue a background Reverb listing sync task on order placement for product with id %s: %s';
+    const EXCEPTION_LISTING_SYNC_ON_PRODUCT_SAVE = 'An exception occurred while attempting to queue a background Reverb listing sync task on product save for product with id %s: %s';
 
     protected $_logSingleton = null;
 
     //function to create the product in reverb
     public function productSave($observer)
     {
+        $product = $observer->getProduct();
+        $product_id = $product->getId();
+
+        $reverbSyncTaskProcessor = Mage::helper('ReverbSync/task_processor');
+        /* @var $reverbSyncTaskProcessor Reverb_ReverbSync_Helper_Task_Processor */
+
         try
         {
-            $product = $observer->getProduct();
-            $product_id = $product->getId();
-
-            $reverbSyncTaskProcessor = Mage::helper('ReverbSync/task_processor');
-            /* @var $reverbSyncTaskProcessor Reverb_ReverbSync_Helper_Task_Processor */
             $reverbSyncTaskProcessor->queueListingsSyncByProductIds(array($product_id));
         }
         catch(Exception $e)
         {
-            // Any other Exception is understood to prevent product save
-            throw $e;
+            $error_message = $reverbSyncTaskProcessor->__(self::EXCEPTION_LISTING_SYNC_ON_PRODUCT_SAVE,
+                                                            $product_id, $e->getMessage());
+
+            $this->_getLogSingleton()->logListingSyncError($error_message);
+            $exceptionToLog = new Exception($error_message);
+            Mage::logException($exceptionToLog);
         }
     }
 
@@ -30,8 +37,7 @@ class Reverb_ReverbSync_Model_Observer
     {
         try
         {
-            $productSyncHelper = Mage::helper('ReverbSync/sync_product');
-            $order = $observer -> getEvent() -> getOrder();
+            $order = $observer->getEvent()->getOrder();
 
             $reverbSyncTaskProcessor = Mage::helper('ReverbSync/task_processor');
             /* @var $reverbSyncTaskProcessor Reverb_ReverbSync_Helper_Task_Processor */
@@ -46,19 +52,15 @@ class Reverb_ReverbSync_Model_Observer
                         $reverbSyncTaskProcessor->queueListingsSyncByProductIds(array($product_id));
                     }
                 }
-                catch(Reverb_ReverbSync_Model_Exception_Product_Excluded $e)
-                {
-                    // If the product has been listed as being excluded from the sync, don't log an exception
-                    $this->_getLogSingleton()->setSessionErrorIfAdminIsLoggedIn($e->getMessage());
-                }
-                catch(Reverb_ReverbSync_Model_Exception_Deactivated $e)
-                {
-                    // If the module is deactivated, don't log an exception
-                    $this->_getLogSingleton()->setSessionErrorIfAdminIsLoggedIn($e->getMessage());
-                }
                 catch(Exception $e)
                 {
-                    Mage::logException($e);
+                    $product_id = $item->getProductId();
+                    $error_message = $reverbSyncTaskProcessor->__(self::EXCEPTION_LISTING_SYNC_ON_ORDER_PLACEMENT,
+                                                                    $product_id, $e->getMessage());
+
+                    $this->_getLogSingleton()->logListingSyncError($error_message);
+                    $exceptionToLog = new Exception($error_message);
+                    Mage::logException($exceptionToLog);
                 }
             }
         }
@@ -95,11 +97,14 @@ class Reverb_ReverbSync_Model_Observer
         }
         catch(Exception $e)
         {
-            $error_message = Mage::helper('ReverbSync')->__(self::ERROR_MASS_ATTRIBUTE_PRODUCT_SYNC, $e->getMessage());
-            Mage::getSingleton('reverbSync/log')->logListingSyncError($error_message);
+            $error_message = Mage::helper('ReverbSync')->__(self::EXCEPTION_MASS_ATTRIBUTE_PRODUCT_SYNC, $e->getMessage());
+            $this->_getLogSingleton()->logListingSyncError($error_message);
         }
     }
 
+    /**
+     * @return Reverb_ReverbSync_Model_Log
+     */
     protected function _getLogSingleton()
     {
         if (is_null($this->_logSingleton))
