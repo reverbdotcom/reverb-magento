@@ -3,6 +3,7 @@
 * Map description field to any field on your products
 * Order pagination fix - if you have more than 24 orders per syncing period, we will now find them
 * Mass updates now trigger reverb syncs
+* Reverb sync fully backgrounded. Saving a product does not block while contacting Reverb.
 
 ## 0.8.2
 * Configurable product support (from 0.8.1)
