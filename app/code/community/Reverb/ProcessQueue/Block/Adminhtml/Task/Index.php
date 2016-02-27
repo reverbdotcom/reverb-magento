@@ -19,11 +19,6 @@ class Reverb_ProcessQueue_Block_Adminhtml_Task_Index
         return null;
     }
 
-    public function getRedirectRoute()
-    {
-        return $this->getAction()->getFullBackControllerActionPath();
-    }
-
     public function __construct()
     {
         parent::__construct();
@@ -45,14 +40,12 @@ class Reverb_ProcessQueue_Block_Adminhtml_Task_Index
         {
             $task_code_param = null;
         }
-        $encoded_redirect_route = urlencode($this->getRedirectRoute());
 
         $clear_all_tasks_action = $this->getAction()->getUriPathForIndexAction('clearAllTasks');
 
         $clear_all_tasks_button = array(
             'action_url' => Mage::getModel('adminhtml/url')->getUrl($clear_all_tasks_action,
-                                                                        array('task_codes' => $task_code_param,
-                                                                        'redirect_route' => $encoded_redirect_route)
+                                                                        array('task_codes' => $task_code_param)
                                                                     ),
             'label' => 'Clear All Tasks',
             'confirm_message' => 'Are you sure you want to clear all tasks?'
@@ -61,8 +54,7 @@ class Reverb_ProcessQueue_Block_Adminhtml_Task_Index
         $clear_successful_tasks_action = $this->getAction()->getUriPathForIndexAction('clearSuccessfulTasks');
         $clear_successful_tasks_button = array(
             'action_url' => Mage::getModel('adminhtml/url')->getUrl($clear_successful_tasks_action,
-                                                                        array('task_codes' => $task_code_param,
-                                                                        'redirect_route' => $encoded_redirect_route)
+                                                                        array('task_codes' => $task_code_param)
                                                                     ),
             'label' => 'Clear Successful Sync Tasks',
             'confirm_message' => 'Are you sure you want to clear all successful tasks?'
