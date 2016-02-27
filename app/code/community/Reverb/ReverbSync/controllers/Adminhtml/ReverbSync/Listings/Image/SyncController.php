@@ -27,31 +27,19 @@ class Reverb_ReverbSync_Adminhtml_ReverbSync_Listings_Image_SyncController
     }
 
     public function actOnTaskAction()
-    {
+    {   
         $task_id = $this->getRequest()->getParam($this->getObjectParamName());
         $uniqueQueueTask = Mage::getModel('reverb_process_queue/task_unique')->load($task_id);
-        if ((!is_object($uniqueQueueTask)) || (!$uniqueQueueTask->getId()))
-        {
+        if ((!is_object($uniqueQueueTask)) || (!$uniqueQueueTask->getId())) {
             $error_message = $this->__(self::CONST_INVALID_TASK_ID, $task_id);
-            $this->_logSyncError($error_message);
-            Mage::getSingleton('adminhtml/session')->addError($this->__($error_message));
-            $exception = new Reverb_ReverbSync_Controller_Varien_Exception($error_message);
-            $exception->prepareRedirect('*/*/index');
-            throw $exception;
+            $this->_getAdminHelper()->throwRedirectException($error_message);
         }
 
-        try
-        {
+        try {
             Mage::helper('reverb_process_queue/task_processor_unique')->processQueueTask($uniqueQueueTask);
-        }
-        catch(Exception $e)
-        {
+        } catch(Exception $e) {
             $error_message = sprintf(self::EXCEPTION_ACT_ON_TASK, $task_id, $e->getMessage());
-            $this->_logSyncError($error_message);
-            Mage::getSingleton('adminhtml/session')->addError($this->__($error_message));
-            $exception = new Reverb_ReverbSync_Controller_Varien_Exception($error_message);
-            $exception->prepareRedirect('*/*/index');
-            throw $exception;
+            $this->_getAdminHelper()->throwRedirectException($error_message);
         }
 
         $action_text = $uniqueQueueTask->getActionText();
@@ -60,11 +48,6 @@ class Reverb_ReverbSync_Adminhtml_ReverbSync_Listings_Image_SyncController
         $notice_message = sprintf(self::NOTICE_TASK_ACTION, $action_text, $filename, $sku);
         Mage::getSingleton('adminhtml/session')->addNotice($this->__($notice_message));
         $this->_redirect('*/*/index');
-    }
-
-    protected function _logSyncError($error_message)
-    {
-        Mage::getSingleton('reverbSync/log')->logListingImageSyncError($error_message);
     }
 
     public function canAdminUpdateStatus()

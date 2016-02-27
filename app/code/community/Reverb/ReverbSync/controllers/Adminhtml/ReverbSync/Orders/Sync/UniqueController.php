@@ -44,11 +44,7 @@ class Reverb_ReverbSync_Adminhtml_ReverbSync_Orders_Sync_UniqueController
         catch(Exception $e)
         {
             $error_message = sprintf(self::EXCEPTION_LOAD_UNIQUE_TASK, $e->getMessage());
-            $this->_logOrderSyncError($error_message);
-            Mage::getSingleton('adminhtml/session')->addError($this->__(self::GENERIC_ADMIN_FACING_ERROR_MESSAGE));
-            $exception = new Reverb_ReverbSync_Controller_Varien_Exception($error_message);
-            $exception->prepareRedirect('*/*/index');
-            throw $exception;
+            $this->_getAdminHelper()->throwRedirectException($error_message);
         }
 
         try
@@ -58,11 +54,7 @@ class Reverb_ReverbSync_Adminhtml_ReverbSync_Orders_Sync_UniqueController
         catch(Exception $e)
         {
             $error_message = sprintf(self::EXCEPTION_ACT_ON_TASK, $task_id, $e->getMessage());
-            $this->_logOrderSyncError($error_message);
-            Mage::getSingleton('adminhtml/session')->addError($this->__($error_message));
-            $exception = new Reverb_ReverbSync_Controller_Varien_Exception($error_message);
-            $exception->prepareRedirect('*/*/index');
-            throw $exception;
+            $this->_getAdminHelper()->throwRedirectException($error_message);
         }
 
         $action_text = $uniqueQueueTask->getActionText();
@@ -82,21 +74,11 @@ class Reverb_ReverbSync_Adminhtml_ReverbSync_Orders_Sync_UniqueController
         catch(Exception $e)
         {
             $error_message = sprintf(self::EXCEPTION_SYNC_SHIPMENT_TRACKING, $e->getMessage());
-            Mage::getSingleton('adminhtml/session')->addError($this->__($error_message));
-            Mage::getSingleton('reverbSync/log')->logShipmentTrackingSyncError($error_message);
-
-            $exception = new Reverb_ReverbSync_Model_Exception_Redirect($error_message);
-            $exception->prepareRedirect('*/*/index');
-            throw $exception;
+            $this->_getAdminHelper()->throwRedirectException($error_message);
         }
 
         Mage::getSingleton('adminhtml/session')->addNotice($this->__(self::NOTICE_SYNC_SHIPMENT_TRACKING));
         $this->_redirect('*/*/index');
-    }
-
-    protected function _logOrderSyncError($error_message)
-    {
-        Mage::getSingleton('reverbSync/log')->logOrderSyncError($error_message);
     }
 
     public function canAdminUpdateStatus()

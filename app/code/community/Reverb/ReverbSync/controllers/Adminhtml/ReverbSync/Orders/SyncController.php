@@ -36,10 +36,12 @@ class Reverb_ReverbSync_Adminhtml_ReverbSync_Orders_SyncController
             $task_param_name = $this->getObjectParamName();
             $task_id = $this->getRequest()->getParam($task_param_name);
             $error_message = sprintf(self::ERROR_DENIED_ORDER_CREATION_STATUS_UPDATE);
-            Mage::getSingleton('adminhtml/session')->addError($this->__($error_message));
-            $exception = new Reverb_ReverbSync_Controller_Varien_Exception();
-            $exception->prepareRedirect('adminhtml/ReverbSync_orders_sync/edit', array($task_param_name => $task_id));
-            throw $exception;
+
+            // TODO:
+            $this->_getAdminHelper()->throwRedirectException($error_message,
+                                                             'adminhtml/ReverbSync_orders_sync/edit',
+                                                             array($task_param_name => $task_id)
+                                                             );
         }
 
         parent::saveAction();
@@ -60,12 +62,7 @@ class Reverb_ReverbSync_Adminhtml_ReverbSync_Orders_SyncController
         catch(Exception $e)
         {
             $error_message = $this->__(self::EXCEPTION_BULK_ORDERS_SYNC, $e->getMessage());
-            Mage::getSingleton('reverbSync/log')->logOrderSyncError($error_message);
-            Mage::getSingleton('adminhtml/session')->addError($this->__($error_message));
-
-            $redirectException = new Reverb_ReverbSync_Model_Exception_Redirect($error_message);
-            $redirectException->prepareRedirect('*/*/index');
-            throw $redirectException;
+            $this->_getAdminHelper()->throwRedirectException($error_message);
         }
 
         Mage::getSingleton('adminhtml/session')->addNotice($this->__(self::NOTICE_QUEUED_ORDERS_FOR_SYNC));
@@ -85,12 +82,7 @@ class Reverb_ReverbSync_Adminhtml_ReverbSync_Orders_SyncController
         catch(Exception $e)
         {
             $error_message = $this->__(self::EXCEPTION_PROCESSING_DOWNLOADED_TASKS, $e->getMessage());
-            Mage::getSingleton('reverbSync/log')->logOrderSyncError($error_message);
-            Mage::getSingleton('adminhtml/session')->addError($this->__($error_message));
-
-            $redirectException = new Reverb_ReverbSync_Model_Exception_Redirect($error_message);
-            $redirectException->prepareRedirect('*/*/index');
-            throw $redirectException;
+            $this->_getAdminHelper()->throwRedirectException($error_message);
         }
 
         Mage::getSingleton('adminhtml/session')->addNotice($this->__(self::NOTICE_PROCESSING_DOWNLOADED_TASKS));
@@ -115,10 +107,7 @@ class Reverb_ReverbSync_Adminhtml_ReverbSync_Orders_SyncController
         {
             $error_message = sprintf(self::EXCEPTION_LOAD_TASK, $e->getMessage());
             $this->_logOrderSyncError($error_message);
-            Mage::getSingleton('adminhtml/session')->addError($this->__(self::GENERIC_ADMIN_FACING_ERROR_MESSAGE));
-            $exception = new Reverb_ReverbSync_Controller_Varien_Exception($error_message);
-            $exception->prepareRedirect('*/*/index');
-            throw $exception;
+            $this->_getAdminHelper()->throwRedirectException($error_message);
         }
 
         try
@@ -128,22 +117,16 @@ class Reverb_ReverbSync_Adminhtml_ReverbSync_Orders_SyncController
         catch(Exception $e)
         {
             $error_message = sprintf(self::EXCEPTION_ACT_ON_TASK, $reverb_order_id, $e->getMessage());
+
+            // TODO now it uses protected function as a shortcut
             $this->_logOrderSyncError($error_message);
-            Mage::getSingleton('adminhtml/session')->addError($this->__($error_message));
-            $exception = new Reverb_ReverbSync_Controller_Varien_Exception($error_message);
-            $exception->prepareRedirect('*/*/index');
-            throw $exception;
+            $this->_getAdminHelper()->throwRedirectException($error_message);
         }
 
         $action_text = $queueTask->getActionText();
         $notice_message = sprintf(self::NOTICE_TASK_ACTION, $action_text, $reverb_order_id);
         Mage::getSingleton('adminhtml/session')->addNotice($this->__($notice_message));
         $this->_redirect('*/*/index');
-    }
-
-    protected function _logOrderSyncError($error_message)
-    {
-        Mage::getSingleton('reverbSync/log')->logOrderSyncError($error_message);
     }
 
     public function canAdminUpdateStatus()

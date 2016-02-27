@@ -18,7 +18,7 @@ class Reverb_ReverbSync_Adminhtml_ReverbSync_Category_SyncController extends Rev
         if (!$this->getRequest()->isPost())
         {
             $error_message = self::ERROR_SUBMISSION_NOT_POST;
-            $this->_setSessionErrorAndRedirect($error_message);
+            $this->_getAdminHelper()->throwRedirectException($error_message);
         }
 
         $post_array = $this->getRequest()->getPost();
@@ -41,22 +41,10 @@ class Reverb_ReverbSync_Adminhtml_ReverbSync_Category_SyncController extends Rev
         catch(Exception $e)
         {
             $error_message = sprintf(self::EXCEPTION_CATEGORY_MAPPING, $e->getMessage());
-            $this->_setSessionErrorAndRedirect($error_message);
+            $this->_getAdminHelper()->throwRedirectException($error_message);
         }
 
         $this->_redirect('*/*/index');
-    }
-
-    /**
-     * @param $error_message
-     * @throws Reverb_ReverbSync_Controller_Varien_Exception
-     */
-    protected function _setSessionErrorAndRedirect($error_message)
-    {
-        Mage::getSingleton('adminhtml/session')->addError($this->__($error_message));
-        $exception = new Reverb_ReverbSync_Controller_Varien_Exception($error_message);
-        $exception->prepareRedirect('*/*/index');
-        throw $exception;
     }
 
     public function getUriPathForAction($action)
