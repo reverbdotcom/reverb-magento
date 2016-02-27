@@ -27,11 +27,6 @@ class Reverb_ReverbSync_Block_Adminhtml_Orders_Unique_Index extends Reverb_Rever
         return 'Create Downloaded Orders';
     }
 
-    protected function _getBulkSyncUrlParams()
-    {
-        return array('redirect_controller' => 'ReverbSync_orders_sync_unique');
-    }
-
     protected function _getHeaderTextTemplate()
     {
         return '%s of %s Reverb Order Creation and Shipment Tracking Tasks have completed syncing with Magento';

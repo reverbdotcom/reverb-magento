@@ -64,12 +64,12 @@ class Reverb_ReverbSync_Adminhtml_ReverbSync_Orders_SyncController
             Mage::getSingleton('adminhtml/session')->addError($this->__($error_message));
 
             $redirectException = new Reverb_ReverbSync_Model_Exception_Redirect($error_message);
-            $redirectException->prepareRedirect($this->_getRedirectPath());
+            $redirectException->prepareRedirect('*/*/index');
             throw $redirectException;
         }
 
         Mage::getSingleton('adminhtml/session')->addNotice($this->__(self::NOTICE_QUEUED_ORDERS_FOR_SYNC));
-        $this->_redirect($this->_getRedirectPath());
+        $this->_redirect('*/*/index');
     }
 
     public function syncDownloadedAction()
@@ -89,12 +89,12 @@ class Reverb_ReverbSync_Adminhtml_ReverbSync_Orders_SyncController
             Mage::getSingleton('adminhtml/session')->addError($this->__($error_message));
 
             $redirectException = new Reverb_ReverbSync_Model_Exception_Redirect($error_message);
-            $redirectException->prepareRedirect($this->_getRedirectPath());
+            $redirectException->prepareRedirect('*/*/index');
             throw $redirectException;
         }
 
         Mage::getSingleton('adminhtml/session')->addNotice($this->__(self::NOTICE_PROCESSING_DOWNLOADED_TASKS));
-        $this->_redirect($this->_getRedirectPath());
+        $this->_redirect('*/*/index');
     }
 
     public function actOnTaskAction()
@@ -144,17 +144,6 @@ class Reverb_ReverbSync_Adminhtml_ReverbSync_Orders_SyncController
     protected function _logOrderSyncError($error_message)
     {
         Mage::getSingleton('reverbSync/log')->logOrderSyncError($error_message);
-    }
-
-    protected function _getRedirectPath()
-    {
-        $redirect_controller = $this->getRequest()->getParam('redirect_controller');
-        if (empty($redirect_controller))
-        {
-            $redirect_controller = 'ReverbSync_orders_sync';
-        }
-
-        return 'adminhtml/' . $redirect_controller . '/index';
     }
 
     public function canAdminUpdateStatus()
