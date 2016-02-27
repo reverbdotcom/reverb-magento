@@ -53,8 +53,7 @@ class Reverb_ProcessQueue_Adminhtml_ProcessQueue_IndexController
         {
             $task_codes_string = implode(', ', $task_codes);
             $error_message = $this->__(self::ERROR_CLEARING_ALL_TASKS, $task_codes_string, $e->getMessage());
-            Mage::getSingleton('reverb_process_queue/log')->logQueueProcessorError($error_message);
-            $this->_getAdminHelper()->throwRedirectException($error_message, '*/*/index');
+            $this->_getAdminHelper()->throwRedirectException($error_message);
         }
 
         if (!empty($task_code))
@@ -81,8 +80,7 @@ class Reverb_ProcessQueue_Adminhtml_ProcessQueue_IndexController
         {
             $task_codes_string = implode(', ', $task_codes);
             $error_message = $this->__(self::ERROR_CLEARING_SUCCESSFUL_TASKS, $task_codes_string, $e->getMessage());
-            Mage::getSingleton('reverb_process_queue/log')->logQueueProcessorError($error_message);
-            $this->_getAdminHelper()->throwRedirectException($error_message, '*/*/index');
+            $this->_getAdminHelper()->throwRedirectException($error_message);
         }
 
         if (!empty($task_code))

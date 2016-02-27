@@ -4,7 +4,7 @@ class Reverb_ReverbSync_Helper_Admin extends Mage_Core_Helper_Data
 {
     protected $_moduleName = 'ReverbSync';
 
-    public function throwRedirectException($error_message, $redirect_path, $redirect_arguments = array())
+    public function throwRedirectException($error_message, $redirect_path = '*/*/index', $redirect_arguments = array())
     {
         $this->addAdminErrorMessage($error_message);
         Mage::log($error_message, null, 'reverb_adminhtml_sync.log');
