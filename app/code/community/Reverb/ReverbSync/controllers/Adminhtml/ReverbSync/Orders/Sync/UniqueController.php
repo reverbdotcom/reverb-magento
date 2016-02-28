@@ -1,7 +1,11 @@
 <?php
+
 /**
- * Author: Sean Dunagan
- * Created: 9/16/15
+ *
+ * @category    Reverb
+ * @package     Reverb_ReverbSync
+ * @author      Sean Dunagan
+ * @author      Timur Zaynullin <zztimur@gmail.com>
  */
 
 require_once('Reverb/ProcessQueue/controllers/Adminhtml/ProcessQueue/Unique/IndexController.php');

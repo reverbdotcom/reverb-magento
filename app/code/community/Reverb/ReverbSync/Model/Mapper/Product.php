@@ -1,12 +1,16 @@
 <?php
 
 /**
- * Author: Sean Dunagan
- * Created: 8/17/15
  * Class Reverb_ReverbSync_Model_Mapper_Product
  *
  * This model meant to be referenced as a Singleton via Mage::getSingleton() functionality
+ *
+ * @category    Reverb
+ * @package     Reverb_ReverbSync
+ * @author      Sean Dunagan
+ * @author      Timur Zaynullin <zztimur@gmail.com>
  */
+
 class Reverb_ReverbSync_Model_Mapper_Product
 {
     const LISTING_CREATION_ENABLED_CONFIG_PATH = 'ReverbSync/reverbDefault/enable_image_sync';

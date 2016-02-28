@@ -1,7 +1,11 @@
 <?php
+
 /**
- * Author: Sean Dunagan
- * Created: 9/14/15
+ *
+ * @category    Reverb
+ * @package     Reverb_ProcessQueue
+ * @author      Sean Dunagan
+ * @author      Timur Zaynullin <zztimur@gmail.com>
  */
 
 class Reverb_ProcessQueue_Adminhtml_ProcessQueue_IndexController

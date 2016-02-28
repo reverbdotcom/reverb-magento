@@ -1,5 +1,13 @@
 <?php
 
+/**
+ *
+ * @category    Reverb
+ * @package     Reverb_ReverbSync
+ * @author      Sean Dunagan
+ * @author      Timur Zaynullin <zztimur@gmail.com>
+ */
+
 require_once('Reverb/ProcessQueue/controllers/Adminhtml/ProcessQueue/IndexController.php');
 class Reverb_ReverbSync_Adminhtml_ReverbSync_Orders_SyncController
     extends Reverb_ProcessQueue_Adminhtml_ProcessQueue_IndexController

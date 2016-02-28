@@ -1,5 +1,13 @@
 <?php
 
+/**
+ *
+ * @category    Reverb
+ * @package     Reverb_ReverbSync
+ * @author      Sean Dunagan
+ * @author      Timur Zaynullin <zztimur@gmail.com>
+ */
+
 require_once('Reverb/ReverbSync/controllers/Adminhtml/BaseController.php');
 class Reverb_ReverbSync_Adminhtml_ReverbSync_Listings_SyncController extends Reverb_ReverbSync_Adminhtml_BaseController
 {
