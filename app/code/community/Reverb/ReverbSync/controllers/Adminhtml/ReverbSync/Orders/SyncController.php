@@ -4,26 +4,15 @@ require_once('Reverb/ProcessQueue/controllers/Adminhtml/ProcessQueue/IndexContro
 class Reverb_ReverbSync_Adminhtml_ReverbSync_Orders_SyncController
     extends Reverb_ProcessQueue_Adminhtml_ProcessQueue_IndexController
 {
-    const EXCEPTION_LOAD_TASK = 'An exception occurred while attempting to load an order task to manually act on the task: %s';
     const EXCEPTION_BULK_ORDERS_SYNC = 'Error executing a Reverb bulk orders sync: %s';
     const EXCEPTION_PROCESSING_DOWNLOADED_TASKS = 'Error processing downloaded Reverb Order Sync tasks: %s';
     const ERROR_DENIED_ORDER_CREATION_STATUS_UPDATE = 'You do not have permissions to update this task\'s status';
-    const GENERIC_ADMIN_FACING_ERROR_MESSAGE = 'An error occurred with your request. Please try again.';
-    const EXCEPTION_ACT_ON_TASK = 'An error occurred while acting on a task for the order with Reverb Id %s: %s';
-    const NOTICE_TASK_ACTION = 'The attempt to %s the Sync of the Order with Reverb ID %s has completed.';
     const NOTICE_QUEUED_ORDERS_FOR_SYNC = 'Order sync in progress. Please wait a few minutes and refresh this page...';
     const NOTICE_PROCESSING_DOWNLOADED_TASKS = 'Processing downloaded orders. Please wait a few minutes and refresh this page...';
 
     public function indexAction()
     {
-        $module_groupname = $this->getModuleGroupname();
-        $module_description = $this->getModuleInstanceDescription();
-
-        $this->loadLayout()
-            ->_setActiveMenuValue()
-            ->_setSetupTitle(Mage::helper($module_groupname)->__($module_description))
-            ->_addBreadcrumb()
-            ->_addBreadcrumb(Mage::helper($module_groupname)->__($module_description), Mage::helper($module_groupname)->__($module_description))
+        $this->_initAction()
             ->_addContent($this->getLayout()->createBlock('ReverbSync/adminhtml_orders_index'))
             ->_addContent($this->getLayout()->createBlock('ReverbSync/adminhtml_orders_task_index'))
             ->renderLayout();
@@ -89,46 +78,6 @@ class Reverb_ReverbSync_Adminhtml_ReverbSync_Orders_SyncController
         $this->_redirect('*/*/index');
     }
 
-    public function actOnTaskAction()
-    {
-        try
-        {
-            $task_id = $this->getRequest()->getParam('task_id');
-            $queueTask = Mage::getModel('reverb_process_queue/task')->load($task_id);
-            if ((!is_object($queueTask)) || (!$queueTask->getId()))
-            {
-                throw new Exception('An invalid Task Id was passed to the Reverb Orders Sync Controller: ' . $task_id);
-            }
-
-            $argumentsObject = $queueTask->convertSerializedArgumentsIntoObject();
-            $reverb_order_id = isset($argumentsObject->order_number) ? $argumentsObject->order_number : '';
-        }
-        catch(Exception $e)
-        {
-            $error_message = sprintf(self::EXCEPTION_LOAD_TASK, $e->getMessage());
-            $this->_logOrderSyncError($error_message);
-            $this->_getAdminHelper()->throwRedirectException($error_message);
-        }
-
-        try
-        {
-            Mage::helper('reverb_process_queue/task_processor')->processQueueTask($queueTask);
-        }
-        catch(Exception $e)
-        {
-            $error_message = sprintf(self::EXCEPTION_ACT_ON_TASK, $reverb_order_id, $e->getMessage());
-
-            // TODO now it uses protected function as a shortcut
-            $this->_logOrderSyncError($error_message);
-            $this->_getAdminHelper()->throwRedirectException($error_message);
-        }
-
-        $action_text = $queueTask->getActionText();
-        $notice_message = sprintf(self::NOTICE_TASK_ACTION, $action_text, $reverb_order_id);
-        Mage::getSingleton('adminhtml/session')->addNotice($this->__($notice_message));
-        $this->_redirect('*/*/index');
-    }
-
     public function canAdminUpdateStatus()
     {
         return Mage::helper('ReverbSync/orders_sync')->canAdminChangeOrderUpdateSyncStatus();
@@ -161,7 +110,7 @@ class Reverb_ReverbSync_Adminhtml_ReverbSync_Orders_SyncController
 
     public function getObjectParamName()
     {
-        return 'task';
+        return 'task_id';
     }
 
     public function getObjectDescription()
