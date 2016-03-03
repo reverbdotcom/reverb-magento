@@ -40,6 +40,11 @@ abstract class Reverb_ReverbSync_Adminhtml_BaseController extends Mage_Adminhtml
         return "ReverbSync";
     }
 
+    protected function _isAllowed()
+    {
+        return Mage::getSingleton('admin/session')->isAllowed($this->getControllerActiveMenuPath());
+    }
+
     protected function _addBreadcrumb($label = null, $title = null, $link=null)
     {
         if (is_null($label))
