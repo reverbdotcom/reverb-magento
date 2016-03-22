@@ -97,10 +97,10 @@ class Reverb_ReverbSync_Helper_Sync_Category extends Mage_Core_Helper_Abstract
      * @param $reverbCategoryA
      * @return int
      */
-    static public function isReverbCategoryASubcategory($reverbCategoryA)
+    static public function isReverbCategoryASubcategory($reverbCategory)
     {
-        $reverb_product_type_slug = $reverbCategoryA->getData('reverb_product_type_slug');
-        return (empty($reverb_product_type_slug) ? 0 : 1);
+        $reverb_category_parent_uuid = $reverbCategory->getParentUuidField();
+        return (empty($reverb_category_parent_uuid) ? 0 : 1);
     }
 
     public function getReverbCategoryObjectsByProduct(Mage_Catalog_Model_Product $magentoProduct)

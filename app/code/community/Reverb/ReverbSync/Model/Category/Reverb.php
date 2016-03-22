@@ -25,6 +25,16 @@ class Reverb_ReverbSync_Model_Category_Reverb extends Mage_Core_Model_Abstract
         $this->_init('reverbSync/category_reverb');
     }
 
+    public function getUuid()
+    {
+        return $this->getData(self::UUID_FIELD);
+    }
+
+    public function getParentUuidField()
+    {
+        return $this->getData(self::PARENT_UUID_FIELD);
+    }
+
     public function convertJsonObjectArrayToORMDataArray(array $jsonObject, $include_primary_key = false)
     {
         $orm_data_array = array();
