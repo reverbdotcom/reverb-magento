@@ -10,6 +10,7 @@ class Reverb_ReverbSync_Model_Category_Reverb extends Mage_Core_Model_Abstract
     const PRODUCT_TYPE_SLUG_FIELD = 'reverb_product_type_slug';
     const CATEGORY_SLUG_FIELD = 'reverb_category_slug';
     const UUID_FIELD = 'uuid';
+    const PARENT_UUID_FIELD = 'parent_uuid';
 
     protected $_json_to_orm_field_mapping_array = array(
         'name' => 'name',

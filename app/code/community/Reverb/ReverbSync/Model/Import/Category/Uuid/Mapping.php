@@ -13,6 +13,7 @@ class Reverb_ReverbSync_Model_Import_Category_Uuid_Mapping
     const EXCEPTION_SAVING_MAPPING_TO_DATABASE = 'An exception occurred while attempting to map Reverb category uuid %s to Magento category entity id %s: %s';
 
     const UUID_FIELD = 'uuid';
+    const PARENT_UUID_FIELD = 'parent_uuid';
     const PRODUCT_TYPE_SLUG_FIELD = 'root_category_slug';
     const CATEGORY_SLUG_FIELD = 'category_slug';
     const NAME_FIELD = 'description';
@@ -21,7 +22,11 @@ class Reverb_ReverbSync_Model_Import_Category_Uuid_Mapping
 
     protected $_error_log_file = 'reverb_category_uuid_to_slug_mapping';
     protected $_suppress_invalid_filename_errors = true;
-    protected $_required_header_rows = array(self::UUID_FIELD, self::PRODUCT_TYPE_SLUG_FIELD, self::CATEGORY_SLUG_FIELD, self::NAME_FIELD);
+    protected $_required_header_rows = array(self::UUID_FIELD => self::UUID_FIELD,
+                                             self::PRODUCT_TYPE_SLUG_FIELD => self::PRODUCT_TYPE_SLUG_FIELD,
+                                             self::CATEGORY_SLUG_FIELD => self::CATEGORY_SLUG_FIELD,
+                                             self::NAME_FIELD => self::NAME_FIELD,
+                                             self::PARENT_UUID_FIELD => self::PARENT_UUID_FIELD);
 
     protected $_translationHelper = null;
 
@@ -38,11 +43,17 @@ class Reverb_ReverbSync_Model_Import_Category_Uuid_Mapping
             // We will want to query any existing category mappings to make sure they are preserved
             $query_category_mappings_to_preserve = true;
             $reverb_category_uuid = $rowData->getData(self::UUID_FIELD);
+            $reverb_parent_category_uuid = $rowData->getData(self::PARENT_UUID_FIELD);
+            if(empty($reverb_parent_category_uuid))
+            {
+                $reverb_parent_category_uuid = null;
+            }
 
             if (!is_null($reverbCategory))
             {
                 // Update the existing Reverb Category Row
                 $reverbCategory->setUuid($reverb_category_uuid);
+                $reverbCategory->setParentUuid($reverb_parent_category_uuid);
 
                 $category_name = $rowData->getData(self::NAME_FIELD);
                 $reverbCategory->setName($category_name);
@@ -58,6 +69,8 @@ class Reverb_ReverbSync_Model_Import_Category_Uuid_Mapping
                 $reverbCategory->setData(Reverb_ReverbSync_Model_Category_Reverb::CATEGORY_SLUG_FIELD,
                                         $rowData->getData(self::CATEGORY_SLUG_FIELD));
                 $reverbCategory->setData(Reverb_ReverbSync_Model_Category_Reverb::UUID_FIELD, $reverb_category_uuid);
+                $reverbCategory->setData(Reverb_ReverbSync_Model_Category_Reverb::PARENT_UUID_FIELD,
+                                         $reverb_parent_category_uuid);
                 // Since we are going to create this category for the first time, there won't be any category
                 //      mappings to it in the system
                 $query_category_mappings_to_preserve = false;
@@ -135,8 +148,12 @@ class Reverb_ReverbSync_Model_Import_Category_Uuid_Mapping
     {
         $empty_fields = array();
 
+        $fields_to_verify = $this->getRequiredHeaders();
+        // The parent_uuid field is allowed to be empty
+        unset($fields_to_verify[self::PARENT_UUID_FIELD]);
+
         // Verify that a value was provided for all fields in the row
-        foreach($this->getRequiredHeaders() as $header_field)
+        foreach($fields_to_verify as $header_field)
         {
             $field_value = $rowData->getData($header_field);
             if (empty($field_value))
