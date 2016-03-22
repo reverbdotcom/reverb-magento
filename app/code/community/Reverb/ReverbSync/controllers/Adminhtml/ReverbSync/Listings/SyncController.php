@@ -1,12 +1,19 @@
 <?php
 
+/**
+ *
+ * @category    Reverb
+ * @package     Reverb_ReverbSync
+ * @author      Sean Dunagan
+ * @author      Timur Zaynullin <zztimur@gmail.com>
+ */
+
 require_once('Reverb/ReverbSync/controllers/Adminhtml/BaseController.php');
 class Reverb_ReverbSync_Adminhtml_ReverbSync_Listings_SyncController extends Reverb_ReverbSync_Adminhtml_BaseController
 {
     const BULK_SYNC_EXCEPTION = 'Error executing the Reverb Bulk Product Sync via the admin panel: %s';
     const EXCEPTION_CLEARING_ALL_LISTING_TASKS = 'An error occurred while clearing all listing tasks from the system: %s';
     const ERROR_CLEARING_SUCCESSFUL_SYNC = 'An error occurred while clearing successful listing syncs: %s';
-    const SUCCESS_BULK_SYNC_COMPLETED = 'Reverb Bulk product sync process completed.';
     const SUCCESS_BULK_SYNC_QUEUED_UP = '%s products have been queued for sync. Please wait a few minutes and refresh this page...';
     const EXCEPTION_STOP_BULK_SYNC = 'Error attempting to stop all reverb listing sync tasks: %s';
     const SUCCESS_STOPPED_LISTING_SYNCS = 'Stopped all pending Reverb Listing Sync tasks';
@@ -33,12 +40,12 @@ class Reverb_ReverbSync_Adminhtml_ReverbSync_Listings_SyncController extends Rev
         {
             // We don't know what caused this exception. Log it and throw redirect exception
             $error_message = $this->__(self::BULK_SYNC_EXCEPTION, $e->getMessage());
-            $this->_getAdminHelper()->throwRedirectException($error_message, 'adminhtml/reports_reverbreport/index');
+            $this->_getAdminHelper()->throwRedirectException($error_message, $this->_getRedirectPath());
         }
 
         $success_message = $this->__(self::SUCCESS_BULK_SYNC_QUEUED_UP, $number_of_syncs_queued_up);
         $this->_getAdminHelper()->addAdminSuccessMessage($success_message);
-        $this->_redirect('adminhtml/reports_reverbreport/index');
+        $this->_redirect($this->_getRedirectPath());
     }
 
     public function stopBulkSyncAction()
@@ -58,12 +65,12 @@ class Reverb_ReverbSync_Adminhtml_ReverbSync_Listings_SyncController extends Rev
         {
             // We don't know what caused this exception. Log it and throw redirect exception
             $error_message = $this->__(self::EXCEPTION_STOP_BULK_SYNC, $e->getMessage());
-            $this->_getAdminHelper()->throwRedirectException($error_message, 'adminhtml/reports_reverbreport/index');
+            $this->_getAdminHelper()->throwRedirectException($error_message, $this->_getRedirectPath());
         }
 
         $success_message = $this->__(self::SUCCESS_STOPPED_LISTING_SYNCS);
         $this->_getAdminHelper()->addAdminSuccessMessage($success_message);
-        $this->_redirect('adminhtml/reports_reverbreport/index');
+        $this->_redirect($this->_getRedirectPath());
     }
 
     public function clearAllTasksAction()
@@ -76,12 +83,12 @@ class Reverb_ReverbSync_Adminhtml_ReverbSync_Listings_SyncController extends Rev
         catch(Exception $e)
         {
             $error_message = $this->__(self::EXCEPTION_CLEARING_ALL_LISTING_TASKS, $e->getMessage());
-            $this->_getAdminHelper()->throwRedirectException($error_message, 'adminhtml/reports_reverbreport/index');
+            $this->_getAdminHelper()->throwRedirectException($error_message, $this->_getRedirectPath());
         }
 
         $success_message = $this->__(self::SUCCESS_CLEAR_LISTING_SYNCS);
         $this->_getAdminHelper()->addAdminSuccessMessage($success_message);
-        $this->_redirect('adminhtml/reports_reverbreport/index');
+        $this->_redirect($this->_getRedirectPath());
     }
 
     public function clearSuccessfulTasksAction()
@@ -95,12 +102,12 @@ class Reverb_ReverbSync_Adminhtml_ReverbSync_Listings_SyncController extends Rev
         catch(Exception $e)
         {
             $error_message = $this->__(self::ERROR_CLEARING_SUCCESSFUL_SYNC, $e->getMessage());
-            $this->_getAdminHelper()->throwRedirectException($error_message, 'adminhtml/reports_reverbreport/index');
+            $this->_getAdminHelper()->throwRedirectException($error_message, $this->_getRedirectPath());
         }
 
         $success_message = $this->__(self::SUCCESS_CLEAR_SUCCESSFUL_LISTING_SYNCS);
         $this->_getAdminHelper()->addAdminSuccessMessage($success_message);
-        $this->_redirect('adminhtml/reports_reverbreport/index');
+        $this->_redirect($this->_getRedirectPath());
     }
 
     public function getBlockToShow()
@@ -127,5 +134,9 @@ class Reverb_ReverbSync_Adminhtml_ReverbSync_Listings_SyncController extends Rev
     public function getControllerActiveMenuPath()
     {
         return 'reverb/reverb_listings_sync';
+    }
+
+    protected function _getRedirectPath() {
+        return 'adminhtml/reports_reverbreport/index';
     }
 }

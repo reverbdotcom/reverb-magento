@@ -1,7 +1,11 @@
 <?php
+
 /**
- * Author: Sean Dunagan
- * Created: 9/14/15
+ *
+ * @category    Reverb
+ * @package     Reverb_ProcessQueue
+ * @author      Sean Dunagan
+ * @author      Timur Zaynullin <zztimur@gmail.com>
  */
 
 class Reverb_ProcessQueue_Adminhtml_ProcessQueue_IndexController
@@ -14,6 +18,9 @@ class Reverb_ProcessQueue_Adminhtml_ProcessQueue_IndexController
     const SUCCESS_CLEARED_SUCCESSFUL_TASKS_WITH_CODE = 'Successfully cleared all successful tasks with code %s';
     const SUCCESS_CLEARED_ALL_TASKS = 'Successfully cleared all tasks';
     const SUCCESS_CLEARED_SUCCESSFUL_TASKS = 'Successfully cleared all successful tasks';
+    const EXCEPTION_INVALID_TASK_ID = '%s. Invalid Task ID=%s.';
+    const EXCEPTION_ACT_ON_TASK = '%s. Error while trying to run Task ID=%s: %s.';
+    const NOTICE_TASK_ACTION = '%s. Task ID=%s is queued (%s).';
 
     protected $_adminHelper = null;
 
@@ -45,7 +52,6 @@ class Reverb_ProcessQueue_Adminhtml_ProcessQueue_IndexController
     public function clearAllTasksAction()
     {
         $task_codes = $this->_getTaskCodesParam();
-        $redirect_route = $this->getRequest()->getParam('redirect_route');
         try
         {
             $rows_deleted = $this->_getTaskProcessor()->deleteAllTasks($task_codes);
@@ -54,8 +60,7 @@ class Reverb_ProcessQueue_Adminhtml_ProcessQueue_IndexController
         {
             $task_codes_string = implode(', ', $task_codes);
             $error_message = $this->__(self::ERROR_CLEARING_ALL_TASKS, $task_codes_string, $e->getMessage());
-            Mage::getSingleton('reverb_process_queue/log')->logQueueProcessorError($error_message);
-            $this->_getAdminHelper()->throwRedirectException($error_message, $redirect_route);
+            $this->_getAdminHelper()->throwRedirectException($error_message);
         }
 
         if (!empty($task_code))
@@ -68,13 +73,12 @@ class Reverb_ProcessQueue_Adminhtml_ProcessQueue_IndexController
         }
 
         $this->_getAdminHelper()->addAdminSuccessMessage($success_message);
-        $this->_redirect($redirect_route);
+        $this->_redirect('*/*/index');
     }
 
     public function clearSuccessfulTasksAction()
     {
         $task_codes = $this->_getTaskCodesParam();
-        $redirect_route = $this->getRequest()->getParam('redirect_route');
         try
         {
             $rows_deleted = $this->_getTaskProcessor()->deleteSuccessfulTasks($task_codes);
@@ -83,8 +87,7 @@ class Reverb_ProcessQueue_Adminhtml_ProcessQueue_IndexController
         {
             $task_codes_string = implode(', ', $task_codes);
             $error_message = $this->__(self::ERROR_CLEARING_SUCCESSFUL_TASKS, $task_codes_string, $e->getMessage());
-            Mage::getSingleton('reverb_process_queue/log')->logQueueProcessorError($error_message);
-            $this->_getAdminHelper()->throwRedirectException($error_message, $redirect_route);
+            $this->_getAdminHelper()->throwRedirectException($error_message);
         }
 
         if (!empty($task_code))
@@ -97,7 +100,7 @@ class Reverb_ProcessQueue_Adminhtml_ProcessQueue_IndexController
         }
 
         $this->_getAdminHelper()->addAdminSuccessMessage($success_message);
-        $this->_redirect($redirect_route);
+        $this->_redirect('*/*/index');
     }
 
     /**
@@ -176,5 +179,57 @@ class Reverb_ProcessQueue_Adminhtml_ProcessQueue_IndexController
         }
 
         return $this->_adminHelper;
+    }
+
+    /**
+    * Init layout, menu and breadcrumb
+    *
+    * @return Reverb_ProcessQueue_Adminhtml_ProcessQueue_Unique_IndexController
+    */
+    protected function _initAction()
+    {
+        $module_groupname = $this->getModuleGroupname();
+        $module_description = $this->getModuleInstanceDescription();
+
+        $this->loadLayout()
+            ->_setActiveMenuValue()
+            ->_setSetupTitle(Mage::helper($module_groupname)->__($module_description))
+            ->_addBreadcrumb()
+            ->_addBreadcrumb(Mage::helper($module_groupname)->__($module_description), Mage::helper($module_groupname)->__($module_description));
+            
+        return $this;
+    }
+
+
+    /**
+    * Standard action on a single task item
+    */
+    public function actOnTaskAction()
+    {
+        $_controller_description = $this->getControllerDescription();
+
+        // e.g. reverb_process_queue/task
+        $_quote_task = Mage::getModel($this->getModuleGroupname() . '/' . $this->getModuleInstance());
+
+        $task_id = $this->getRequest()->getParam($this->getObjectParamName());
+        $_quote_task = $_quote_task->load($task_id);
+        if ((!is_object($_quote_task)) || (!$_quote_task->getId())) {
+            $error_message = $this->__(self::EXCEPTION_INVALID_TASK_ID, $_controller_description, $task_id);
+            $this->_getAdminHelper()->throwRedirectException($error_message);
+        }
+
+        try {
+            // This shouldn't fail based on Processor code.
+            $this->_getTaskProcessor()->processQueueTask($_quote_task);
+        } catch(Exception $e) {
+            $error_message = sprintf(self::EXCEPTION_ACT_ON_TASK, $_controller_description, $task_id, $e->getMessage());
+            $this->_getAdminHelper()->throwRedirectException($error_message);
+        }
+
+        $action_text = $_quote_task->getActionText();
+        $notice_message = sprintf(self::NOTICE_TASK_ACTION, $_controller_description, $task_id, $action_text);
+        Mage::getSingleton('adminhtml/session')->addNotice($this->__($notice_message));
+
+        $this->_redirect('*/*/index');
     }
 }
