@@ -44,7 +44,7 @@ class Reverb_ReverbSync_Helper_Sync_Category extends Mage_Core_Helper_Abstract
 
         if (!empty($defined_category_mapping))
         {
-            Mage::getResourceSingleton('reverbSync/category_magento_reverb_mapping')
+            Mage::getResourceSingleton('reverbSync/category_reverb_magento_xref')
                 ->redefineCategoryMapping($defined_category_mapping);
         }
     }
@@ -53,6 +53,7 @@ class Reverb_ReverbSync_Helper_Sync_Category extends Mage_Core_Helper_Abstract
     {
         return strcmp($mapped_value, self::NO_CATEGORY_CHOSEN_OPTION);
     }
+
     public function addCategoriesToListingFieldsArray(array $fieldsArray, Mage_Catalog_Model_Product $product)
     {
         $product_reverb_category_objects_array = $this->getReverbCategoryObjectsByProduct($product);
@@ -137,7 +138,7 @@ class Reverb_ReverbSync_Helper_Sync_Category extends Mage_Core_Helper_Abstract
 
         foreach($reverb_categories as $reverbCategory)
         {
-            $reverb_category_select_options_array[$reverbCategory->getId()] = $reverbCategory->getName();
+            $reverb_category_select_options_array[$reverbCategory->getUuid()] = $reverbCategory->getName();
         }
 
         return $reverb_category_select_options_array;

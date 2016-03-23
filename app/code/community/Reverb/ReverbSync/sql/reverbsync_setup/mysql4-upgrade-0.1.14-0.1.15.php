@@ -4,9 +4,6 @@ $installer = $this;
 /* @var $installer Mage_Core_Model_Resource_Setup */
 $installer->startSetup();
 
-// We need to lock the reverb_categories table during the execution of the Reverb Category schema update, which is why
-//      this migration file is so large
-
 // Update the reverb_categories database table to reflect the new category schema
 $reverb_category_table = $installer->getTable('reverbSync/reverb_category');
 // Add the uuid column

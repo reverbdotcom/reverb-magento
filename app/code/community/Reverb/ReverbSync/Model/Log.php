@@ -16,6 +16,11 @@ class Reverb_ReverbSync_Model_Log
         }
     }
 
+    public function logCategoryMappingError($error_message)
+    {
+        $this->logSyncError($error_message, 'category_mapping');
+    }
+
     public function logOrderSyncError($error_message)
     {
         $this->logSyncError($error_message, 'orders');
