@@ -46,10 +46,10 @@ $magentoReverbCategoryXrefTable =
         )->addIndex(
             $installer->getIdxName('reverbSync/magento_reverb_category_xref', array('magento_category_id')),
             array('magento_category_id'),
-            array('type' => Varien_Db_Adapter_Interface::INDEX_TYPE_INDEX)
+            array('type' => Varien_Db_Adapter_Interface::INDEX_TYPE_UNIQUE)
         )->addIndex(
-            $installer->getIdxName('reverbSync/magento_reverb_category_xref', array('xref_id')),
-            array('xref_id'),
+            $installer->getIdxName('reverbSync/magento_reverb_category_xref', array('reverb_category_uuid')),
+            array('reverb_category_uuid'),
             array('type' => Varien_Db_Adapter_Interface::INDEX_TYPE_INDEX)
         )->addForeignKey(
             $installer->getFkName('reverbSync/magento_reverb_category_xref', 'magento_category_id', 'catalog/category', 'entity_id'),

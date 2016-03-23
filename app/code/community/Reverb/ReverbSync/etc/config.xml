@@ -17,12 +17,13 @@
               <reverb_category>
                   <table>reverb_categories</table>
               </reverb_category>
-              <magento_reverb_category_mapping>
-                  <table>reverb_magento_categories</table>
-              </magento_reverb_category_mapping>
               <magento_reverb_category_xref>
                   <table>reverb_magento_category_xref</table>
               </magento_reverb_category_xref>
+              <!-- This table has been deprecated and is no longer in use -->
+              <magento_reverb_category_mapping>
+                  <table>reverb_magento_categories</table>
+              </magento_reverb_category_mapping>
           </entities>
       </reverb_sync_queue_mysql4>
     </models>
