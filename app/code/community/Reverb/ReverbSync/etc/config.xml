@@ -302,6 +302,7 @@
       <listings_update_switches>
         <title>0</title>
         <price>0</price>
+        <description>0</description>
         <inventory_qty>1</inventory_qty>
       </listings_update_switches>
       <listings_field_attributes>
