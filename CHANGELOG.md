@@ -1,3 +1,7 @@
+## 0.8.4
+* Fix occasional 404 Not Found errors while clearing sync tasks
+* Fix enterprise edition incompatibility due to version check
+
 ## 0.8.3
 * Accept offers can be set to yes/no on a per product basis
 * Map description field to any field on your products

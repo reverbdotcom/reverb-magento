@@ -1,17 +1,16 @@
 <?php
+
 /**
- * Author: Sean Dunagan
- * Created: 9/11/15
+ *
+ * @category    Reverb
+ * @package     Reverb_ReverbSync
+ * @author      Sean Dunagan
+ * @author      Timur Zaynullin <zztimur@gmail.com>
  */
 
 require_once('Reverb/ReverbSync/controllers/Adminhtml/BaseController.php');
 class Reverb_ReverbSync_Adminhtml_ReverbSync_Category_SyncController extends Reverb_ReverbSync_Adminhtml_BaseController
 {
-    const BULK_SYNC_EXCEPTION = 'An uncaught exception occurred while executing the Reverb Bulk Product Sync via the admin panel: %s';
-    const SUCCESS_BULK_SYNC_COMPLETED = 'Reverb Bulk product sync process completed.';
-    const SUCCESS_BULK_SYNC_QUEUED_UP = '%s products have been queued to be synced with Reverb';
-    const EXCEPTION_STOP_BULK_SYNC = 'An exception occurred while attempting to stop all reverb listing sync tasks: %s';
-    const SUCCESS_STOPPED_LISTING_SYNCS = 'Stopped all pending Reverb Listing Sync tasks';
     const ERROR_SUBMISSION_NOT_POST = 'There was an error with your submission. Please try again.';
     const EXCEPTION_CATEGORY_MAPPING = 'An error occurred while attempting to set the Reverb-Magento category mapping: %s';
     const EXCEPTION_UPDATING_REVERB_CATEGORIES = 'An exception occurred while updating the Reverb categories in the system: %s';
@@ -25,7 +24,7 @@ class Reverb_ReverbSync_Adminhtml_ReverbSync_Category_SyncController extends Rev
         if (!$this->getRequest()->isPost())
         {
             $error_message = self::ERROR_SUBMISSION_NOT_POST;
-            $this->_setSessionErrorAndRedirect($error_message);
+            $this->_getAdminHelper()->throwRedirectException($error_message);
         }
 
         $post_array = $this->getRequest()->getPost();
@@ -48,6 +47,7 @@ class Reverb_ReverbSync_Adminhtml_ReverbSync_Category_SyncController extends Rev
         catch(Exception $e)
         {
             $error_message = sprintf(self::EXCEPTION_CATEGORY_MAPPING, $e->getMessage());
+
             Mage::getSingleton('reverbSync/log')->logCategoryMappingError($error_message);
             $this->_setSessionErrorAndRedirect($error_message);
         }

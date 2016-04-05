@@ -11,8 +11,8 @@ class Reverb_ReverbSync_Model_Adapter_Curl
     const POST_DATA_ARGUMENT_TEMPLATE = "--data '%s'";
     const POST_ERROR_LOG_TEMPLATE = 'The following error occurred with the post above: %s';
     const CURL_ERROR_TEMPLATE = "Curl error number %s occurred with the following error message: %s";
-    const USER_AGENT_TEMPLATE = 'Reverb-Magento ReverbMagentoVersion=0.8.3 MagentoVersion=%s MagentoDomain=%s';
-    const MAGENTO_VERSION_TEMPLATE = '%s-%s';
+    const USER_AGENT_TEMPLATE = 'Reverb-Magento ReverbMagentoVersion=0.8.4 MagentoVersion=%s MagentoDomain=%s';
+    const MAGENTO_VERSION_TEMPLATE = '%s';
 
     const PUT_CUSTOM_REQUEST_VALUE = 'PUT';
 
@@ -51,10 +51,9 @@ class Reverb_ReverbSync_Model_Adapter_Curl
     protected function _addCurrentMagentoVersionUserAgent()
     {
         $magento_version = Mage::getVersion();
-        $magento_edition = Mage::getEdition();
         $magento_base_web_url = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
 
-        $magento_version_string = sprintf(self::MAGENTO_VERSION_TEMPLATE, $magento_edition, $magento_version);
+        $magento_version_string = sprintf(self::MAGENTO_VERSION_TEMPLATE, $magento_version);
 
         $magento_domain = Mage::helper('reverb_base')->extractDomainFromUrl($magento_base_web_url);
 

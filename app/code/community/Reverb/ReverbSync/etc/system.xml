@@ -1,3 +1,13 @@
+<?xml version="1.0"?>
+<!--
+/**
+ *
+ * @category    Reverb
+ * @package     Reverb_ReverbSync
+ * @author      Sean Dunagan
+ * @author      Timur Zaynullin <zztimur@gmail.com>
+ */
+-->
 <config>
   <tabs>
     <ReverbSync translate="label" module="ReverbSync">
@@ -7,7 +17,7 @@
   </tabs>
   <sections>
     <ReverbSync translate="label" module="ReverbSync">
-      <label>Reverb Configuration (v0.8.3)</label>
+      <label>Reverb Configuration (v0.8.4)</label>
       <tab>ReverbSync</tab>
       <sort_order>1</sort_order>
       <show_in_default>2</show_in_default>
