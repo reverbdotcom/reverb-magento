@@ -14,7 +14,7 @@ class Reverb_ReverbSync_Model_Import_Category_Uuid_Mapping
 
     const UUID_FIELD = 'uuid';
     const PARENT_UUID_FIELD = 'parent_uuid';
-    const PRODUCT_TYPE_SLUG_FIELD = 'root_category_slug';
+    const PRODUCT_TYPE_SLUG_FIELD = 'product_type_slug';
     const CATEGORY_SLUG_FIELD = 'category_slug';
     const NAME_FIELD = 'description';
 

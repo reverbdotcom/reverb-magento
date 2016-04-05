@@ -14,6 +14,8 @@ class Reverb_ReverbSync_Adminhtml_ReverbSync_Category_SyncController extends Rev
     const SUCCESS_STOPPED_LISTING_SYNCS = 'Stopped all pending Reverb Listing Sync tasks';
     const ERROR_SUBMISSION_NOT_POST = 'There was an error with your submission. Please try again.';
     const EXCEPTION_CATEGORY_MAPPING = 'An error occurred while attempting to set the Reverb-Magento category mapping: %s';
+    const EXCEPTION_UPDATING_REVERB_CATEGORIES = 'An exception occurred while updating the Reverb categories in the system: %s';
+    const SUCCESS_UPDATED_LISTINGS = 'Reverb category update completed';
 
     protected $_categorySyncHelper = null;
     protected $_adminHelper = null;
@@ -46,8 +48,29 @@ class Reverb_ReverbSync_Adminhtml_ReverbSync_Category_SyncController extends Rev
         catch(Exception $e)
         {
             $error_message = sprintf(self::EXCEPTION_CATEGORY_MAPPING, $e->getMessage());
+            Mage::getSingleton('reverbSync/log')->logCategoryMappingError($error_message);
             $this->_setSessionErrorAndRedirect($error_message);
         }
+
+        $this->_redirect('*/*/index');
+    }
+
+    public function updateCategoriesAction()
+    {
+        try
+        {
+            $categoryUpdateSyncHelper = Mage::helper('ReverbSync/sync_category_update');
+            /* @var $categoryUpdateSyncHelper Reverb_ReverbSync_Helper_Sync_Category_Update */
+            $categoryUpdateSyncHelper->updateReverbCategoriesFromApi();
+        }
+        catch(Exception $e)
+        {
+            $error_message = $this->__(self::EXCEPTION_UPDATING_REVERB_CATEGORIES, $e->getMessage());
+            Mage::getSingleton('reverbSync/log')->logCategoryMappingError($error_message);
+            $this->_setSessionErrorAndRedirect($error_message);
+        }
+
+        Mage::getSingleton('adminhtml/session')->addSuccess($this->__(self::SUCCESS_UPDATED_LISTINGS));
 
         $this->_redirect('*/*/index');
     }

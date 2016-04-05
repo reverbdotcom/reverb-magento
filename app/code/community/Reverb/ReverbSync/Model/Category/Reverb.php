@@ -20,6 +20,11 @@ class Reverb_ReverbSync_Model_Category_Reverb extends Mage_Core_Model_Abstract
         'id' => 'reverb_category_id'
     );
 
+    public function loadByUuid($uuid)
+    {
+        return $this->load($uuid, self::UUID_FIELD);
+    }
+
     protected function _construct()
     {
         $this->_init('reverbSync/category_reverb');
@@ -30,9 +35,19 @@ class Reverb_ReverbSync_Model_Category_Reverb extends Mage_Core_Model_Abstract
         return $this->getData(self::UUID_FIELD);
     }
 
+    public function setUuid($uuid)
+    {
+        return $this->setData(self::UUID_FIELD, $uuid);
+    }
+
     public function getParentUuidField()
     {
         return $this->getData(self::PARENT_UUID_FIELD);
+    }
+
+    public function setParentUuidField($parent_uuid)
+    {
+        return $this->getData(self::PARENT_UUID_FIELD, $parent_uuid);
     }
 
     public function convertJsonObjectArrayToORMDataArray(array $jsonObject, $include_primary_key = false)
