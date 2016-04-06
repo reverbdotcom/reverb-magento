@@ -46,6 +46,18 @@ class Reverb_ReverbSync_Helper_Api_Adapter_Category
     }
 
     /**
+     * This request should always use the Production endpoint
+     *
+     * @return string
+     */
+    protected function _getReverbAPIBaseUrl()
+    {
+        $reverbUrlSourceSingleton = Mage::getSingleton('reverbSync/source_revurl');
+        /* @var $reverbUrlSourceSingleton Reverb_ReverbSync_Model_Source_Revurl */
+        return $reverbUrlSourceSingleton->getProductionUrl();
+    }
+
+    /**
      * We don't want to log the responses from this request
      *
      * @param $request

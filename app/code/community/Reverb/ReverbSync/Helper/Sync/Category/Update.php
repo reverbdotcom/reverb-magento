@@ -78,6 +78,11 @@ class Reverb_ReverbSync_Helper_Sync_Category_Update extends Mage_Core_Helper_Abs
         $product_type_slug = isset($reverb_category_data_array['product_type_slug']) ? $reverb_category_data_array['product_type_slug'] : '';
         $reverbCategory->setReverbProductTypeSlug($product_type_slug);
         $parent_uuid = isset($reverb_category_data_array['root_uuid']) ? $reverb_category_data_array['root_uuid'] : null;
+        if (!strcmp($uuid, $parent_uuid))
+        {
+            // If this category is a root category, the parent uuid field should be null
+            $parent_uuid = null;
+        }
         $reverbCategory->setParentUuidField($parent_uuid);
         $reverbCategory->save();
     }

@@ -57,9 +57,10 @@ $magentoReverbCategoryXrefTable =
 
 $installer->getConnection()->createTable($magentoReverbCategoryXrefTable);
 
-// Execute the new Reverb category uuid mapping
-$reverbCategoryMappingModel = Mage::getModel('reverbSync/Import_Category_Uuid_Mapping');
-$reverbCategoryMappingModel->run();
+// Remap the Magento categories to the Reverb categories using the new database table
+$remapHelper = Mage::helper('ReverbSync/category_remap');
+/* @var $remapHelper Reverb_ReverbSync_Helper_Category_Remap */
+$remapHelper->remapReverbCategories();
 
 // Drop the pre-existing Category xref table
 $installer->getConnection()->dropTable('reverb_magento_categories');

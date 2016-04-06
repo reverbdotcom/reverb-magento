@@ -6,6 +6,7 @@
 
 class Reverb_ReverbSync_Model_Category_Reverb extends Mage_Core_Model_Abstract
 {
+    const PRIMARY_KEY_FIELD = 'reverb_category_id';
     const NAME_FIELD = 'name';
     const PRODUCT_TYPE_SLUG_FIELD = 'reverb_product_type_slug';
     const CATEGORY_SLUG_FIELD = 'reverb_category_slug';
