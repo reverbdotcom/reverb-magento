@@ -12,6 +12,16 @@ class Reverb_ReverbSync_Model_Source_Revurl
     const SANDBOX_LABEL = 'Reverb Sandbox (Testing)';
 
     /**
+     * Returns the Reverb production API endpoint
+     *
+     * @return string
+     */
+    public function getProductionUrl()
+    {
+        return self::PRODUCTION_URL;
+    }
+
+    /**
      * Options getter
      *
      * @return array

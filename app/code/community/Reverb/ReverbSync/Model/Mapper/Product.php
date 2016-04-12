@@ -251,6 +251,9 @@ class Reverb_ReverbSync_Model_Mapper_Product
         return $this->_reverbConditionSourceModel;
     }
 
+    /**
+     * @return Reverb_ReverbSync_Helper_Sync_Category
+     */
     protected function _getCategorySyncHelper()
     {
         if (is_null($this->_categorySyncHelper))
