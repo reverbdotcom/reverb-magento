@@ -1,3 +1,7 @@
+## 0.9.0
+* Base image is now sent as the primary image to Reverb if there is one set
+* Changes internal category mapping to use Reverb UUIDs. This makes category mapping more robust and less likely to break in the future. When installing this release a migration will be run. Customers are advised to install in off-hours if they have many category mappings.
+
 ## 0.8.4
 * Fix occasional 404 Not Found errors while clearing sync tasks
 * Fix enterprise edition incompatibility due to version check
