@@ -49,6 +49,11 @@ class Reverb_ReverbSync_Model_Mapper_Product
             $fieldsArray['price'] = $this->getProductPrice($product);
         }
 
+        if ($this->_getListingsUpdateSyncHelper()->isDescriptionUpdateEnabled())
+        {
+            $fieldsArray['description'] = $this->getProductDescription($product);
+        }
+
         if ($this->_getListingsUpdateSyncHelper()->isInventoryQtyUpdateEnabled())
         {
             $hasInventory = $this->_getHasInventory();
@@ -119,7 +124,7 @@ class Reverb_ReverbSync_Model_Mapper_Product
     {
         $_reverb_allowed_tags = '<ul>,<ol>,<li>,<strong>,<b>,<em>,<i>,<u>,<div>,<p>,<br>';
         $_descr = Mage::helper('core')->stripTags($this->getProductValueForListing($product, 'description'), $_reverb_allowed_tags);
-        
+
         return $_descr;
     }
 

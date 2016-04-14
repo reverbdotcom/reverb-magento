@@ -183,7 +183,7 @@
             </title>
             <price translate="label">
               <label>Price</label>
-              <comment>Click "Yes" to have the listing price updated whenever a listing update call is made to Reverb</comment>
+              <comment>Click "Yes" to have the listing price synced to Reverb on update</comment>
               <frontend_type>select</frontend_type>
               <sort_order>20</sort_order>
               <show_in_default>1</show_in_default>
@@ -194,7 +194,7 @@
             </price>
             <inventory_qty translate="label">
               <label>Inventory</label>
-              <comment>Click "Yes" to have the listing inventory quantity updated whenever a listing update call is made to Reverb</comment>
+              <comment>Click "Yes" to have the listing inventory quantity synced to Reverb on update</comment>
               <frontend_type>select</frontend_type>
               <sort_order>30</sort_order>
               <show_in_default>1</show_in_default>
@@ -203,6 +203,17 @@
               <source_model>adminhtml/system_config_source_yesno</source_model>
               <validate>input-text required-entry</validate>
             </inventory_qty>
+            <description translate="label">
+              <label>Description</label>
+              <comment>Click "Yes" to have the listing description synced to Reverb on update</comment>
+              <frontend_type>select</frontend_type>
+              <sort_order>40</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <validate>input-text required-entry</validate>
+            </description>
           </fields>
         </listings_update_switches>
 
