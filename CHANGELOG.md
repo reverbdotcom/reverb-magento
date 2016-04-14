@@ -1,6 +1,8 @@
 ## 0.9.0 (unreleased)
 * Base image is now sent as the primary image to Reverb if there is one set
-* Changes internal category mapping to use Reverb UUIDs. This makes category mapping more robust and less likely to break in the future. When installing this release a migration will be run. Customers are advised to install in off-hours if they have many category mappings.
+* New syncable fields: shipping_profile_name, finish, year.  Please create your own attributes in magento for these and map them in the settings screen if you want them.
+* Description syncs on update - control whether it syncs in the settings screen.
+* Changes internal category mapping to make category mapping more robust and less likely to break in the future. When installing this release a migration will be run. No impact to existing category mappings.
 
 ## 0.8.4
 * Fix occasional 404 Not Found errors while clearing sync tasks
