@@ -252,6 +252,33 @@
                     <show_in_store>0</show_in_store>
                     <source_model>reverbSync/source_product_attribute</source_model>
                 </description>
+                <shipping_profile_name translate="label">
+                    <label>Shipping Profile (Name)</label>
+                    <frontend_type>select</frontend_type>
+                    <sort_order>50</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <source_model>reverbSync/source_product_attribute</source_model>
+                </shipping_profile_name>
+                <finish translate="label">
+                    <label>Finish (e.g. Pelham Blue) - For Guitars</label>
+                    <frontend_type>select</frontend_type>
+                    <sort_order>50</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <source_model>reverbSync/source_product_attribute</source_model>
+                </finish>
+                <year translate="label">
+                    <label>Year of manufacture - e.g. 1975 or range like 1960-1963</label>
+                    <frontend_type>select</frontend_type>
+                    <sort_order>50</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <source_model>reverbSync/source_product_attribute</source_model>
+                </year>
             </fields>
         </listings_field_attributes>
 
