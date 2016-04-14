@@ -73,6 +73,9 @@ The listing sync to Reverb can be triggered in two ways:
 
 Orders are automatically synced on a one minute cron timer. If you aren't seeing orders, please visit the Order Creation tab under Reverb and click the button to manually sync them. Please report any issues with periodic syncing to the [Reverb Magento Support Group](https://groups.google.com/forum/#!forum/reverb-magento)
 
+* Orders are synced 24 hours back from the time of sync. Older orders will not be pulled.
+* You can select whether to sync all orders (including unpaid accepted offers) or only orders awaiting shipment, via the settings screen
+
 ## Notes on Bulk Sync
 
 The bulk sync uses multiple threads (runs in parallel). It takes some time to spin up, so it may appear that nothing is happening for approximately 1 minute until your cron runs and starts picking up the jobs.
