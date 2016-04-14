@@ -18,7 +18,6 @@ This is a Magento app for integrating with Reverb's API including product sync (
 
 * If you don't already have make & model fields in your magento installation, you can add them by using the Catalog->Attributes section to add two new fields (for example, "reverb_make" and "reverb_model"). Then go to Catalog->Attributes->Attribute Sets and add those fields into your default attribute set so they appear on every product. Finally, go to (System->Configuration->Reverb Configuration) and map the make and model fields to your newly created fields.
 
-* **Orders are synced only 24 hours into the past** if you just installed the extension and want to sync older orders, please edit the file at app/code/community/Reverb/ReverbSync/Helper/Orders/Retrieval/Creation.php and change MINUTES_IN_PAST_FOR_CREATION_QUERY to the number in minutes you want to go into the past. For 3 days, use 3 * 60 * 24 = 4320
 
 ## Installation: Part 1 - Install the App
 
@@ -73,7 +72,7 @@ The listing sync to Reverb can be triggered in two ways:
 
 Orders are automatically synced on a one minute cron timer. If you aren't seeing orders, please visit the Order Creation tab under Reverb and click the button to manually sync them. Please report any issues with periodic syncing to the [Reverb Magento Support Group](https://groups.google.com/forum/#!forum/reverb-magento)
 
-* Orders are synced 24 hours back from the time of sync. Older orders will not be pulled.
+* **Orders are synced only 24 hours into the past** if you just installed the extension and want to sync older orders, please edit the file at app/code/community/Reverb/ReverbSync/Helper/Orders/Retrieval/Creation.php and change MINUTES_IN_PAST_FOR_CREATION_QUERY to the number in minutes you want to go into the past. For 3 days, use 3 * 60 * 24 = 4320
 * You can select whether to sync all orders (including unpaid accepted offers) or only orders awaiting shipment, via the settings screen
 
 ## Notes on Bulk Sync
