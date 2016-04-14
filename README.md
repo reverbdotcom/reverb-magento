@@ -10,7 +10,7 @@ This is a Magento app for integrating with Reverb's API including product sync (
 * Sync orders from Reverb to Magento
 * Sync shipping number from Magento to Reverb
 * Configurable products - children are synced as individual listings on Reverb
-* Make/model/price can be mapped to attributes in your magento installation
+* Make/model/price/finish/year/shipping_profile_name can be mapped to attributes in your magento installation
 
 ## Caveats
 
