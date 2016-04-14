@@ -1,4 +1,4 @@
-## 0.9.0 (unreleased)
+## 0.9.0
 * Base image is now sent as the primary image to Reverb if there is one set
 * New syncable fields: shipping_profile_name, finish, year.  Please create your own attributes in magento for these and map them in the settings screen if you want them.
 * Description syncs on update - control whether it syncs in the settings screen.
