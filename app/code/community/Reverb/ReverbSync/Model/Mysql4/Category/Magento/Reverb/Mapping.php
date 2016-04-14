@@ -4,17 +4,38 @@
  * Created: 10/27/15
  */
 
+/**
+ * This class has been deprecated and is no longer in use
+ */
 class Reverb_ReverbSync_Model_Mysql4_Category_Magento_Reverb_Mapping extends Mage_Core_Model_Mysql4_Abstract
 {
+    public function _construct()
+    {
+        $this->_init('reverbSync/magento_reverb_category_mapping', 'xref_id');
+    }
+
+    /**
+     * @return array
+     */
+    public function getAllCategoryMappings()
+    {
+        $table_name = $this->getMainTable();
+        $readConnection = $this->getReadConnection();
+
+        $fields_to_select = array(Reverb_ReverbSync_Model_Category_Magento_Reverb_Mapping::MAGENTO_CATEGORY_ID_FIELD,
+                                    Reverb_ReverbSync_Model_Category_Magento_Reverb_Mapping::REVERB_CATEGORY_ID_FIELD);
+
+        $select = $readConnection->select()->from($table_name, $fields_to_select);
+
+        $reverb_category_ids_by_magento_category_ids = $readConnection->fetchPairs($select);
+        return $reverb_category_ids_by_magento_category_ids;
+    }
+/*
     const MAGENTO_CATEGORY_ID_FIELD = 'magento_category_id';
     const REVERB_CATEGORY_ID_FIELD = 'reverb_category_id';
 
     protected $_database_insert_columns_array = array(self::MAGENTO_CATEGORY_ID_FIELD, self::REVERB_CATEGORY_ID_FIELD);
 
-    public function _construct()
-    {
-        $this->_init('reverbSync/magento_reverb_category_mapping', 'xref_id');
-    }
 
     public function getReverbCategoryIdsByMagentoCategoryIds(array $magento_category_ids)
     {
@@ -69,4 +90,5 @@ class Reverb_ReverbSync_Model_Mysql4_Category_Magento_Reverb_Mapping extends Mag
         $rows_deleted = $this->_getWriteAdapter()->delete($this->getMainTable());
         return $rows_deleted;
     }
+*/
 }

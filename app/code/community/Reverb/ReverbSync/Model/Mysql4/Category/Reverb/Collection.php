@@ -16,4 +16,15 @@ class Reverb_ReverbSync_Model_Mysql4_Category_Reverb_Collection extends Mage_Cor
         $this->addFieldToFilter('reverb_category_id', $reverb_category_ids);
         return $this;
     }
+
+    public function addCategoryUuidFilter($category_uuid)
+    {
+        if (!is_array($category_uuid))
+        {
+            $category_uuid = array($category_uuid);
+        }
+
+        $this->addFieldToFilter(Reverb_ReverbSync_Model_Category_Reverb::UUID_FIELD, array('in' => $category_uuid));
+        return $this;
+    }
 }

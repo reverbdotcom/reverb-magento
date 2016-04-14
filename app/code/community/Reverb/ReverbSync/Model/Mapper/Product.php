@@ -182,14 +182,27 @@ class Reverb_ReverbSync_Model_Mapper_Product
         try
         {
             $gallery_image_urls_array = array();
+            // If the product has a base image set, we want that image to be the first image in the eventual images
+            //      array that is sent to Reverb
+            $base_image_url = $this->_getProductBaseImageUrl($product);
+            if (!is_null($base_image_url))
+            {
+                $gallery_image_urls_array[] = $base_image_url;
+            }
+            // Add all gallery images to the array that is sent to Reverb
             $galleryImagesCollection = $product->getMediaGalleryImages();
             if (is_object($galleryImagesCollection))
             {
                 $gallery_image_items = $galleryImagesCollection->getItems();
                 foreach($gallery_image_items as $galleryImageObject)
                 {
-                    $full_image_url = $galleryImageObject->getUrl();
-                    $gallery_image_urls_array[] = $full_image_url;
+                    $gallery_image_url = $galleryImageObject->getUrl();
+                    // If the base image is not null and the base image url is not the same as this gallery image' url
+                    if ((!is_null($base_image_url)) && (strcmp($base_image_url, $gallery_image_url)))
+                    {
+                        // Set the gallery image url to be added to the array which is communicated to Reverb
+                        $gallery_image_urls_array[] = $gallery_image_url;
+                    }
                 }
                 // Remove any potential duplicates
                 $unique_image_urls_array = array_unique($gallery_image_urls_array);
@@ -200,6 +213,24 @@ class Reverb_ReverbSync_Model_Mapper_Product
         {
             // Do nothing here
         }
+    }
+
+    /**
+     * Returns the product's base image if one is defined
+     *
+     * @param Mage_Catalog_Model_Product $product
+     * @return string|null
+     */
+    protected function _getProductBaseImageUrl(Mage_Catalog_Model_Product $product)
+    {
+        $product_base_image = $product->getImage();
+        if(empty($product_base_image) || ($product_base_image == 'no_selection'))
+        {
+            return null;
+        }
+
+        $base_image_url = Mage::getModel('catalog/product_media_config')->getMediaUrl($product_base_image);
+        return $base_image_url;
     }
 
     /**
@@ -220,6 +251,9 @@ class Reverb_ReverbSync_Model_Mapper_Product
         return $this->_reverbConditionSourceModel;
     }
 
+    /**
+     * @return Reverb_ReverbSync_Helper_Sync_Category
+     */
     protected function _getCategorySyncHelper()
     {
         if (is_null($this->_categorySyncHelper))
