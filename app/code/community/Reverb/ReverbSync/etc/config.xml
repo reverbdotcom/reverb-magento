@@ -232,7 +232,7 @@
     <jobs>
       <reverb_process_queued_listing_sync_tasks>
         <schedule>
-          <cron_expr>*/2 * * * *</cron_expr>
+          <cron_expr>* * * * *</cron_expr>
         </schedule>
         <run>
           <model>reverbSync/cron_listings_sync::attemptCronExecution</model>
@@ -241,7 +241,7 @@
 
       <reverb_process_queued_listing_image_sync_tasks>
         <schedule>
-          <cron_expr>*/2 * * * *</cron_expr>
+          <cron_expr>* * * * *</cron_expr>
         </schedule>
         <run>
           <model>reverbSync/cron_listings_images_sync::attemptCronExecution</model>

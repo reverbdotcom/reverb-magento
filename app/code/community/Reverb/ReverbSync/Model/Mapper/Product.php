@@ -28,7 +28,7 @@ class Reverb_ReverbSync_Model_Mapper_Product
     protected $_reverbConditionSourceModel = null;
     protected $_reverb_field_product_attributes = array();
 
-    protected $_reverb_fields_mapped_to_magento_attributes = array('make', 'model');
+    protected $_reverb_fields_mapped_to_magento_attributes = array('make', 'model', 'shipping_profile_name', 'finish', 'year');
 
     //LEGACY CODE: function to Map the Magento and Reverb attributes
     public function getUpdateListingWrapper(Mage_Catalog_Model_Product $product)
