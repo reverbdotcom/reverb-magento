@@ -18,7 +18,7 @@ Q: Why aren't things synced in real time, or failing to sync at all?
 
 The Reverb sync runs on a cron (magento's scheduler)  that's set to every minute for product syncs and every two minutes for order syncing. This is done so that when you save a product we won't interfere with your normal magento functions, and do all the sync in the background.
 
-However the design of Magento's cron means that other cron-based plugins that take a long time to run may interfere with other plugins. Reverb generally finishes its work in seconds, but we have seen plugins that can take many minutes to run, or even crash, preventing plugins like Reverb from finishing their work. If you're experiencing problems with your cron, you should look at var/log/cron.log, and possibly install [AOE Scheduler](https://www.magentocommerce.com/magento-connect/aoe-scheduler.html) to inspect the functioning of your cron. 
+However the design of Magento's cron means that other cron-based plugins that take a long time to run may interfere with each other. Reverb generally finishes its work in seconds, but we have seen plugins that can take many minutes to run, or even crash, preventing plugins like Reverb from finishing their work. If you're experiencing problems with your cron, you should look at var/log/cron.log, and possibly install [AOE Scheduler](https://www.magentocommerce.com/magento-connect/aoe-scheduler.html) to inspect the functioning of your cron. 
 
 If you're continuing to have cron issues, please install Reverb on a fresh magento instance without any other plugins as a test. If that works, the problem is with one of your other plugins. Please ensure you have no error messages in your cron and php logs prior to contacting Reverb Support.
 
