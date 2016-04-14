@@ -14,14 +14,6 @@ This is a Magento app for integrating with Reverb's API including product sync (
 
 ## FAQ
 
-Q: Why are my Reverb Make & Model incorrect or showing as "Unknown"
-
-**Make & Model are guessed from the title unless you map those fields **. Use the configuration screen (System->Configuration->Reverb Configuration) to map make/model fields to attribute fields in your Magento installation. If you don't have structured make/model fields, we will attempt to guess them from the title, but this is not reliable.
-
-Q: How can I map make/model and other fields?
-
-If you don't already have make & model fields in your magento installation, you can add them by using the Catalog->Attributes section to add two new fields (for example, "reverb_make" and "reverb_model"). Then go to Catalog->Attributes->Attribute Sets and add those fields into your default attribute set so they appear on every product. Finally, go to (System->Configuration->Reverb Configuration) and map the make and model fields to your newly created fields. You can do the same for other reverb attributes such as finish/year/shipping_profile_name
-
 Q: Why aren't things synced in real time, or failing to sync at all?
 
 The Reverb sync runs on a cron (magento's scheduler)  that's set to every minute for product syncs and every two minutes for order syncing. This is done so that when you save a product we won't interfere with your normal magento functions, and do all the sync in the background.
@@ -29,6 +21,14 @@ The Reverb sync runs on a cron (magento's scheduler)  that's set to every minute
 However the design of Magento's cron means that other cron-based plugins that take a long time to run may interfere with other plugins. Reverb generally finishes its work in seconds, but we have seen plugins that can take many minutes to run, or even crash, preventing plugins like Reverb from finishing their work. If you're experiencing problems with your cron, you should look at var/log/cron.log, and possibly install [AOE Scheduler](https://www.magentocommerce.com/magento-connect/aoe-scheduler.html) to inspect the functioning of your cron. 
 
 If you're continuing to have cron issues, please install Reverb on a fresh magento instance without any other plugins as a test. If that works, the problem is with one of your other plugins. Please ensure you have no error messages in your cron and php logs prior to contacting Reverb Support.
+
+Q: Why are my Reverb Make & Model incorrect or showing as "Unknown"
+
+**Make & Model are guessed from the title unless you map those fields **. Use the configuration screen (System->Configuration->Reverb Configuration) to map make/model fields to attribute fields in your Magento installation. If you don't have structured make/model fields, we will attempt to guess them from the title, but this is not reliable.
+
+Q: How can I map make/model and other fields?
+
+If you don't already have make & model fields in your magento installation, you can add them by using the Catalog->Attributes section to add two new fields (for example, "reverb_make" and "reverb_model"). Then go to Catalog->Attributes->Attribute Sets and add those fields into your default attribute set so they appear on every product. Finally, go to (System->Configuration->Reverb Configuration) and map the make and model fields to your newly created fields. You can do the same for other reverb attributes such as finish/year/shipping_profile_name
 
 
 ## Installation: Part 1 - Install the App
