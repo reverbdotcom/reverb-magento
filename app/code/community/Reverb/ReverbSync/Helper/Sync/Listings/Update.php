@@ -55,6 +55,11 @@ class Reverb_ReverbSync_Helper_Sync_Listings_Update
             $magento_attributes[] = 'name';
         }
 
+        if ($this->isDescriptionUpdateEnabled())
+        {
+            $magento_attributes[] = 'description';
+        }
+
         $reverbProductMapper = Mage::getSingleton('reverbSync/mapper_product');
         /* @var $reverbProductMapper Reverb_ReverbSync_Model_Mapper_Product */
 
