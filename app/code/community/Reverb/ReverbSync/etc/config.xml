@@ -10,7 +10,7 @@
 <config>
   <modules>
     <Reverb_ReverbSync>
-      <version>0.1.15</version>
+      <version>0.1.16</version>
     </Reverb_ReverbSync>
   </modules>
   <global>
@@ -28,6 +28,9 @@
               <magento_reverb_category_xref>
                   <table>reverb_magento_category_xref</table>
               </magento_reverb_category_xref>
+              <magento_reverb_field_mapping>
+                  <table>reverb_magento_field_mapping</table>
+              </magento_reverb_field_mapping>
               <!-- This table has been deprecated and is no longer in use -->
               <magento_reverb_category_mapping>
                   <table>reverb_magento_categories</table>
