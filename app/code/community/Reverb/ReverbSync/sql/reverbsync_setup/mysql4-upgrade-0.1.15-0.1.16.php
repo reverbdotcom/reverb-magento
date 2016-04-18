@@ -36,7 +36,7 @@ $magentoReverbFieldMappingTable =
         )->addIndex(
             $installer->getIdxName('reverbSync/magento_reverb_field_mapping', array('reverb_api_field')),
             array('reverb_api_field'),
-            array('type' => Varien_Db_Adapter_Interface::INDEX_TYPE_INDEX)
+            array('type' => Varien_Db_Adapter_Interface::INDEX_TYPE_UNIQUE)
         )
         /*
          * Magento does not have an index in the eav_attribute table where attribute_code is the first column. As such,
