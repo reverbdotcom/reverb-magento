@@ -61,7 +61,12 @@ class Reverb_ReverbSync_Adminhtml_ReverbSync_Field_MappingController
     }
 
     /**
+     * Validates that there is not already a Magento attribute mapped to the Reverb API field defined on
+     *  $mappingObjectToValidate
+     *
      * @param Reverb_ReverbSync_Model_Field_Mapping $mappingObjectToValidate
+     * @return bool
+     * @throws Exception
      */
     protected function _validateReverbFieldMappingDoesNotAlreadyExist($mappingObjectToValidate)
     {
@@ -71,6 +76,11 @@ class Reverb_ReverbSync_Adminhtml_ReverbSync_Field_MappingController
         $mappedReverbFieldObject = Mage::getModel('reverbSync/field_mapping')
                                         ->load($reverb_api_field, 'reverb_api_field');
         /* @var $mappedReverbFieldObject Reverb_ReverbSync_Model_Field_Mapping */
+        if ((!is_object($mappedReverbFieldObject)) || (!$mappedReverbFieldObject->getId()))
+        {
+            // There is no mapping in the system mapped to this Reverb API field.
+            return true;
+        }
         // Check whether the $mappingObjectToValidate passed in already exists in the system or not
         $mapping_object_id_to_validate = $mappingObjectToValidate->getId();
         if ($mapping_object_id_to_validate)
@@ -88,16 +98,12 @@ class Reverb_ReverbSync_Adminhtml_ReverbSync_Field_MappingController
         }
         else
         {
-            // This object does not already exist in the system. Verify that the $reverb_api_field on the object does
-            //      not exist in the system
-            if (is_object($mappedReverbFieldObject) && $mappedReverbFieldObject->getId())
-            {
-                // There is already a mapping to this reverb field in the system. Throw an exception
-                $mapped_magento_attribute = $mappedReverbFieldObject->getMagentoAttributeCode();
-                $error_message = $this->__(self::ERROR_FIELD_ALREADY_MAPPED_IN_SYSTEM, $reverb_api_field,
-                                           $mapped_magento_attribute);
-                throw new Exception($error_message);
-            }
+            // There is already a mapping to this reverb field in the system, and the user is attempting to create a new
+            //      mapping to this Reverb field. Throw an exception
+            $mapped_magento_attribute = $mappedReverbFieldObject->getMagentoAttributeCode();
+            $error_message = $this->__(self::ERROR_FIELD_ALREADY_MAPPED_IN_SYSTEM, $reverb_api_field,
+                                       $mapped_magento_attribute);
+            throw new Exception($error_message);
         }
     }
 
