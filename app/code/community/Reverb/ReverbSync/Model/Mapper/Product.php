@@ -283,6 +283,11 @@ class Reverb_ReverbSync_Model_Mapper_Product
         return self::REVERB_CONDITION_PRODUCT_ATTRIBUTE;
     }
 
+    /**
+     * Returns the Magento attributes which are mapped to Reverb listing sync API request fields
+     *
+     * @return array
+     */
     public function getMagentoAttributesMappedToReverbAttributes()
     {
         $magento_attribute_codes = array();
@@ -294,6 +299,14 @@ class Reverb_ReverbSync_Model_Mapper_Product
             {
                 $magento_attribute_codes[] = $attribute_code;
             }
+        }
+
+        $arbitrary_magento_to_reverb_field_mapping = $this->_getArbitraryMagentoToReverbFieldMapping();
+        foreach($arbitrary_magento_to_reverb_field_mapping as $fieldMapping)
+        {
+            /* @var $fieldMapping Reverb_ReverbSync_Model_Field_Mapping */
+            $magento_attribute_code = $fieldMapping->getMagentoAttributeCode();
+            $magento_attribute_codes[] = $magento_attribute_code;
         }
 
         return $magento_attribute_codes;
