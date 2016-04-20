@@ -1,3 +1,6 @@
+## 0.9.1
+* Reach back a day (instead of 11 minutes) for order updates. This compensates for broken or slow crons that may miss some orders. This behavior is often due to other plugins on your system slowing down cron functions.
+
 ## 0.9.0
 * Base image is now sent as the primary image to Reverb if there is one set
 * New syncable fields: shipping_profile_name, finish, year.  Please create your own attributes in magento for these and map them in the settings screen if you want them.
