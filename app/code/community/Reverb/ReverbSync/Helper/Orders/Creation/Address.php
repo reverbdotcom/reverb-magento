@@ -10,6 +10,7 @@ class Reverb_ReverbSync_Helper_Orders_Creation_Address extends Reverb_ReverbSync
     const ERROR_VALIDATING_QUOTE_ADDRESS = "While validating a quote address for a Reverb Order Sync, the address failed validation. The address's serialized data was: %s. The error message was: %s";
 
     const LOCAL_PICKUP_VALUE = 'Local Pickup';
+    const NO_ADDRESS_VALUE = 'No Address';
 
     public function addOrderAddressAsShippingAndBillingToQuote(stdClass $reverbOrderObject,
                                                                    Mage_Sales_Model_Quote $quoteToBuild)
@@ -22,8 +23,10 @@ class Reverb_ReverbSync_Helper_Orders_Creation_Address extends Reverb_ReverbSync
         $shippingAddressObject = $reverbOrderObject->shipping_address;
         if (!is_object($shippingAddressObject))
         {
-            $error_message = $this->__(self::ERROR_NO_ADDRESS);
-            throw new Exception($error_message);
+            // In this event, we still want to create the Magento order. We will populate the address fields with a
+            //      fake placeholder value
+            $this->_addNoAddressToOrderObject($reverbOrderObject);
+            $shippingAddressObject = $reverbOrderObject->shipping_address;
         }
 
         $customerAddress = $this->_getCustomerAddressForOrder($shippingAddressObject);
@@ -43,6 +46,21 @@ class Reverb_ReverbSync_Helper_Orders_Creation_Address extends Reverb_ReverbSync
         $shippingAddress->postal_code = self::LOCAL_PICKUP_VALUE;
         $shippingAddress->country_code = self::LOCAL_PICKUP_VALUE;
         $shippingAddress->phone = self::LOCAL_PICKUP_VALUE;
+
+        $reverbOrderObject->shipping_address = $shippingAddress;
+    }
+
+    protected function _addNoAddressToOrderObject(stdClass $reverbOrderObject)
+    {
+        $shippingAddress = new stdClass();
+        $shippingAddress->name = $reverbOrderObject->buyer_name;
+        $shippingAddress->street_address = self::NO_ADDRESS_VALUE;
+        $shippingAddress->extended_address = self::NO_ADDRESS_VALUE;
+        $shippingAddress->locality = self::NO_ADDRESS_VALUE;
+        $shippingAddress->region = self::NO_ADDRESS_VALUE;
+        $shippingAddress->postal_code = self::NO_ADDRESS_VALUE;
+        $shippingAddress->country_code = self::NO_ADDRESS_VALUE;
+        $shippingAddress->phone = self::NO_ADDRESS_VALUE;
 
         $reverbOrderObject->shipping_address = $shippingAddress;
     }
