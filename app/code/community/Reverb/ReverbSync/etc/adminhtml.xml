@@ -53,6 +53,11 @@
                                 <title>Category Mapping</title>
                                 <sort_order>75</sort_order>
                             </reverb_category_sync>
+                            <!-- Field Mapping -->
+                            <reverb_field_sync translate="title" module="ReverbSync">
+                                <title>Field Mapping</title>
+                                <sort_order>100</sort_order>
+                            </reverb_field_sync>
                         </children>
                     </reverb>
                 </children>
@@ -89,6 +94,11 @@
                     <action>adminhtml/ReverbSync_category_sync</action>
                     <sort_order>15</sort_order>
                 </reverb_category_sync>
+                <reverb_field_sync translate="title" module="ReverbSync">
+                    <title>Field Mapping</title>
+                    <action>adminhtml/ReverbSync_field_mapping</action>
+                    <sort_order>100</sort_order>
+                </reverb_field_sync>
             </children>
         </reverb>
     </menu>

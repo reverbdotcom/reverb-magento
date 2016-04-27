@@ -11,9 +11,11 @@ abstract class Reverb_Base_Controller_Adminhtml_Form_Abstract
     const ERROR_INVALID_OBJECT_ID = 'No object with classname %s and id %s was found in the database.';
     const ERROR_NON_PERMITTED_FIELDS_UPDATE = 'An attempt was made to modify field(s) "%s" on a %s object. No hacking of html is allowed :)';
     const ERROR_REQUIRED_FIELDS_NOT_POSTED = 'No values for required field(s) "%s" were posted for the %s object being saved. Please include the missing data and try again.';
+    const EXCEPTION_DELETING_OBJECT = 'An exception occurred while attempting to delete %s object with id %s: %s';
     const EXCEPTION_DURING_SAVE_ACTION = 'Error attempting to %s: %s';
     const SUCCESS_OBJECT_SUCESSFULLY_CREATED = '%s has been successfully created.';
     const SUCCESS_OBJECT_SUCESSFULLY_UPDATED = '%s has been successfully updated.';
+    const SUCCESS_DELETING_OBJECT = 'Successfully deleted %s object with id %s';
 
     // Documentation for these abstract classes is given in Reverb_Base_Controller_Adminhtml_Form_Interface
     abstract public function validateDataAndCreateObject($objectToSave, $posted_object_data);
@@ -151,6 +153,38 @@ abstract class Reverb_Base_Controller_Adminhtml_Form_Abstract
 
             $this->_redirect('*/*/edit', $redirect_argument);
         }
+    }
+
+    public function deleteAction()
+    {
+        $objectToDelete = $this->_initializeObjectFromParam();
+        $object_id = $this->getRequest()->getParam($this->getObjectParamName());
+
+        if ((!is_object($objectToDelete)) || (!$objectToDelete->getId()))
+        {
+            // Object Id was provided but an object was not returned from _initializeObjectFromParam()
+            $error_message = sprintf(self::ERROR_INVALID_OBJECT_ID, $this->getObjectClassname(), $object_id);
+            $error_message .= ' ' . $this->getObjectDescription() . ' deletion will not occur.';
+            $this->_getSession()->addError(Mage::helper($this->getModuleGroupname())->__($error_message));
+            $this->_redirect($this->getFullBackControllerActionPath());
+            return;
+        }
+        try
+        {
+            $objectToDelete->delete();
+
+            $success_message = $this->__(self::SUCCESS_DELETING_OBJECT, $this->getModuleInstanceDescription(),
+                                         $object_id);
+            $this->_getSession()->addSuccess(Mage::helper($this->getModuleGroupname())->__($success_message));
+        }
+        catch(Exception $e)
+        {
+            $error_message = $this->__(self::EXCEPTION_DELETING_OBJECT, $this->getModuleInstanceDescription(),
+                                       $object_id, $e->getMessage());
+            $this->_getSession()->addError(Mage::helper($this->getModuleGroupname())->__($error_message));
+        }
+
+        $this->_redirect($this->getFullBackControllerActionPath());
     }
 
     public function getEditBlockClassname()

@@ -4,7 +4,7 @@
  * Created: 9/15/15
  */
 
-interface Reverb_Base_Controller_Adminhtml_Form_Interface
+interface Reverb_Base_Controller_Adminhtml_Form_Interface extends Reverb_Base_Controller_Adminhtml_Interface
 {
     // The following methods are REQUIRED for all leaf classes which implement this interface
     /**

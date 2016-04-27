@@ -6,6 +6,11 @@
 
 class Reverb_ReverbSync_Model_Source_Product_Attribute
 {
+    /**
+     * Returns an array which has Magento product attribute codes mapped to the attribute labels
+     *
+     * @return array
+     */
     public function toOptionArray()
     {
         $product_attributes_array = Mage::getResourceModel('catalog/product_attribute_collection')->getItems();
