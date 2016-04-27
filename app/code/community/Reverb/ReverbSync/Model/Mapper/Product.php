@@ -35,6 +35,7 @@ class Reverb_ReverbSync_Model_Mapper_Product
     {
         $reverbListingWrapper = Mage::getModel('reverbSync/wrapper_listing');
         $sku = $product->getSku();
+        $sku = urlencode($sku);
         // $condition = $this->_getCondition();
 
         $fieldsArray = array('sku'=> $sku);
@@ -83,6 +84,7 @@ class Reverb_ReverbSync_Model_Mapper_Product
         $name = $product->getName();
         $description = $this->getProductDescription($product);
         $sku = $product->getSku();
+        $sku = urlencode($sku);
         $hasInventory = $this->_getHasInventory();
 
         $fieldsArray = array(
