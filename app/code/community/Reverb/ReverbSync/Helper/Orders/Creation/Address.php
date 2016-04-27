@@ -11,6 +11,9 @@ class Reverb_ReverbSync_Helper_Orders_Creation_Address extends Reverb_ReverbSync
 
     const LOCAL_PICKUP_VALUE = 'Local Pickup';
     const NO_ADDRESS_VALUE = 'No Address';
+    // If a user has Local Pickup or No Address, we don't want a country to show up in the address.
+    //      As such, use a code which will not lead to a country showing up in the admin panel
+    const UNMATCHED_COUNTRY_CODE = 'XX';
 
     public function addOrderAddressAsShippingAndBillingToQuote(stdClass $reverbOrderObject,
                                                                    Mage_Sales_Model_Quote $quoteToBuild)
@@ -44,7 +47,7 @@ class Reverb_ReverbSync_Helper_Orders_Creation_Address extends Reverb_ReverbSync
         $shippingAddress->locality = self::LOCAL_PICKUP_VALUE;
         $shippingAddress->region = self::LOCAL_PICKUP_VALUE;
         $shippingAddress->postal_code = self::LOCAL_PICKUP_VALUE;
-        $shippingAddress->country_code = self::LOCAL_PICKUP_VALUE;
+        $shippingAddress->country_code = self::UNMATCHED_COUNTRY_CODE;
         $shippingAddress->phone = self::LOCAL_PICKUP_VALUE;
 
         $reverbOrderObject->shipping_address = $shippingAddress;
@@ -59,7 +62,7 @@ class Reverb_ReverbSync_Helper_Orders_Creation_Address extends Reverb_ReverbSync
         $shippingAddress->locality = self::NO_ADDRESS_VALUE;
         $shippingAddress->region = self::NO_ADDRESS_VALUE;
         $shippingAddress->postal_code = self::NO_ADDRESS_VALUE;
-        $shippingAddress->country_code = self::NO_ADDRESS_VALUE;
+        $shippingAddress->country_code = self::UNMATCHED_COUNTRY_CODE;
         $shippingAddress->phone = self::NO_ADDRESS_VALUE;
 
         $reverbOrderObject->shipping_address = $shippingAddress;
