@@ -45,6 +45,13 @@ class Reverb_ReverbSync_Model_Sync_Product extends Reverb_ProcessQueue_Model_Tas
             /* @var $reverbSyncProductHelper Reverb_ReverbSync_Helper_Sync_Product */
             $listings_wrapper_array = $reverbSyncProductHelper->executeIndividualProductDataSync($product_id);
         }
+        catch(Reverb_ReverbSync_Model_Exception_Product_Excluded $e)
+        {
+            $error_message = Mage::helper('ReverbSync')->__(self::EXCEPTION_SYNCING_PRODUCT, $product_sku, $e->getMessage());
+            $taskExecutionResult->setTaskStatus(Reverb_ProcessQueue_Model_Task::STATUS_ABORTED);
+            $taskExecutionResult->setTaskStatusMessage($error_message);
+            return $taskExecutionResult;
+        }
         catch(Exception $e)
         {
             $error_message = Mage::helper('ReverbSync')->__(self::EXCEPTION_SYNCING_PRODUCT, $product_sku, $e->getMessage());
