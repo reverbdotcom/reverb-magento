@@ -1,3 +1,7 @@
+## 0.9.2
+* Fixes urlencoding issue affecting skus with nonstandard characters like tabs, causing them not to sync
+* New Field Mapping screen: you can now map any magento field to any reverb api field. Get a list of reverb api fields from https://reverb.com/swagger
+
 ## 0.9.1
 * Reach back a day (instead of 11 minutes) for order updates. This compensates for broken or slow crons that may miss some orders. This behavior is often due to other plugins on your system slowing down cron functions.
 
