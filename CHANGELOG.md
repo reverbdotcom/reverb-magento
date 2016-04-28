@@ -1,5 +1,5 @@
 ## 0.9.2
-* Fixes urlencoding issue affecting skus with nonstandard characters like tabs, causing them not to sync
+* Fixes issue where orders that do not have an address fail to get created in Magento
 * New Field Mapping screen: you can now map any magento field to any reverb api field. Get a list of reverb api fields from https://reverb.com/swagger
 
 ## 0.9.1
