@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Author: Sean Dunagan (https://github.com/dunagan5887)
+ *
+ * Class Reverb_ReverbSync_Block_Adminhtml_Orders_Index
+ *
+ * @method Reverb_Base_Controller_Adminhtml_Abstract getAction()
+ */
 class Reverb_ReverbSync_Block_Adminhtml_Orders_Index extends Mage_Adminhtml_Block_Widget_Container
 {
     const LAST_EXECUTED_AT_TEMPLATE = '<h3>The last Sync Task was executed at %s</h3>';
@@ -28,13 +35,21 @@ class Reverb_ReverbSync_Block_Adminhtml_Orders_Index extends Mage_Adminhtml_Bloc
 
         $this->setTemplate('ReverbSync/sales/order/index/container.phtml');
 
+        $order_sync_actions_controller = $this->getAction()->getIndexActionsController();
+        $bulk_sync_action_url = Mage::getModel('adminhtml/url')
+                                    ->getUrl('adminhtml/ReverbSync_orders_sync/bulkSync',
+                                             array('redirect_controller' => $order_sync_actions_controller));
+
         $bulk_orders_sync_process_button = array(
-            'action_url' => Mage::getModel('adminhtml/url')->getUrl('adminhtml/ReverbSync_orders_sync/bulkSync'),
+            'action_url' => $bulk_sync_action_url,
             'label' => $this->_retrieveAndProcessTasksButtonLabel()
         );
 
+        $process_downloaded_tasks_action_url = Mage::getModel('adminhtml/url')
+                                                ->getUrl('adminhtml/ReverbSync_orders_sync/syncDownloaded',
+                                                    array('redirect_controller' => $order_sync_actions_controller));
         $process_downloaded_tasks_button = array(
-            'action_url' => Mage::getModel('adminhtml/url')->getUrl('adminhtml/ReverbSync_orders_sync/syncDownloaded'),
+            'action_url' => $process_downloaded_tasks_action_url,
             'label' => $this->_processDownloadedTasksButtonLabel()
         );
 
@@ -166,6 +181,9 @@ class Reverb_ReverbSync_Block_Adminhtml_Orders_Index extends Mage_Adminhtml_Bloc
         return 'order_update';
     }
 
+    /**
+     * @return Reverb_ProcessQueue_Helper_Task_Processor
+     */
     protected function _getTaskProcessorHelper()
     {
         return Mage::helper('reverb_process_queue/task_processor');

@@ -63,7 +63,8 @@ class Reverb_ReverbSync_Adminhtml_ReverbSync_Orders_SyncController
         }
 
         Mage::getSingleton('adminhtml/session')->addNotice($this->__(self::NOTICE_QUEUED_ORDERS_FOR_SYNC));
-        $this->_redirect('*/*/index');
+
+        $this->_redirectBasedOnRequestParameter();
     }
 
     public function syncDownloadedAction()
@@ -83,7 +84,21 @@ class Reverb_ReverbSync_Adminhtml_ReverbSync_Orders_SyncController
         }
 
         Mage::getSingleton('adminhtml/session')->addNotice($this->__(self::NOTICE_PROCESSING_DOWNLOADED_TASKS));
-        $this->_redirect('*/*/index');
+
+        $this->_redirectBasedOnRequestParameter();
+    }
+
+    /**
+     * Returns the appropriate redirect path for the request based on the page which the request came from
+     *
+     * @return string
+     */
+    protected function _redirectBasedOnRequestParameter()
+    {
+        $redirect_controller_param = $this->getRequest()->getParam('redirect_controller');
+        $redirect_path_controller = (!empty($redirect_controller_param)) ? $redirect_controller_param : '*';
+        $redirect_path = sprintf('*/%s/index', $redirect_path_controller);
+        $this->_redirect($redirect_path);
     }
 
     public function canAdminUpdateStatus()
