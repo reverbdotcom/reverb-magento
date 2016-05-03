@@ -16,12 +16,12 @@ class Reverb_ReverbSync_Model_Source_Listing_Condition
     const VERY_GOOD = 'Very Good';
     const EXCELLENT = 'Excellent';
     const MINT = 'Mint';
-    const LIKE_NEW = 'Like New';
+    const B_STOCK = 'B-Stock';
     const BRAND_NEW = 'Brand New';
 
     protected $_valid_conditions_array = array(
         self::NONE, self::NON_FUNCTIONING, self::POOR, self::FAIR, self::GOOD, self::VERY_GOOD, self::EXCELLENT,
-        self::MINT, self::LIKE_NEW, self::BRAND_NEW,
+        self::MINT, self::B_STOCK, self::BRAND_NEW,
     );
 
     public function isValidConditionValue($condition_value)
@@ -66,8 +66,8 @@ class Reverb_ReverbSync_Model_Source_Listing_Condition
                     'value' => self::MINT
                 ),
                 array(
-                    'label' => Mage::helper('ReverbSync')->__(self::LIKE_NEW),
-                    'value' => self::LIKE_NEW
+                    'label' => Mage::helper('ReverbSync')->__(self::B_STOCK),
+                    'value' => self::B_STOCK
                 ),
                 array(
                     'label' => Mage::helper('ReverbSync')->__(self::BRAND_NEW),
