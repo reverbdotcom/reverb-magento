@@ -4,6 +4,12 @@
  * Created: 9/14/15
  */
 
+/**
+ * Author: Sean Dunagan (https://github.com/dunagan5887)
+ * Class Reverb_ProcessQueue_Block_Adminhtml_Task_Index
+ *
+ * @method Reverb_Base_Controller_Adminhtml_Abstract getAction()
+ */
 class Reverb_ProcessQueue_Block_Adminhtml_Task_Index
     extends Reverb_Base_Block_Adminhtml_Widget_Grid_Container
 {
