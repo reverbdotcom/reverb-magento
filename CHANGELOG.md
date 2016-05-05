@@ -1,3 +1,7 @@
+## 0.9.3
+* Uses updated B-Stock instead of Like New condition.
+* Order Creation page buttons redirect back to Order Creation page
+
 ## 0.9.2
 * Fixes issue where orders that do not have an address fail to get created in Magento
 * New Field Mapping screen: you can now map any magento field to any reverb api field. Get a list of reverb api fields from https://reverb.com/swagger
