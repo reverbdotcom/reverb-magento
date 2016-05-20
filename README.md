@@ -18,7 +18,7 @@ Please read this entire README prior to installing the application.
 
 ## FAQ
 
-Q: Why aren't things synced in real time, or failing to sync at all?
+#### Q: Why aren't things synced in real time, or failing to sync at all?
 
 If you're experiencing problems with your cron, please install [AOE Scheduler](https://www.magentocommerce.com/magento-connect/aoe-scheduler.html) to inspect the functioning of your cron.  
 
@@ -28,15 +28,15 @@ However the design of Magento's cron means that other cron-based plugins that ta
 
 If you're continuing to have cron issues, please install Reverb on a fresh magento instance without any other plugins as a test. If that works, the problem is with one of your other plugins. Please ensure you have no error messages in your cron and php logs prior to contacting Reverb Support.
 
-Q: Why are my Reverb Make & Model incorrect or showing as "Unknown"
+#### Q: Why are my Reverb Make & Model incorrect or showing as "Unknown"
 
 **Make & Model are guessed from the title unless you map those fields **. Use the configuration screen (System->Configuration->Reverb Configuration) to map make/model fields to attribute fields in your Magento installation. If you don't have structured make/model fields, we will attempt to guess them from the title, but this is not reliable.
 
-Q: How can I map make/model and other fields?
+#### Q: How can I map make/model and other fields?
 
 If you don't already have make & model fields in your magento installation, you can add them by using the Catalog->Attributes section to add two new fields (for example, "reverb_make" and "reverb_model"). Then go to Catalog->Attributes->Attribute Sets and add those fields into your default attribute set so they appear on every product. Finally, go to (System->Configuration->Reverb Configuration) and map the make and model fields to your newly created fields. You can do the same for other reverb attributes such as finish/year/shipping_profile_name
 
-Q: How can I set all my items to free shipping?
+#### Q: How can I set all my items to free shipping?
 
 1. Set up a [Reverb Shipping Profile](https://reverb.com/my/selling/shipping_rates) with free shipping ($0), called "Free Shipping".
 2. Add a magento attribute for reverb_shipping_profile from Catalog->Manage Attributes. Set a default value of "Free Shipping" (corresponding to the profile you created in step 1).
