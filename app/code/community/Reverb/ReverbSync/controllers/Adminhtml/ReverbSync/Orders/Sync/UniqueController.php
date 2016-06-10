@@ -1,7 +1,5 @@
 <?php
-
 /**
- *
  * @category    Reverb
  * @package     Reverb_ReverbSync
  * @author      Sean Dunagan
@@ -9,6 +7,11 @@
  */
 
 require_once('Reverb/ProcessQueue/controllers/Adminhtml/ProcessQueue/Unique/IndexController.php');
+
+/**
+ * Author: Sean Dunagan (https://github.com/dunagan5887)
+ * Class Reverb_ReverbSync_Adminhtml_ReverbSync_Orders_Sync_UniqueController
+ */
 class Reverb_ReverbSync_Adminhtml_ReverbSync_Orders_Sync_UniqueController
     extends Reverb_ProcessQueue_Adminhtml_ProcessQueue_Unique_IndexController
 {
@@ -56,7 +59,7 @@ class Reverb_ReverbSync_Adminhtml_ReverbSync_Orders_Sync_UniqueController
 
     public function getControllerDescription()
     {
-        return "Reverb Order Creation and Shipment Tracking Creation Sync";
+        return "Reverb Shipment Tracking Creation Sync";
     }
 
     public function getControllerActiveMenuPath()
@@ -66,7 +69,7 @@ class Reverb_ReverbSync_Adminhtml_ReverbSync_Orders_Sync_UniqueController
 
     public function getModuleInstanceDescription()
     {
-        return 'Reverb Order Creation and Shipment Tracking Sync Tasks';
+        return 'Reverb Shipment Tracking Sync Tasks';
     }
 
     public function getObjectDescription()

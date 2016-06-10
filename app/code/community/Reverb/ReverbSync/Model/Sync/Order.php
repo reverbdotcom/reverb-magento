@@ -4,6 +4,18 @@
  * Created: 8/22/15
  */
 
+/**
+ * Author: Sean Dunagan (https://github.com/dunagan5887)
+ * Class Reverb_ReverbSync_Model_Sync_Order
+ * @deprecated
+ *
+ * This class is responsible for executing the task of creating Reverb Orders in the Magento system
+ *
+ * As of 2016/05/12:
+ * This class has been deprecated. The task model responsible for updating orders now creates Reverb orders in the
+ *  Magento system. That task model is currently Reverb_ReverbSync_Model_Sync_Order_Update
+ *
+ */
 class Reverb_ReverbSync_Model_Sync_Order extends Reverb_ProcessQueue_Model_Task
 {
     const ERROR_ORDER_ALREADY_CREATED = "Reverb Order %s already exists in Magento with entity_id %s";

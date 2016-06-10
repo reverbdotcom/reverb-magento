@@ -89,7 +89,7 @@ class Reverb_ReverbSync_Block_Adminhtml_Orders_Task_Unique_Index_Grid
 
     public function setCollection($collection)
     {
-        $collection->addCodeFilter(array('order_creation', Reverb_ReverbSync_Model_Sync_Shipment_Tracking::JOB_CODE));
+        $collection->addCodeFilter(array(Reverb_ReverbSync_Model_Sync_Shipment_Tracking::JOB_CODE));
         parent::setCollection($collection);
     }
 }

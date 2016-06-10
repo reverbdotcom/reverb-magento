@@ -4,6 +4,10 @@
  * Created: 9/10/15
  */
 
+/**
+ * Author: Sean Dunagan (https://github.com/dunagan5887)
+ * Class Reverb_ReverbSync_Model_Cron_Orders_Update
+ */
 class Reverb_ReverbSync_Model_Cron_Orders_Update
     extends Reverb_Process_Model_Locked_File_Cron_Abstract
     implements Reverb_Process_Model_Locked_File_Cron_Interface

@@ -251,6 +251,7 @@
         </run>
       </reverb_process_queued_listing_image_sync_tasks>
 
+      <!-- As of 2016/05/12, orders will be created as part of the order update task
       <reverb_sync_order_creations>
         <schedule>
           <cron_expr>2,7,12,17,22,27,32,37,42,47,52,57 * * * *</cron_expr>
@@ -259,6 +260,7 @@
           <model>reverbSync/cron_orders_creation::attemptCronExecution</model>
         </run>
       </reverb_sync_order_creations>
+      -->
 
       <reverb_sync_order_updates>
         <schedule>

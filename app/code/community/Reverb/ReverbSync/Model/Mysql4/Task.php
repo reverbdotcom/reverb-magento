@@ -42,6 +42,8 @@ abstract class Reverb_ReverbSync_Model_Mysql4_Task extends Mage_Core_Model_Mysql
             $data_array_template['subject_id'] = $subject_id;
         }
 
+        $data_array_template['created_at'] = Mage::getSingleton('core/date')->gmtDate();
+
         return $data_array_template;
     }
 }
