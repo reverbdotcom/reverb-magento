@@ -5,7 +5,7 @@
  */
 
 /**
- * Class Reverb_ReverbSync_Model_Core_Config
+ * Class Reverb_ReverbSync_Model_Mysql4_Core_Config
  *
  * This class only exists to server migration reverbsync_setup/mysql4-upgrade-0.1.16-0.1.17.php
  * As of 6/9/2016 it serves no other purpose

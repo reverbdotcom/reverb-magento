@@ -8,7 +8,7 @@ $installer = $this;
 /* @var $installer Mage_Core_Model_Resource_Setup */
 $installer->startSetup();
 
-// Define the legacy condition valuen we want to update
+// Define the legacy condition value we want to update
 $legacy_condition_value = 'Like New';
 $updated_condition_value = Reverb_ReverbSync_Model_Source_Listing_Condition::B_STOCK;
 
@@ -16,7 +16,7 @@ try
 {
     // First update the core_config_data value if it is set to the legacy value we want to update
     $coreConfigAdapter = Mage::getResourceSingleton('reverbSync/core_config');
-    /* @var $coreConfigAdapter Reverb_ReverbSync_Model_Core_Config */
+    /* @var $coreConfigAdapter Reverb_ReverbSync_Model_Mysql4_Core_Config */
 
     $reverb_condition_config_path = Reverb_ReverbSync_Model_Mapper_Product::LISTING_DEFAULT_CONDITION_CONFIG_PATH;
     $default_reverb_product_condition = $coreConfigAdapter->getConfigValue($reverb_condition_config_path);
