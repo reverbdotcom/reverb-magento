@@ -163,6 +163,9 @@ class Reverb_ProcessQueue_Adminhtml_ProcessQueue_IndexController
         return 'ProcessQueue_index';
     }
 
+    /**
+     * @return Reverb_ProcessQueue_Helper_Task_Processor
+     */
     protected function _getTaskProcessor()
     {
         return Mage::helper('reverb_process_queue/task_processor');
