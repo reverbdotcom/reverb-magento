@@ -215,6 +215,9 @@ class Reverb_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
         return Mage::getModel($this->_task_model_classname)->getCollection();
     }
 
+    /**
+     * @return Reverb_ProcessQueue_Model_Mysql4_Task
+     */
     protected function _getTaskResourceSingleton()
     {
         if (is_null($this->_taskResourceSingleton))

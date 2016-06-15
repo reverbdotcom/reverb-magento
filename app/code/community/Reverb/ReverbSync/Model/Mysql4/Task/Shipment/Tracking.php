@@ -8,8 +8,8 @@ class Reverb_ReverbSync_Model_Mysql4_Task_Shipment_Tracking extends Reverb_Rever
 {
     const ERROR_ADDING_PRODUCT_DATA = 'An error occurred while adding product data to a Reverb Shipment Tracking Sync queue task object for shipment track with tracking number %s: %s';
 
-    const ORDER_CREATION_OBJECT = 'reverbSync/sync_shipment_tracking';
-    const ORDER_CREATION_METHOD = 'transmitTrackingDataToReverb';
+    const SHIPMENT_TRACKING_TASK_OBJECT = 'reverbSync/sync_shipment_tracking';
+    const SHIPMENT_TRACKING_TASK_METHOD = 'transmitTrackingDataToReverb';
 
     protected $_tracking_data_values_to_serialize = array(
         'carrier_code' => 'carrier_code',
@@ -27,7 +27,7 @@ class Reverb_ReverbSync_Model_Mysql4_Task_Shipment_Tracking extends Reverb_Rever
     protected $_reverbShipmentHelper = null;
 
     /**
-     * The unique key for the shipment tracking object syncs will be a concatentation of the following:
+     * The unique key for the shipment tracking object syncs will be a concatenation of the following:
      *
      *  reverb_order_id
      *  shipping carrier code
@@ -36,14 +36,14 @@ class Reverb_ReverbSync_Model_Mysql4_Task_Shipment_Tracking extends Reverb_Rever
      * @param Mage_Sales_Model_Order_Shipment_Track $shipmentTrackingObject
      * @return int
      */
-    public function queueOrderCreationByReverbOrderDataObject(Mage_Sales_Model_Order_Shipment_Track $shipmentTrackingObject)
+    public function queueShipmentTrackingTransmission(Mage_Sales_Model_Order_Shipment_Track $shipmentTrackingObject)
     {
         $unique_id_key = $this->_getReverbShipmentHelper()->getTrackingSyncQueueTaskUniqueId($shipmentTrackingObject);
         $reverb_order_id = $this->_getReverbShipmentHelper()
                                     ->getReverbOrderIdForMagentoShipmentTrackingObject($shipmentTrackingObject);
 
-        $insert_data_array = $this->_getUniqueInsertDataArrayTemplate(self::ORDER_CREATION_OBJECT,
-                                                                        self::ORDER_CREATION_METHOD, $unique_id_key);
+        $insert_data_array = $this->_getUniqueInsertDataArrayTemplate(self::SHIPMENT_TRACKING_TASK_OBJECT,
+                                                                        self::SHIPMENT_TRACKING_TASK_METHOD, $unique_id_key);
 
         $tracking_data = $shipmentTrackingObject->getData();
         $tracking_data_to_serialize = array_intersect_key($tracking_data, $this->_tracking_data_values_to_serialize);
@@ -86,11 +86,17 @@ class Reverb_ReverbSync_Model_Mysql4_Task_Shipment_Tracking extends Reverb_Rever
         return $task_primary_key;
     }
 
+    /**
+     * @return string
+     */
     public function getTaskCode()
     {
         return Reverb_ReverbSync_Model_Sync_Shipment_Tracking::JOB_CODE;
     }
 
+    /**
+     * @return Reverb_ReverbSync_Helper_Shipment_Data
+     */
     protected function _getReverbShipmentHelper()
     {
         if (is_null($this->_reverbShipmentHelper))

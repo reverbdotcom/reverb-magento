@@ -166,6 +166,9 @@ abstract class Reverb_ReverbSync_Helper_Orders_Retrieval extends Reverb_ReverbSy
         return $api_url_path;
     }
 
+    /**
+     * @return Reverb_ReverbSync_Model_Mysql4_Task_Order
+     */
     protected function _getOrderTaskResourceSingleton()
     {
         if (is_null($this->_orderTaskResourceSingleton))
@@ -191,6 +194,9 @@ abstract class Reverb_ReverbSync_Helper_Orders_Retrieval extends Reverb_ReverbSy
         return $this->_orderSyncHelper;
     }
 
+    /**
+     * @return Reverb_ReverbSync_Model_Log
+     */
     protected function _getLogModel()
     {
         if (is_null($this->_logModel))

@@ -58,7 +58,7 @@ class Reverb_ReverbSync_Helper_Shipment_Data extends Mage_Core_Helper_Abstract
         }
 
         $number_of_rows_inserted = Mage::getResourceSingleton('reverbSync/task_shipment_tracking')
-                                    ->queueOrderCreationByReverbOrderDataObject($shipmentTrackingObject);
+                                    ->queueShipmentTrackingTransmission($shipmentTrackingObject);
         if (!empty($number_of_rows_inserted))
         {
             $unique_id_key = $this->getTrackingSyncQueueTaskUniqueId($shipmentTrackingObject);

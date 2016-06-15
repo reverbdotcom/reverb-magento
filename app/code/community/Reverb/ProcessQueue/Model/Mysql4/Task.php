@@ -114,7 +114,7 @@ class Reverb_ProcessQueue_Model_Mysql4_Task extends Mage_Core_Model_Mysql4_Abstr
         return $rows_deleted;
     }
 
-    public function deleteAllTasks($task_code = null)
+    public function deleteAllTasks($task_code = null, $statuses_to_delete = array())
     {
         if(!empty($task_code))
         {
@@ -122,7 +122,14 @@ class Reverb_ProcessQueue_Model_Mysql4_Task extends Mage_Core_Model_Mysql4_Abstr
             {
                 $task_code = array($task_code);
             }
+
             $where_condition_array = array('code in (?)' => $task_code);
+
+            if (!empty($statuses_to_delete))
+            {
+                $where_condition_array['status in (?)'] = $statuses_to_delete;
+            }
+
             $rows_deleted = $this->_getWriteAdapter()->delete($this->getMainTable(), $where_condition_array);
         }
         else

@@ -6,6 +6,8 @@ class Reverb_ReverbSync_Block_Adminhtml_Orders_Unique_Index extends Reverb_Rever
     {
         parent::__construct();
 
+        $this->_removeButton('bulk_orders_sync', 'sync_downloaded_tasks');
+
         $sync_shipment_tracking_action_url = Mage::getModel('adminhtml/url')
                                                 ->getUrl('adminhtml/ReverbSync_orders_sync_unique/syncShipmentTracking');
 
@@ -19,22 +21,22 @@ class Reverb_ReverbSync_Block_Adminhtml_Orders_Unique_Index extends Reverb_Rever
 
     protected function _retrieveAndProcessTasksButtonLabel()
     {
-        return 'Download and Create New Orders';
+        return '';
     }
 
     protected function _processDownloadedTasksButtonLabel()
     {
-        return 'Create Downloaded Orders';
+        return '';
     }
 
     protected function _getHeaderTextTemplate()
     {
-        return '%s of %s Reverb Order Creation and Shipment Tracking Tasks have completed syncing with Magento';
+        return '%s of %s Reverb Shipment Tracking Tasks have completed syncing with Magento';
     }
 
     protected function _getTaskCode()
     {
-        return array('order_creation', Reverb_ReverbSync_Model_Sync_Shipment_Tracking::JOB_CODE);
+        return array(Reverb_ReverbSync_Model_Sync_Shipment_Tracking::JOB_CODE);
     }
 
     protected function _getTaskProcessorHelper()

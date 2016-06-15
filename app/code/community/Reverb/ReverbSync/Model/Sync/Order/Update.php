@@ -8,7 +8,10 @@ class Reverb_ReverbSync_Model_Sync_Order_Update extends Reverb_ProcessQueue_Mode
 {
     const ERROR_ORDER_NOT_CREATED = 'Reverb Order with id %s has not been created in the Magento system yet';
     const EXCEPTION_EXECUTING_STATUS_UPDATE = 'Exception occurred while executing the status update for order with magento entity id %s to status %s: %s';
+    const EXCEPTION_CREATING_ORDER = 'An exception occurred while creating order with Reverb Order Number %s: %s';
     const SUCCESS_ORDER_STATUS_UPDATED = 'The order\'s status has been updated to %s';
+
+    protected $_orderCreationHelper = null;
 
     public function updateReverbOrderInMagento(stdClass $argumentsObject)
     {
@@ -26,10 +29,19 @@ class Reverb_ReverbSync_Model_Sync_Order_Update extends Reverb_ProcessQueue_Mode
 
         if (empty($magento_order_entity_id))
         {
-            // Need to wait for the order to be created
-            $error_message = Mage::helper('ReverbSync')->__(self::ERROR_ORDER_NOT_CREATED, $reverb_order_number);
-            // Set this task to be processed again
-            return $this->_returnErrorCallbackResult($error_message);
+            // In this event, we will create the order
+            try
+            {
+                $magentoOrder = $this->_getOrderCreationHelper()->createMagentoOrder($argumentsObject);
+            }
+            catch(Exception $e)
+            {
+                // In this event, log the error and return an Abort status
+                $error_message = Mage::helper('ReverbSync')->__(self::EXCEPTION_CREATING_ORDER, $reverb_order_number,
+                                                                $e->getMessage());
+                Mage::getSingleton('reverbSync/log')->logOrderSyncError($error_message);
+                return $this->_returnAbortCallbackResult($error_message);
+            }
         }
 
         $reverb_order_status = $argumentsObject->status;
@@ -77,5 +89,18 @@ class Reverb_ReverbSync_Model_Sync_Order_Update extends Reverb_ProcessQueue_Mode
 
         $success_message = Mage::helper('ReverbSync')->__(self::SUCCESS_ORDER_STATUS_UPDATED, $reverb_order_status);
         return $this->_returnSuccessCallbackResult($success_message);
+    }
+
+    /**
+     * @return Reverb_ReverbSync_Helper_Orders_Creation
+     */
+    protected function _getOrderCreationHelper()
+    {
+        if (is_null($this->_orderCreationHelper))
+        {
+            $this->_orderCreationHelper = Mage::helper('ReverbSync/orders_creation');
+        }
+
+        return $this->_orderCreationHelper;
     }
 }

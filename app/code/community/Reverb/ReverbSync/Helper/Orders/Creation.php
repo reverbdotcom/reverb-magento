@@ -12,6 +12,7 @@ class Reverb_ReverbSync_Helper_Orders_Creation extends Reverb_ReverbSync_Helper_
     const INVALID_CURRENCY_CODE = 'An invalid currency code %s was defined.';
     const EXCEPTION_UPDATE_STORE_NAME = 'An error occurred while setting the store name to %s for order with Reverb Order Id #%s: %s';
     const EXCEPTION_CONFIGURED_STORE_ID = 'An exception occurred while attempting to load the store with the configured store id of %s: %s';
+    const EXCEPTION_REVERB_ORDER_CREATION_EVENT_OBSERVER = 'An exception occurred while firing the reverb_order_creation event for order with Reverb Order Number #%s: %s';
 
     const STORE_TO_SYNC_ORDERS_TO_CONFIG_PATH = 'ReverbSync/orders_sync/store_to_sync_order_to';
 
@@ -90,6 +91,21 @@ class Reverb_ReverbSync_Helper_Orders_Creation extends Reverb_ReverbSync_Helper_
         {
             // Log the exception but don't stop execution
             $error_message = $this->__(self::EXCEPTION_UPDATE_STORE_NAME, self::REVERB_ORDER_STORE_NAME, $reverb_order_number, $e->getMessage());
+            $this->_logOrderSyncError($error_message);
+        }
+
+        try
+        {
+            // Dispatch an event for clients to hook in to regarding order creation
+            Mage::dispatchEvent('reverb_order_created',
+                                array('magento_order_object' => $order, 'reverb_order_object' => $reverbOrderObject)
+            );
+        }
+        catch(Exception $e)
+        {
+            // Log the exception but don't stop execution
+            $error_message = $this->__(self::EXCEPTION_REVERB_ORDER_CREATION_EVENT_OBSERVER, $reverb_order_number,
+                                        $e->getMessage());
             $this->_logOrderSyncError($error_message);
         }
 

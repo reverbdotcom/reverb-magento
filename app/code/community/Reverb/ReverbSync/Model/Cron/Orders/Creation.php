@@ -4,6 +4,13 @@
  * Created: 8/14/15
  */
 
+/**
+ * Author: Sean Dunagan (https://github.com/dunagan5887)
+ * Class Reverb_ReverbSync_Model_Cron_Orders_Creation
+ * @deprecated
+ *
+ * As of 2016/05/12, this class is deprecated. Orders are now created via the order update task process
+ */
 class Reverb_ReverbSync_Model_Cron_Orders_Creation
     extends Reverb_Process_Model_Locked_File_Cron_Abstract
     implements Reverb_Process_Model_Locked_File_Cron_Interface

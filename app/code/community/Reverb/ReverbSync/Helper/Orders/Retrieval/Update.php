@@ -7,11 +7,16 @@
 class Reverb_ReverbSync_Helper_Orders_Retrieval_Update extends Reverb_ReverbSync_Helper_Orders_Retrieval
 {
     const ORDERS_UPDATE_RETRIEVAL_URL_TEMPLATE = '/api/my/orders/selling/all?updated_start_date=%s';
+
     // Reach back a day for updates
     const MINUTES_IN_PAST_FOR_UPDATE_QUERY = 1440;
 
     protected $_orderUpdateTaskResourceSingleton = null;
 
+    /**
+     * @param stdClass $orderDataObject
+     * @return int
+     */
     public function queueOrderActionByReverbOrderDataObject(stdClass $orderDataObject)
     {
         return $this->_getOrderUpdateTaskResourceSingleton()->queueOrderUpdateByReverbOrderDataObject($orderDataObject);
@@ -37,6 +42,9 @@ class Reverb_ReverbSync_Helper_Orders_Retrieval_Update extends Reverb_ReverbSync
         return 'update';
     }
 
+    /**
+     * @return Reverb_ReverbSync_Model_Mysql4_Task_Order_Update
+     */
     protected function _getOrderUpdateTaskResourceSingleton()
     {
         if (is_null($this->_orderUpdateTaskResourceSingleton))

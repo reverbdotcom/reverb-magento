@@ -4,6 +4,13 @@
  * Created: 9/10/15
  */
 
+/**
+ * Author: Sean Dunagan (https://github.com/dunagan5887)
+ * Class Reverb_ReverbSync_Helper_Orders_Retrieval_Creation
+ * @deprecated
+ *
+ * As of 2016/05/12, this class is deprecated. Orders are now created via the order update task process
+ */
 class Reverb_ReverbSync_Helper_Orders_Retrieval_Creation
     extends Reverb_ReverbSync_Helper_Orders_Retrieval
 {
