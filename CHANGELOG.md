@@ -1,3 +1,7 @@
+## 0.9.4
+* Migrates all Like New items to B-Stock.
+* Simplifies order sync by creating / updating orders in one cron job
+
 ## 0.9.3
 * Uses updated B-Stock instead of Like New condition.
 * Order Creation page buttons redirect back to Order Creation page

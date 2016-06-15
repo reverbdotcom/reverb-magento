@@ -11,7 +11,7 @@ class Reverb_ReverbSync_Model_Adapter_Curl
     const POST_DATA_ARGUMENT_TEMPLATE = "--data '%s'";
     const POST_ERROR_LOG_TEMPLATE = 'The following error occurred with the post above: %s';
     const CURL_ERROR_TEMPLATE = "Curl error number %s occurred with the following error message: %s";
-    const USER_AGENT_TEMPLATE = 'Reverb-Magento ReverbMagentoVersion=0.9.3 MagentoVersion=%s MagentoDomain=%s';
+    const USER_AGENT_TEMPLATE = 'Reverb-Magento ReverbMagentoVersion=0.9.4 MagentoVersion=%s MagentoDomain=%s';
     const MAGENTO_VERSION_TEMPLATE = '%s';
 
     const PUT_CUSTOM_REQUEST_VALUE = 'PUT';
