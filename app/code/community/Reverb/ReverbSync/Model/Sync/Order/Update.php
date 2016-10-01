@@ -46,10 +46,16 @@ class Reverb_ReverbSync_Model_Sync_Order_Update extends Reverb_ProcessQueue_Mode
 
         $reverb_order_status = $argumentsObject->status;
 
-        return $this->_executeStatusUpdate($magento_order_entity_id, $reverb_order_status);
+        return $this->_executeStatusUpdate($magento_order_entity_id, $reverb_order_status, $argumentsObject);
     }
 
-    protected function _executeStatusUpdate($magento_order_entity_id, $reverb_order_status)
+    /**
+     * @param int $magento_order_entity_id
+     * @param string $reverb_order_status
+     * @param stdClass $argumentsObject
+     * @return false|Mage_Core_Model_Abstract
+     */
+    protected function _executeStatusUpdate($magento_order_entity_id, $reverb_order_status, $argumentsObject)
     {
         try
         {
@@ -61,7 +67,8 @@ class Reverb_ReverbSync_Model_Sync_Order_Update extends Reverb_ProcessQueue_Mode
             // Fire event to allow for executing functionality upon order cancels/refunds
             Mage::dispatchEvent($event_name,
                                     array('order_entity_id' => $magento_order_entity_id,
-                                          'reverb_order_status' => $reverb_order_status)
+                                          'reverb_order_status' => $reverb_order_status,
+                                          'reverb_order_update_arguments_object' => $argumentsObject)
             );
             // Update the reverb_order_status field on the sales_flat_order table
             $updated_rows = Mage::getResourceSingleton('reverbSync/order')

@@ -16,12 +16,19 @@ class Reverb_ReverbSync_Model_Observer_Orders_Update
         Mage::helper('ReverbSync/orders_update_cancel')->executeMagentoOrderCancel($magentoOrder, $reverb_order_status);
     }
 
+    /**
+     * @param Varien_Event_Observer $observer
+     * @throws Reverb_ReverbSync_Model_Exception_Data_Order
+     */
     public function executeMagentoOrderPaid($observer)
     {
         $magento_order_entity_id = $observer->getData('order_entity_id');
         $magentoOrder = $this->_initializeMagentoOrder($magento_order_entity_id);
         $reverb_order_status = $observer->getData('reverb_order_status');
-        Mage::helper('ReverbSync/orders_update_paid')->executeMagentoOrderPaid($magentoOrder, $reverb_order_status);
+        $orderUpdateArgumentsObject = $observer->getData('reverb_order_update_arguments_object');
+        $paidOrderUpdateHelper = Mage::helper('ReverbSync/orders_update_paid');
+        /* @var Reverb_ReverbSync_Helper_Orders_Update_Paid $paidOrderUpdateHelper */
+        $paidOrderUpdateHelper->executeMagentoOrderPaid($magentoOrder, $reverb_order_status, $orderUpdateArgumentsObject);
     }
 
     /**

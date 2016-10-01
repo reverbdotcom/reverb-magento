@@ -18,17 +18,39 @@ class Reverb_ReverbSync_Helper_Orders_Update_Paid extends Reverb_ReverbSync_Help
      *
      * @param Mage_Sales_Model_Order $magentoOrder
      * @param string                 $reverb_order_status
+     * @param stdClass               $orderUpdateArgumentsObject
      */
-    public function executeMagentoOrderPaid(Mage_Sales_Model_Order $magentoOrder, $reverb_order_status)
+    public function executeMagentoOrderPaid(Mage_Sales_Model_Order $magentoOrder, $reverb_order_status,
+                                            stdClass $orderUpdateArgumentsObject)
     {
-        $invoice = $this->_initInvoice($magentoOrder);
-        $invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_ONLINE);
-        $invoice->register();
+        $transactionSave = Mage::getModel('core/resource_transaction');
+        /* @var Mage_Core_Model_Resource_Transaction $transactionSave */
+        // Keep track of whether or not we need to save the database transaction
+        $need_to_save_transaction = false;
+        // Check if this order has already been fully invoiced
+        if (!$this->_isOrderAlreadyFullyInvoiced($magentoOrder))
+        {
+            $invoice = $this->_initInvoice($magentoOrder);
+            $invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_ONLINE);
+            $invoice->register();
 
-        $transactionSave = Mage::getModel('core/resource_transaction')
-                               ->addObject($invoice)
-                               ->addObject($invoice->getOrder());
-        $transactionSave->save();
+            $transactionSave->addObject($invoice)
+                            ->addObject($invoice->getOrder());
+            $need_to_save_transaction = true;
+        }
+        // Check to see if this order's shipping address will need to be updated
+        $potentiallyUpdateOrderAddress
+            = $this->updateAndReturnOrderShippingAddressIfNecessary($magentoOrder, $orderUpdateArgumentsObject);
+        if (!is_null($potentiallyUpdateOrderAddress))
+        {
+            $transactionSave->addObject($potentiallyUpdateOrderAddress);
+            $need_to_save_transaction = true;
+        }
+        // Don't execute a database transaction save unless we have actually updated objects
+        if ($need_to_save_transaction)
+        {
+            $transactionSave->save();
+        }
     }
 
     /**
@@ -43,7 +65,9 @@ class Reverb_ReverbSync_Helper_Orders_Update_Paid extends Reverb_ReverbSync_Help
             $this->_inspectWhyCanNotUpdateAndThrowException($magentoOrder);
         }
 
-        $magentoInvoice = Mage::getModel('sales/service_order', $magentoOrder)->prepareInvoice(array());
+        $magentoOrderService = Mage::getModel('sales/service_order', $magentoOrder);
+        /* @var Mage_Sales_Model_Service_Order $magentoOrderService */
+        $magentoInvoice = $magentoOrderService->prepareInvoice(array());
         if (!$magentoInvoice->getTotalQty())
         {
             $this->_throwCanNotUpdateException($magentoOrder, self::NO_PRODUCTS_INVOICED);
