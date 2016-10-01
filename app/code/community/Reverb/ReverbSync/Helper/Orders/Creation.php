@@ -37,6 +37,7 @@ class Reverb_ReverbSync_Helper_Orders_Creation extends Reverb_ReverbSync_Helper_
 
         $storeId = $this->_getStoreId();
         $quoteToBuild = Mage::getModel('sales/quote')->setStoreId($storeId);
+        /* @var $quoteToBuild Mage_Sales_Model_Quote */
         $reverb_order_number = $reverbOrderObject->order_number;
 
         if (Mage::helper('ReverbSync/orders_sync')->isOrderSyncSuperModeEnabled())
@@ -66,6 +67,7 @@ class Reverb_ReverbSync_Helper_Orders_Creation extends Reverb_ReverbSync_Helper_
 
         // The calling block will handle catching any exceptions occurring from the calls below
         $service = Mage::getModel('sales/service_quote', $quoteToBuild);
+        /* @var Mage_Sales_Model_Service_Quote $service */
         $service->submitAll();
 
         $order = $service->getOrder();

@@ -9,6 +9,9 @@ class Reverb_ReverbSync_Model_Observer_Orders
     protected $_reverbShippingHelper = null;
     protected $_reverbPaymentHelper = null;
 
+    /**
+     * @param Varien_Event_Observer $observer
+     */
     public function checkForSyncingReverbOrderForShipping($observer)
     {
         $orderBeingSynced = $this->_getReverbShippingHelper()->getOrderBeingSyncedInRegistry();

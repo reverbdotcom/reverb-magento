@@ -13,6 +13,9 @@ class Reverb_ReverbSync_Helper_Orders_Creation_Helper extends Mage_Core_Helper_A
     protected $_addressHelper = null;
     protected $_customerHelper = null;
 
+    /**
+     * @return Reverb_ReverbSync_Helper_Orders_Creation_Shipping
+     */
     protected function _getShippingHelper()
     {
         if (is_null($this->_shippingHelper))
@@ -23,6 +26,9 @@ class Reverb_ReverbSync_Helper_Orders_Creation_Helper extends Mage_Core_Helper_A
         return $this->_shippingHelper;
     }
 
+    /**
+     * @return Reverb_ReverbSync_Helper_Orders_Creation_Payment
+     */
     protected function _getPaymentHelper()
     {
         if (is_null($this->_paymentHelper))
@@ -33,6 +39,9 @@ class Reverb_ReverbSync_Helper_Orders_Creation_Helper extends Mage_Core_Helper_A
         return $this->_paymentHelper;
     }
 
+    /**
+     * @return Reverb_ReverbSync_Helper_Orders_Creation_Address
+     */
     protected function _getAddressHelper()
     {
         if (is_null($this->_addressHelper))
@@ -43,6 +52,9 @@ class Reverb_ReverbSync_Helper_Orders_Creation_Helper extends Mage_Core_Helper_A
         return $this->_addressHelper;
     }
 
+    /**
+     * @return Reverb_ReverbSync_Helper_Orders_Creation_Customer
+     */
     protected function _getCustomerHelper()
     {
         if (is_null($this->_customerHelper))

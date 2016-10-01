@@ -13,6 +13,7 @@ class Reverb_ReverbSync_Helper_Orders_Creation_Customer extends Reverb_ReverbSyn
     public function addCustomerToQuote(stdClass $reverbOrderObject, Mage_Sales_Model_Quote $quoteToBuild)
     {
         $magentoCustomerObject = Mage::getModel('customer/customer');
+        /* @var Mage_Customer_Model_Customer $magentoCustomerObject */
         $reverb_order_number = $reverbOrderObject->order_number;
 
         try
