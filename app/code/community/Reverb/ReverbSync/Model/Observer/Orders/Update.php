@@ -4,16 +4,25 @@
  * Created: 10/28/15
  */
 
+/**
+ * Class Reverb_ReverbSync_Model_Observer_Orders_Update
+ */
 class Reverb_ReverbSync_Model_Observer_Orders_Update
 {
     const ERROR_INVALID_ORDER_ENTITY_ID = 'Magento order entity id %s does not correspond to an order in the system';
 
+    /**
+     * @param Varien_Event_Observer $observer
+     * @throws Reverb_ReverbSync_Model_Exception_Data_Order
+     */
     public function executeMagentoOrderCancel($observer)
     {
         $magento_order_entity_id = $observer->getData('order_entity_id');
         $magentoOrder = $this->_initializeMagentoOrder($magento_order_entity_id);
         $reverb_order_status = $observer->getData('reverb_order_status');
-        Mage::helper('ReverbSync/orders_update_cancel')->executeMagentoOrderCancel($magentoOrder, $reverb_order_status);
+        $cancelOrderUpdateHelper = Mage::helper('ReverbSync/orders_update_cancel');
+        /* @var Reverb_ReverbSync_Helper_Orders_Update_Cancel $cancelOrderUpdateHelper */
+        $cancelOrderUpdateHelper->executeMagentoOrderCancel($magentoOrder, $reverb_order_status);
     }
 
     /**
@@ -29,6 +38,36 @@ class Reverb_ReverbSync_Model_Observer_Orders_Update
         $paidOrderUpdateHelper = Mage::helper('ReverbSync/orders_update_paid');
         /* @var Reverb_ReverbSync_Helper_Orders_Update_Paid $paidOrderUpdateHelper */
         $paidOrderUpdateHelper->executeMagentoOrderPaid($magentoOrder, $reverb_order_status, $orderUpdateArgumentsObject);
+    }
+
+    /**
+     * @param Varien_Event_Observer $observer
+     * @throws Reverb_ReverbSync_Model_Exception_Data_Order
+     */
+    public function executeMagentoOrderShipped($observer)
+    {
+        $magento_order_entity_id = $observer->getData('order_entity_id');
+        $magentoOrder = $this->_initializeMagentoOrder($magento_order_entity_id);
+        $reverb_order_status = $observer->getData('reverb_order_status');
+        $orderUpdateArgumentsObject = $observer->getData('reverb_order_update_arguments_object');
+        $shippedOrderUpdateHelper = Mage::helper('ReverbSync/orders_update_shipped');
+        /* @var Reverb_ReverbSync_Helper_Orders_Update_Shipped $shippedOrderUpdateHelper */
+        $shippedOrderUpdateHelper->executeMagentoOrderShipped($magentoOrder, $reverb_order_status, $orderUpdateArgumentsObject);
+    }
+
+    /**
+     * @param Varien_Event_Observer $observer
+     * @throws Reverb_ReverbSync_Model_Exception_Data_Order
+     */
+    public function executeMagentoOrderUnpaid($observer)
+    {
+        $magento_order_entity_id = $observer->getData('order_entity_id');
+        $magentoOrder = $this->_initializeMagentoOrder($magento_order_entity_id);
+        $reverb_order_status = $observer->getData('reverb_order_status');
+        $orderUpdateArgumentsObject = $observer->getData('reverb_order_update_arguments_object');
+        $unpaidOrderUpdateHelper = Mage::helper('ReverbSync/orders_update_unpaid');
+        /* @var Reverb_ReverbSync_Helper_Orders_Update_Unpaid $unpaidOrderUpdateHelper */
+        $unpaidOrderUpdateHelper->executeMagentoOrderUnpaid($magentoOrder, $reverb_order_status, $orderUpdateArgumentsObject);
     }
 
     /**

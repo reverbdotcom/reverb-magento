@@ -107,6 +107,26 @@
                 </execute_magento_order_paid>
             </observers>
         </reverb_order_status_update_paid>
+
+      <reverb_order_status_update_shipped>
+        <observers>
+          <execute_magento_order_shipped>
+            <type>singleton</type>
+            <class>Reverb_ReverbSync_Model_Observer_Orders_Update</class>
+            <method>executeMagentoOrderShipped</method>
+          </execute_magento_order_shipped>
+        </observers>
+      </reverb_order_status_update_shipped>
+
+        <reverb_order_status_update_unpaid>
+            <observers>
+                <execute_magento_order_unpaid>
+                    <type>singleton</type>
+                    <class>Reverb_ReverbSync_Model_Observer_Orders_Update</class>
+                    <method>executeMagentoOrderUnpaid</method>
+                </execute_magento_order_unpaid>
+            </observers>
+        </reverb_order_status_update_unpaid>
     </events>
     <blocks>
       <ReverbSync>

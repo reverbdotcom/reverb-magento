@@ -4,6 +4,9 @@
  * Created: 11/7/15
  */
 
+/**
+ * Class Reverb_ReverbSync_Helper_Orders_Update_Abstract
+ */
 abstract class Reverb_ReverbSync_Helper_Orders_Update_Abstract extends Mage_Core_Helper_Abstract
 {
     const ORDER_CAN_NOT_BE_UPDATED = 'The Magento order with increment id %s can not be %s: %s';
@@ -15,7 +18,10 @@ abstract class Reverb_ReverbSync_Helper_Orders_Update_Abstract extends Mage_Core
     const REASON_COMPLETE = 'The order has already been marked as complete';
     const REASON_CLOSED = 'The order has already been marked as closed';
     const REASON_DEFAULT = 'The order can not be cancelled';
-    
+
+    /**
+     * @return string
+     */
     abstract public function getUpdateAction();
 
     /**

@@ -4,10 +4,16 @@
  * Created: 11/7/15
  */
 
+/**
+ * Class Reverb_ReverbSync_Helper_Orders_Update_Paid
+ */
 class Reverb_ReverbSync_Helper_Orders_Update_Paid extends Reverb_ReverbSync_Helper_Orders_Update_Abstract
 {
     const NO_PRODUCTS_INVOICED = 'The invoice did not contain any products';
 
+    /**
+     * {@inheritdoc}
+     */
     public function getUpdateAction()
     {
         return 'invoiced';
@@ -39,11 +45,11 @@ class Reverb_ReverbSync_Helper_Orders_Update_Paid extends Reverb_ReverbSync_Help
             $need_to_save_transaction = true;
         }
         // Check to see if this order's shipping address will need to be updated
-        $potentiallyUpdateOrderAddress
+        $potentiallyUpdatedOrderAddress
             = $this->updateAndReturnOrderShippingAddressIfNecessary($magentoOrder, $orderUpdateArgumentsObject);
-        if (!is_null($potentiallyUpdateOrderAddress))
+        if (!is_null($potentiallyUpdatedOrderAddress))
         {
-            $transactionSave->addObject($potentiallyUpdateOrderAddress);
+            $transactionSave->addObject($potentiallyUpdatedOrderAddress);
             $need_to_save_transaction = true;
         }
         // Don't execute a database transaction save unless we have actually updated objects
