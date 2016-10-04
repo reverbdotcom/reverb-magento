@@ -16,6 +16,22 @@ Please read this entire README prior to installing the application.
 * Configurable products - children are synced as individual listings on Reverb
 * Make/model/price/finish/year/shipping_profile_name can be mapped to attributes in your magento installation
 
+## Professional Support
+
+If you need support with your Magento install or integration of this plugin with your Magento instance, please contact the following:
+
+##### Sean Dunagan
+
+Github: [dunagan5887](https://github.com/dunagan588700)
+
+Email: [dunagan5887@gmail.com](mailto:dunagan5887@gmail.com?Subject=Reverb%20Magento%20Plugin)
+
+##### Timur Zaynullin
+
+Github: [zztimur](https://github.com/zztimur)
+
+Email: [zztimur@gmail.com](mailto:zztimur@gmail.com?Subject=Reverb%20Magento%20Plugin)
+
 ## FAQ
 
 #### Q: Why aren't things synced in real time, or failing to sync at all?
