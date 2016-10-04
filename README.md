@@ -18,7 +18,7 @@ Please read this entire README prior to installing the application.
 
 ## Professional Support
 
-If you need support with your Magento install or integration of this plugin with your Magento instance, please contact the following:
+If you need help with your Magento install or integration of this plugin with your Magento instance, please contact these independent consultants for support. Please note that Reverb does not manage these relationships or support the plugin directly.
 
 ##### Sean Dunagan
 
