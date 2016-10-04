@@ -24,13 +24,13 @@ If you need help with your Magento install or integration of this plugin with yo
 
 Github: [dunagan5887](https://github.com/dunagan588700)
 
-Email: [dunagan5887 at gmail.com](mailto:dunagan5887+at+gmail.com?Subject=Reverb%20Magento%20Plugin)
+Email: [dunagan5887@gmail.com](mailto:dunagan5887@gmail.com?Subject=Reverb%20Magento%20Plugin)
 
 ##### Timur Zaynullin
 
 Github: [zztimur](https://github.com/zztimur)
 
-Email: [zztimur at gmail.com](mailto:zztimur+at+gmail.com?Subject=Reverb%20Magento%20Plugin)
+Email: [zztimur@gmail.com](mailto:zztimur@gmail.com?Subject=Reverb%20Magento%20Plugin)
 
 ## FAQ
 
