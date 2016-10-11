@@ -29,32 +29,19 @@ class Reverb_ReverbSync_Helper_Orders_Update_Paid extends Reverb_ReverbSync_Help
     public function executeMagentoOrderPaid(Mage_Sales_Model_Order $magentoOrder, $reverb_order_status,
                                             stdClass $orderUpdateArgumentsObject)
     {
-        $transactionSave = Mage::getModel('core/resource_transaction');
-        /* @var Mage_Core_Model_Resource_Transaction $transactionSave */
-        // Keep track of whether or not we need to save the database transaction
-        $need_to_save_transaction = false;
         // Check if this order has already been fully invoiced
         if (!$this->_isOrderAlreadyFullyInvoiced($magentoOrder))
         {
+            // Invoice the order
             $invoice = $this->_initInvoice($magentoOrder);
             $invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_ONLINE);
             $invoice->register();
 
+            // Save the order and the invoice in a database transaction
+            $transactionSave = Mage::getModel('core/resource_transaction');
+            /* @var Mage_Core_Model_Resource_Transaction $transactionSave */
             $transactionSave->addObject($invoice)
                             ->addObject($invoice->getOrder());
-            $need_to_save_transaction = true;
-        }
-        // Check to see if this order's shipping address will need to be updated
-        $potentiallyUpdatedOrderAddress
-            = $this->updateAndReturnOrderShippingAddressIfNecessary($magentoOrder, $orderUpdateArgumentsObject);
-        if (!is_null($potentiallyUpdatedOrderAddress))
-        {
-            $transactionSave->addObject($potentiallyUpdatedOrderAddress);
-            $need_to_save_transaction = true;
-        }
-        // Don't execute a database transaction save unless we have actually updated objects
-        if ($need_to_save_transaction)
-        {
             $transactionSave->save();
         }
     }

@@ -38,7 +38,7 @@ abstract class Reverb_ReverbSync_Helper_Orders_Update_Abstract extends Mage_Core
      * @param stdClass $orderArgumentObject
      * @return Mage_Sales_Model_Order_Address|null
      */
-    public function updateAndReturnOrderShippingAddressIfNecessary(Mage_Sales_Model_Order $magentoOrder, stdClass $orderArgumentObject)
+    public function updateOrderShippingAddressIfNecessary(Mage_Sales_Model_Order $magentoOrder, stdClass $orderArgumentObject)
     {
         // Get the shipping address for the order
         $orderShippingAddress = $magentoOrder->getShippingAddress();
@@ -63,7 +63,9 @@ abstract class Reverb_ReverbSync_Helper_Orders_Update_Abstract extends Mage_Core
         $has_a_field_been_updated = false;
         foreach($arguments_object_order_data_array as $field => $arguments_object_value)
         {
-
+            // Trim the $arguments_object_value before comparing to the shipping address's value to avoid making
+            //  superficial updates to the address object
+            $arguments_object_value = trim($arguments_object_value);
             $order_address_value = $orderShippingAddress->getData($field);
             if ($order_address_value != $arguments_object_value)
             {
@@ -76,10 +78,8 @@ abstract class Reverb_ReverbSync_Helper_Orders_Update_Abstract extends Mage_Core
         if ($has_a_field_been_updated)
         {
             // If so, return the updated order address object
-            return $orderShippingAddress;
+            $orderShippingAddress->save();
         }
-        // If not, return null
-        return null;
     }
 
     /**

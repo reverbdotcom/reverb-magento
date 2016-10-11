@@ -62,9 +62,15 @@ class Reverb_ReverbSync_Model_Sync_Order_Update extends Reverb_ProcessQueue_Mode
             // Start a database transaction
             Mage::getResourceSingleton('sales/order')->beginTransaction();
 
-            $event_name = 'reverb_order_status_update_' . $reverb_order_status;
+            // Fire a general event denoting that a Reverb order update transmission has been received
+            Mage::dispatchEvent('reverb_order_update',
+                array('order_entity_id' => $magento_order_entity_id,
+                      'reverb_order_status' => $reverb_order_status,
+                      'reverb_order_update_arguments_object' => $argumentsObject)
+            );
 
-            // Fire event to allow for executing functionality upon order cancels/refunds
+            // Fire an event specific to the order status transmitted by Reverb
+            $event_name = 'reverb_order_status_update_' . $reverb_order_status;
             Mage::dispatchEvent($event_name,
                                     array('order_entity_id' => $magento_order_entity_id,
                                           'reverb_order_status' => $reverb_order_status,
