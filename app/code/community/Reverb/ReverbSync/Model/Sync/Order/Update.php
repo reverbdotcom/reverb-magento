@@ -6,6 +6,7 @@
 
 class Reverb_ReverbSync_Model_Sync_Order_Update extends Reverb_ProcessQueue_Model_Task
 {
+    const ERROR_MAGENTO_ORDER_NOT_CREATED = 'No Magento order object was returned from the order creation helper';
     const ERROR_ORDER_NOT_CREATED = 'Reverb Order with id %s has not been created in the Magento system yet';
     const EXCEPTION_EXECUTING_STATUS_UPDATE = 'Exception occurred while executing the status update for order with magento entity id %s to status %s: %s';
     const EXCEPTION_CREATING_ORDER = 'An exception occurred while creating order with Reverb Order Number %s: %s';
@@ -25,7 +26,7 @@ class Reverb_ReverbSync_Model_Sync_Order_Update extends Reverb_ProcessQueue_Mode
         $reverb_order_number = $argumentsObject->order_number;
         // Check to ensure the order has been created
         $magento_order_entity_id = Mage::getResourceSingleton('reverbSync/order')
-                                ->getMagentoOrderEntityIdByReverbOrderNumber($reverb_order_number);
+                                    ->getMagentoOrderEntityIdByReverbOrderNumber($reverb_order_number);
 
         if (empty($magento_order_entity_id))
         {
@@ -33,6 +34,16 @@ class Reverb_ReverbSync_Model_Sync_Order_Update extends Reverb_ProcessQueue_Mode
             try
             {
                 $magentoOrder = $this->_getOrderCreationHelper()->createMagentoOrder($argumentsObject);
+                // Get the magento order entity id from the newly created order
+                if ((!is_object($magentoOrder)) || (!$magentoOrder->getId()))
+                {
+                    // If the order is not a loaded object in the database, throw an exception
+                    $error_message = Mage::helper('ReverbSync')
+                                        ->__(self::ERROR_MAGENTO_ORDER_NOT_CREATED, $reverb_order_number);
+                    throw new Exception($error_message);
+                }
+
+                $magento_order_entity_id = $magentoOrder->getId();
             }
             catch(Exception $e)
             {
