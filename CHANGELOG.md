@@ -1,3 +1,6 @@
+## 0.9.5
+* Always update orders, not just on state changes
+
 ## 0.9.4
 * Migrates all Like New items to B-Stock.
 * Simplifies order sync by creating / updating orders in one cron job
