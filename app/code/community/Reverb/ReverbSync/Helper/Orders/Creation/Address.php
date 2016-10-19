@@ -103,6 +103,21 @@ class Reverb_ReverbSync_Helper_Orders_Creation_Address extends Reverb_ReverbSync
         $quoteToBuild->save();
     }
 
+    /**
+     * Essentially a public-scope alias for _getCustomerAddressForOrder
+     *
+     * @param stdClass $orderTaskArgumentsObject
+     * @return Mage_Customer_Model_Address
+     */
+    public function getCustomerAddressForOrderByArgumentsObject(stdClass $orderTaskArgumentsObject)
+    {
+        return $this->_getCustomerAddressForOrder($orderTaskArgumentsObject);
+    }
+
+    /**
+     * @param stdClass $shippingAddressObject
+     * @return Mage_Customer_Model_Address
+     */
     protected function _getCustomerAddressForOrder(stdClass $shippingAddressObject)
     {
         $name = $shippingAddressObject->name;
@@ -135,6 +150,7 @@ class Reverb_ReverbSync_Helper_Orders_Creation_Address extends Reverb_ReverbSync
         $address_data_array = $this->_trimAddressFields($address_data_array);
 
         $customerAddress = Mage::getModel('customer/address');
+        /* @var Mage_Customer_Model_Address $customerAddress */
         $customerAddress->addData($address_data_array);
 
         return $customerAddress;

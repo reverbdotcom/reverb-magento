@@ -9,6 +9,11 @@ class Reverb_ReverbSync_Helper_Orders_Creation_Shipping extends Reverb_ReverbSyn
     const ERROR_INVALID_SHIPPING_METHOD_CODE = 'Unable to get a rate for the Reverb Shipping Method';
     protected $_shipping_method_code = 'reverbshipping_reverbshipping';
 
+    /**
+     * @param stdClass $reverbOrderObject
+     * @param Mage_Sales_Model_Quote $quoteToBuild
+     * @throws Exception
+     */
     public function setShippingMethodAndRateOnQuote($reverbOrderObject, $quoteToBuild)
     {
         $this->_setOrderBeingSyncedInRegistry($reverbOrderObject);
@@ -27,14 +32,22 @@ class Reverb_ReverbSync_Helper_Orders_Creation_Shipping extends Reverb_ReverbSyn
         $quoteToBuild->save();
     }
 
+    /**
+     * @param stdClass $reverbOrderObject
+     * @param Mage_Customer_Model_Address $customerAddress
+     * @param Mage_Sales_Model_Quote $quoteToBuild
+     * @throws Exception
+     */
     public function addShippingAddressToQuote($reverbOrderObject, $customerAddress, $quoteToBuild)
     {
-        $shippingQuoteAddress = Mage::getModel('sales/quote_address')
-                                    ->setAddressType(Mage_Sales_Model_Quote_Address::TYPE_SHIPPING);
+        $shippingQuoteAddress = Mage::getModel('sales/quote_address');
+        /* @var Mage_Sales_Model_Quote_Address $shippingQuoteAddress */
+        $shippingQuoteAddress->setAddressType(Mage_Sales_Model_Quote_Address::TYPE_SHIPPING);
         $quoteToBuild->addAddress($shippingQuoteAddress);
 
         $shippingQuoteAddress->importCustomerAddress($customerAddress)->setSaveInAddressBook(0);
         $addressForm = Mage::getModel('customer/form');
+        /* @var Mage_Customer_Model_Form $addressForm */
         $addressForm->setFormCode('customer_address_edit')
                     ->setEntityType('customer_address')
                     ->setIsAjaxRequest(false);

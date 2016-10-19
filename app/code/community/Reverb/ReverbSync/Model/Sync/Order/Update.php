@@ -6,6 +6,7 @@
 
 class Reverb_ReverbSync_Model_Sync_Order_Update extends Reverb_ProcessQueue_Model_Task
 {
+    const ERROR_MAGENTO_ORDER_NOT_CREATED = 'No Magento order object was returned from the order creation helper';
     const ERROR_ORDER_NOT_CREATED = 'Reverb Order with id %s has not been created in the Magento system yet';
     const EXCEPTION_EXECUTING_STATUS_UPDATE = 'Exception occurred while executing the status update for order with magento entity id %s to status %s: %s';
     const EXCEPTION_CREATING_ORDER = 'An exception occurred while creating order with Reverb Order Number %s: %s';
@@ -25,7 +26,7 @@ class Reverb_ReverbSync_Model_Sync_Order_Update extends Reverb_ProcessQueue_Mode
         $reverb_order_number = $argumentsObject->order_number;
         // Check to ensure the order has been created
         $magento_order_entity_id = Mage::getResourceSingleton('reverbSync/order')
-                                ->getMagentoOrderEntityIdByReverbOrderNumber($reverb_order_number);
+                                    ->getMagentoOrderEntityIdByReverbOrderNumber($reverb_order_number);
 
         if (empty($magento_order_entity_id))
         {
@@ -33,6 +34,16 @@ class Reverb_ReverbSync_Model_Sync_Order_Update extends Reverb_ProcessQueue_Mode
             try
             {
                 $magentoOrder = $this->_getOrderCreationHelper()->createMagentoOrder($argumentsObject);
+                // Get the magento order entity id from the newly created order
+                if ((!is_object($magentoOrder)) || (!$magentoOrder->getId()))
+                {
+                    // If the order is not a loaded object in the database, throw an exception
+                    $error_message = Mage::helper('ReverbSync')
+                                        ->__(self::ERROR_MAGENTO_ORDER_NOT_CREATED, $reverb_order_number);
+                    throw new Exception($error_message);
+                }
+
+                $magento_order_entity_id = $magentoOrder->getId();
             }
             catch(Exception $e)
             {
@@ -46,22 +57,35 @@ class Reverb_ReverbSync_Model_Sync_Order_Update extends Reverb_ProcessQueue_Mode
 
         $reverb_order_status = $argumentsObject->status;
 
-        return $this->_executeStatusUpdate($magento_order_entity_id, $reverb_order_status);
+        return $this->_executeStatusUpdate($magento_order_entity_id, $reverb_order_status, $argumentsObject);
     }
 
-    protected function _executeStatusUpdate($magento_order_entity_id, $reverb_order_status)
+    /**
+     * @param int $magento_order_entity_id
+     * @param string $reverb_order_status
+     * @param stdClass $argumentsObject
+     * @return false|Mage_Core_Model_Abstract
+     */
+    protected function _executeStatusUpdate($magento_order_entity_id, $reverb_order_status, $argumentsObject)
     {
         try
         {
             // Start a database transaction
             Mage::getResourceSingleton('sales/order')->beginTransaction();
 
-            $event_name = 'reverb_order_status_update_' . $reverb_order_status;
+            // Fire a general event denoting that a Reverb order update transmission has been received
+            Mage::dispatchEvent('reverb_order_update',
+                array('order_entity_id' => $magento_order_entity_id,
+                      'reverb_order_status' => $reverb_order_status,
+                      'reverb_order_update_arguments_object' => $argumentsObject)
+            );
 
-            // Fire event to allow for executing functionality upon order cancels/refunds
+            // Fire an event specific to the order status transmitted by Reverb
+            $event_name = 'reverb_order_status_update_' . $reverb_order_status;
             Mage::dispatchEvent($event_name,
                                     array('order_entity_id' => $magento_order_entity_id,
-                                          'reverb_order_status' => $reverb_order_status)
+                                          'reverb_order_status' => $reverb_order_status,
+                                          'reverb_order_update_arguments_object' => $argumentsObject)
             );
             // Update the reverb_order_status field on the sales_flat_order table
             $updated_rows = Mage::getResourceSingleton('reverbSync/order')

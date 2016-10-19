@@ -8,6 +8,10 @@ class Reverb_Shipping_Model_Carrier_Reverb extends Mage_Shipping_Model_Carrier_A
 {
     protected $_code = 'reverbshipping';
 
+    /**
+     * @param Mage_Shipping_Model_Rate_Request $request
+     * @return bool|false|Mage_Core_Model_Abstract
+     */
     public function collectRates(Mage_Shipping_Model_Rate_Request $request)
     {
         if (!$this->getConfigFlag('active'))
@@ -16,12 +20,14 @@ class Reverb_Shipping_Model_Carrier_Reverb extends Mage_Shipping_Model_Carrier_A
         }
 
         $result = Mage::getModel('shipping/rate_result');
+        /* @var Mage_Shipping_Model_Rate_Result $result */
 
         $transportObject = $this->_shouldMethodBeAllowed($request);
 
         if($transportObject->getShouldBeAllowed())
         {
             $method = Mage::getModel('shipping/rate_result_method');
+            /* @var Mage_Shipping_Model_Rate_Result_Method $method */
 
             $method->setCarrier($this->_code);
             $method->setCarrierTitle($this->getConfigData('title'));
@@ -38,11 +44,18 @@ class Reverb_Shipping_Model_Carrier_Reverb extends Mage_Shipping_Model_Carrier_A
         return $result;
     }
 
+    /**
+     * @return array
+     */
     public function getAllowedMethods()
     {
         return array('reverbshipping' => $this->getConfigData('name'));
     }
 
+    /**
+     * @param Mage_Shipping_Model_Rate_Request $request
+     * @return Varien_Object
+     */
     protected function _shouldMethodBeAllowed(Mage_Shipping_Model_Rate_Request $request)
     {
         $transportObject = new Varien_Object();

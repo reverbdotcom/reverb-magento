@@ -88,6 +88,16 @@
         </observers>
       </sales_order_place_after>
 
+        <reverb_order_update>
+            <observers>
+                <execute_magento_order_update>
+                    <type>singleton</type>
+                    <class>Reverb_ReverbSync_Model_Observer_Orders_Update</class>
+                    <method>executeMagentoOrderUpdate</method>
+                </execute_magento_order_update>
+            </observers>
+        </reverb_order_update>
+
         <reverb_order_status_update_cancelled>
             <observers>
                 <execute_magento_order_cancel>

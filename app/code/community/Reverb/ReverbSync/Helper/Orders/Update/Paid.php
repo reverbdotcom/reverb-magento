@@ -4,10 +4,16 @@
  * Created: 11/7/15
  */
 
+/**
+ * Class Reverb_ReverbSync_Helper_Orders_Update_Paid
+ */
 class Reverb_ReverbSync_Helper_Orders_Update_Paid extends Reverb_ReverbSync_Helper_Orders_Update_Abstract
 {
     const NO_PRODUCTS_INVOICED = 'The invoice did not contain any products';
 
+    /**
+     * {@inheritdoc}
+     */
     public function getUpdateAction()
     {
         return 'invoiced';
@@ -18,17 +24,26 @@ class Reverb_ReverbSync_Helper_Orders_Update_Paid extends Reverb_ReverbSync_Help
      *
      * @param Mage_Sales_Model_Order $magentoOrder
      * @param string                 $reverb_order_status
+     * @param stdClass               $orderUpdateArgumentsObject
      */
-    public function executeMagentoOrderPaid(Mage_Sales_Model_Order $magentoOrder, $reverb_order_status)
+    public function executeMagentoOrderPaid(Mage_Sales_Model_Order $magentoOrder, $reverb_order_status,
+                                            stdClass $orderUpdateArgumentsObject)
     {
-        $invoice = $this->_initInvoice($magentoOrder);
-        $invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_ONLINE);
-        $invoice->register();
+        // Check if this order has already been fully invoiced
+        if (!$this->_isOrderAlreadyFullyInvoiced($magentoOrder))
+        {
+            // Invoice the order
+            $invoice = $this->_initInvoice($magentoOrder);
+            $invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_ONLINE);
+            $invoice->register();
 
-        $transactionSave = Mage::getModel('core/resource_transaction')
-                               ->addObject($invoice)
-                               ->addObject($invoice->getOrder());
-        $transactionSave->save();
+            // Save the order and the invoice in a database transaction
+            $transactionSave = Mage::getModel('core/resource_transaction');
+            /* @var Mage_Core_Model_Resource_Transaction $transactionSave */
+            $transactionSave->addObject($invoice)
+                            ->addObject($invoice->getOrder());
+            $transactionSave->save();
+        }
     }
 
     /**
@@ -43,7 +58,9 @@ class Reverb_ReverbSync_Helper_Orders_Update_Paid extends Reverb_ReverbSync_Help
             $this->_inspectWhyCanNotUpdateAndThrowException($magentoOrder);
         }
 
-        $magentoInvoice = Mage::getModel('sales/service_order', $magentoOrder)->prepareInvoice(array());
+        $magentoOrderService = Mage::getModel('sales/service_order', $magentoOrder);
+        /* @var Mage_Sales_Model_Service_Order $magentoOrderService */
+        $magentoInvoice = $magentoOrderService->prepareInvoice(array());
         if (!$magentoInvoice->getTotalQty())
         {
             $this->_throwCanNotUpdateException($magentoOrder, self::NO_PRODUCTS_INVOICED);
