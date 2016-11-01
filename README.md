@@ -112,7 +112,13 @@ The listing sync to Reverb can be triggered in two ways:
 Orders are automatically synced on a one minute cron timer. If you aren't seeing orders, please visit the Order Creation tab under Reverb and click the button to manually sync them. Please report any issues with periodic syncing to the [Reverb Magento Support Group](https://groups.google.com/forum/#!forum/reverb-magento)
 
 * **Orders are synced only 24 hours into the past** if you just installed the extension and want to sync older orders, please edit the file at app/code/community/Reverb/ReverbSync/Helper/Orders/Retrieval/Creation.php and change MINUTES_IN_PAST_FOR_CREATION_QUERY to the number in minutes you want to go into the past. For 3 days, use 3 * 60 * 24 = 4320
-* You can select whether to sync all orders (including unpaid accepted offers) or only orders awaiting shipment, via the settings screen
+
+## Syncing Orders - Paid or All
+
+You can select whether to sync all orders (including unpaid accepted offers) or only orders awaiting shipment, via the settings screen
+
+![](https://www.evernote.com/shard/s202/sh/09e73084-df9a-4fc9-b31b-85117b85dcb7/460581bf350dbdf4/res/114d0cb3-ae96-4769-9f77-e0a87f3e48ac/skitch.png?resizeSmall&width=832)
+
 
 ## Notes on Bulk Sync
 
