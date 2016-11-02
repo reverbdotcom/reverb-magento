@@ -334,6 +334,10 @@
         <!-- Default orders to be synced to the Admin store -->
         <store_to_sync_order_to>0</store_to_sync_order_to>
       </orders_sync>
+      <stale_task_deletion>
+        <enabled>1</enabled>
+        <stale_period_in_days>7</stale_period_in_days>
+      </stale_task_deletion>
     </ReverbSync>
   </default>
 </config>

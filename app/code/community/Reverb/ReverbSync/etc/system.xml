@@ -349,6 +349,40 @@
             </store_to_sync_order_to>
           </fields>
         </orders_sync>
+
+          <stale_task_deletion translate="label">
+              <label>Stale Task Deletion</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>250</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <expanded>1</expanded>
+
+              <fields>
+                  <enabled translate="label">
+                      <label>Enable Deletion of Stale Tasks</label>
+                      <comment>To delete tasks which have been completed in the system for more than the amount of days configured below, set this to "Yes"</comment>
+                      <frontend_type>select</frontend_type>
+                      <sort_order>10</sort_order>
+                      <show_in_default>1</show_in_default>
+                      <show_in_website>1</show_in_website>
+                      <show_in_store>1</show_in_store>
+                      <source_model>adminhtml/system_config_source_yesno</source_model>
+                      <validate>required-entry</validate>
+                  </enabled>
+                  <stale_period_in_days>
+                      <label>Period to define as stale</label>
+                      <comment>If the above setting is set to "Yes", any completed task in the system which is older than this value will be deleted from the system during a nightly cronjob.</comment>
+                      <frontend_type>text</frontend_type>
+                      <sort_order>20</sort_order>
+                      <show_in_default>1</show_in_default>
+                      <show_in_website>1</show_in_website>
+                      <show_in_store>1</show_in_store>
+                      <validate>validate-greater-than-zero required-entry</validate>
+                  </stale_period_in_days>
+                </fields>
+            </stale_task_deletion>
       </groups>
     </ReverbSync>
   </sections>
