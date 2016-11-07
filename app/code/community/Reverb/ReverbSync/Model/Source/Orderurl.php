@@ -17,6 +17,40 @@ class Reverb_ReverbSync_Model_Source_Orderurl
     const ORDERS_AWAITING_SHIPMENT_URL = '/api/my/orders/selling/awaiting_shipment?updated_start_date=%s';
     const ORDERS_AWAITING_SHIPMENT_LABEL = 'Paid Orders Awaiting Shipment';
 
+    const SOURCE_ORDER_URL_CONFIG = 'ReverbSync/orders_sync/order_sync_reverb_source_url';
+
+    /**
+     * @var null|bool
+     */
+    protected $_only_sync_paid_orders = null;
+
+    /**
+     * Returns whether the client has configured the order creation sync process to only sync orders which are awaiting
+     *  shipment
+     *
+     * @return bool
+     */
+    public function shouldOnlySyncPaidOrders()
+    {
+        if (is_null($this->_only_sync_paid_orders))
+        {
+            $order_sync_source_url_configuration_setting = Mage::getStoreConfig(self::SOURCE_ORDER_URL_CONFIG);
+            // trim the field just to be safe
+            $order_sync_source_url_configuration_setting = trim($order_sync_source_url_configuration_setting);
+            // Compare the field to the constant above
+            if (!strcmp($order_sync_source_url_configuration_setting, self::ALL_ORDERS_URL))
+            {
+                $this->_only_sync_paid_orders = false;
+            }
+            else
+            {
+                $this->_only_sync_paid_orders = true;
+            }
+        }
+
+        return $this->_only_sync_paid_orders;
+    }
+
     /**
      * Options getter
      *
