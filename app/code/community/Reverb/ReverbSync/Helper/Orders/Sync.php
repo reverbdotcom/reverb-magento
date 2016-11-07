@@ -55,12 +55,19 @@ class Reverb_ReverbSync_Helper_Orders_Sync extends Mage_Core_Helper_Abstract
         return Mage::getStoreConfig(self::ORDER_SYNC_SUPER_MODE_ENABLED_CONFIG_PATH);
     }
 
+    /**
+     * @return string
+     */
     public function logOrderSyncDisabledMessage()
     {
         $error_message = $this->getOrderSyncIsDisabledMessage();
         Mage::getSingleton('reverbSync/log')->logOrderSyncError($error_message);
+        return $error_message;
     }
 
+    /**
+     * @return string
+     */
     public function getOrderSyncIsDisabledMessage()
     {
         if (is_null($this->_order_sync_is_disabled_message))

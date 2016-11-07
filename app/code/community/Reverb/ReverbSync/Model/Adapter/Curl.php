@@ -18,6 +18,11 @@ class Reverb_ReverbSync_Model_Adapter_Curl
 
     const REQUEST_LOG_FILE = 'reverb_curl_requests.log';
 
+    /**
+     * @var null|Reverb_ReverbSync_Model_Log
+     */
+    protected $_getLogSingleton = null;
+
     protected function _applyConfig()
     {
         $this->_addCurrentMagentoVersionUserAgent();
@@ -157,7 +162,7 @@ class Reverb_ReverbSync_Model_Adapter_Curl
         }
 
         $string_to_log = sprintf(self::REQUEST_LOG_TEMPLATE, $http_method_log, $http_header_string_to_log, $url_to_log, $body_to_log);
-        Mage::log($string_to_log, null, self::REQUEST_LOG_FILE);
+        $this->_logApiRequestMessage($string_to_log);
 
         $status = $this->getRequestHttpCode();
         $status_as_int = intval($status);
@@ -165,7 +170,7 @@ class Reverb_ReverbSync_Model_Adapter_Curl
         {
             $curl_error = $this->getCurlErrorMessage();
             $error_string_to_log = sprintf(self::POST_ERROR_LOG_TEMPLATE, $curl_error);
-            Mage::log($error_string_to_log, null, self::REQUEST_LOG_FILE);
+            $this->_logApiRequestMessage($error_string_to_log);
         }
     }
 
@@ -437,5 +442,26 @@ class Reverb_ReverbSync_Model_Adapter_Curl
         }
         curl_multi_close($multihandle);
         return $result;
+    }
+
+    /**
+     * @param string $api_message
+     */
+    protected function _logApiRequestMessage($api_message)
+    {
+        $this->_getLogSingleton()->logApiRequestMessage($api_message);
+    }
+
+    /**
+     * @return Reverb_ReverbSync_Model_Log
+     */
+    protected function _getLogSingleton()
+    {
+        if (is_null($this->_getLogSingleton))
+        {
+            $this->_getLogSingleton = Mage::getSingleton('reverbSync/log');
+        }
+
+        return $this->_getLogSingleton;
     }
 }
