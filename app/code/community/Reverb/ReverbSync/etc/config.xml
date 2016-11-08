@@ -334,11 +334,9 @@
         <!-- Default orders to be synced to the Admin store -->
         <store_to_sync_order_to>0</store_to_sync_order_to>
         <!-- The set of order statuses which should be regarded as constituting NOT being a paid order -->
-        <non_paid_order_statuses>
-          <unpaid/>
-          <pending_review/>
-          <blocked/>
-        </non_paid_order_statuses>
+        <paid_order_statuses>
+          <paid/>
+        </paid_order_statuses>
       </orders_sync>
     </ReverbSync>
   </default>

@@ -96,8 +96,8 @@ class Reverb_ReverbSync_Model_Sync_Order_Update extends Reverb_ProcessQueue_Mode
      *
      * IF the user has "Paid Orders Awaiting Shipment" setting
      *      on update, poll the endpoint (still using the "all" endpoint as we do want all updates)
-     *      if the status on an order is unpaid/pending_review/blocked, do NOT create the order
-     *      otherwise create the order
+     *      if the status on an order is paid, create the order
+     *      otherwise do NOT create the order
      *
      * IF the user has the All Orders setting,
      *      on update, create the order regardless of status
@@ -115,8 +115,8 @@ class Reverb_ReverbSync_Model_Sync_Order_Update extends Reverb_ProcessQueue_Mode
         }
         // Check the update status for the order
         $reverb_order_status = $argumentsObject->status;
-        $non_paid_order_statuses_array = $this->_getOrderStatusSourceSingleton()->getNonPaidOrderStatuses();
-        $should_create_order = (!in_array($reverb_order_status, $non_paid_order_statuses_array));
+        $paid_order_statuses_array = $this->_getOrderStatusSourceSingleton()->getPaidOrderStatusesArray();
+        $should_create_order = in_array($reverb_order_status, $paid_order_statuses_array);
         return $should_create_order;
     }
 
