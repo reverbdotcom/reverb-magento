@@ -65,7 +65,7 @@
         <jobs>
             <reverb_process_queue_delete_stale_successful>
                 <schedule>
-                    <cron_expr>36 4 * * *</cron_expr>
+                    <cron_expr>19 3 * * *</cron_expr>
                 </schedule>
                 <run>
                     <model>reverb_process_queue/cron_delete_stale_successful::deleteStaleSuccessfulQueueTasks</model>
