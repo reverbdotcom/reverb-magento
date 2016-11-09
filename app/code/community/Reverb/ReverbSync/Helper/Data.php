@@ -24,10 +24,14 @@ class Reverb_ReverbSync_Helper_Data
     const LISTING_STATUS_SUCCESS = 1;
 
     /**
-     * $fieldsArray should eventually be a model
-     *
-     * @param $listingWrapper
-     * @return Reverb_ReverbSync_Model_Wrapper_Listing
+     * @var null|Reverb_ReverbSync_Model_Log
+     */
+    protected $_getLogSingleton = null;
+
+    /**
+     * @param $product
+     * @param bool $do_not_allow_creation
+     * @return false|Reverb_ReverbSync_Model_Wrapper_Listing
      */
     public function createOrUpdateReverbListing($product, $do_not_allow_creation = false)
     {
@@ -429,6 +433,19 @@ class Reverb_ReverbSync_Helper_Data
     {
         $message = sprintf(self::API_CALL_LOG_TEMPLATE, $api_request, $request, $status, $response);
         $file = 'reverb_sync_' . $api_request . '.log';
-        Mage::log($message, null, $file);
+        $this->_getLogSingleton()->logReverbMessage($message, $file);
+    }
+
+    /**
+     * @return Reverb_ReverbSync_Model_Log
+     */
+    protected function _getLogSingleton()
+    {
+        if (is_null($this->_getLogSingleton))
+        {
+            $this->_getLogSingleton = Mage::getSingleton('reverbSync/log');
+        }
+
+        return $this->_getLogSingleton;
     }
 }

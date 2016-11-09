@@ -30,7 +30,6 @@ class Reverb_ReverbSync_Model_Sync_Order_Update extends Reverb_ProcessQueue_Mode
         if (!Mage::helper('ReverbSync/orders_sync')->isOrderSyncEnabled())
         {
             $error_message = Mage::helper('ReverbSync/orders_sync')->logOrderSyncDisabledMessage();
-            Mage::getModel('reverbSync/log')->logOrderSyncError($error_message);
             return $this->_returnAbortCallbackResult($error_message);
         }
 

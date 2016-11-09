@@ -307,6 +307,10 @@
 
   <default>
     <ReverbSync>
+      <extensionOption_group>
+        <!-- By default, logging will be turned off to prevent bloating of log files on client servers -->
+        <enable_logging>0</enable_logging>
+      </extensionOption_group>
       <reverbDefault>
         <enable_listing_creation>0</enable_listing_creation>
         <require_reverb_category_definition>0</require_reverb_category_definition>
