@@ -11,8 +11,19 @@ class Reverb_ReverbSync_Model_Sync_Order_Update extends Reverb_ProcessQueue_Mode
     const EXCEPTION_EXECUTING_STATUS_UPDATE = 'Exception occurred while executing the status update for order with magento entity id %s to status %s: %s';
     const EXCEPTION_CREATING_ORDER = 'An exception occurred while creating order with Reverb Order Number %s: %s';
     const SUCCESS_ORDER_STATUS_UPDATED = 'The order\'s status has been updated to %s';
+    const NOTICE_ORDER_NOT_PAID = 'Reverb Order #%s has not yet been paid, and will not be created in the Magento system at this time as a result';
 
     protected $_orderCreationHelper = null;
+
+    /**
+     * @var null|Reverb_ReverbSync_Model_Source_Orderurl
+     */
+    protected $_orderCreationRetrievalUrlSource = null;
+
+    /**
+     * @var null|Reverb_ReverbSync_Model_Source_Order_Status
+     */
+    protected $_orderStatusSource = null;
 
     public function updateReverbOrderInMagento(stdClass $argumentsObject)
     {
@@ -30,34 +41,83 @@ class Reverb_ReverbSync_Model_Sync_Order_Update extends Reverb_ProcessQueue_Mode
 
         if (empty($magento_order_entity_id))
         {
-            // In this event, we will create the order
-            try
+            /**
+             * In this event, we will adhere to the following business logic
+             * IF the user has "Paid Orders Awaiting Shipment" setting
+             *      on update, poll the endpoint (still using the "all" endpoint as we do want all updates)
+             *      if the status on an order is unpaid/pending_review/blocked, do NOT create the order
+             *      otherwise create the order
+             *
+             * IF the user has the All Orders setting,
+             *      on update, create the order regardless of status
+             */
+            if ($this->_shouldCreateOrderDueToUpdateTransmission($argumentsObject))
             {
-                $magentoOrder = $this->_getOrderCreationHelper()->createMagentoOrder($argumentsObject);
-                // Get the magento order entity id from the newly created order
-                if ((!is_object($magentoOrder)) || (!$magentoOrder->getId()))
+                try
                 {
-                    // If the order is not a loaded object in the database, throw an exception
-                    $error_message = Mage::helper('ReverbSync')
-                                        ->__(self::ERROR_MAGENTO_ORDER_NOT_CREATED, $reverb_order_number);
-                    throw new Exception($error_message);
-                }
+                    $magentoOrder = $this->_getOrderCreationHelper()->createMagentoOrder($argumentsObject);
+                    // Get the magento order entity id from the newly created order
+                    if ((!is_object($magentoOrder)) || (!$magentoOrder->getId()))
+                    {
+                        // If the order is not a loaded object in the database, throw an exception
+                        $error_message = Mage::helper('ReverbSync')
+                                            ->__(self::ERROR_MAGENTO_ORDER_NOT_CREATED, $reverb_order_number);
+                        throw new Exception($error_message);
+                    }
 
-                $magento_order_entity_id = $magentoOrder->getId();
+                    $magento_order_entity_id = $magentoOrder->getId();
+                }
+                catch(Exception $e)
+                {
+                    // In this event, log the error and return an Abort status
+                    $error_message = Mage::helper('ReverbSync')->__(self::EXCEPTION_CREATING_ORDER, $reverb_order_number,
+                        $e->getMessage());
+                    Mage::getSingleton('reverbSync/log')->logOrderSyncError($error_message);
+                    return $this->_returnAbortCallbackResult($error_message);
+                }
             }
-            catch(Exception $e)
+            else
             {
-                // In this event, log the error and return an Abort status
-                $error_message = Mage::helper('ReverbSync')->__(self::EXCEPTION_CREATING_ORDER, $reverb_order_number,
-                                                                $e->getMessage());
-                Mage::getSingleton('reverbSync/log')->logOrderSyncError($error_message);
-                return $this->_returnAbortCallbackResult($error_message);
+                // In this case, do not create the order and return a Complete status for the task
+                // Once the order becomes paid, a new order update will be created in the Reverb system which will
+                //      trigger creation of the order
+                $notice_message = Mage::helper('ReverbSync')->__(self::NOTICE_ORDER_NOT_PAID, $reverb_order_number);
+                return $this->_returnSuccessCallbackResult($notice_message);
             }
         }
 
         $reverb_order_status = $argumentsObject->status;
 
         return $this->_executeStatusUpdate($magento_order_entity_id, $reverb_order_status, $argumentsObject);
+    }
+
+    /**
+     * Will return whether or not the order should be create in the Magento system as per the following logic:
+     *
+     * IF the user has "Paid Orders Awaiting Shipment" setting
+     *      on update, poll the endpoint (still using the "all" endpoint as we do want all updates)
+     *      if the status on an order is paid, create the order
+     *      otherwise do NOT create the order
+     *
+     * IF the user has the All Orders setting,
+     *      on update, create the order regardless of status
+     *
+     * @param stdClass $argumentsObject
+     * @return bool
+     */
+    protected function _shouldCreateOrderDueToUpdateTransmission(stdClass $argumentsObject)
+    {
+        // Check if the user has set Order Creation to be scoped to "All Orders"
+        if (!$this->_getOrderCreationRetrievalUrlSource()->shouldOnlySyncPaidOrders())
+        {
+            // The order should be created regardless of its update status
+            return true;
+        }
+        // Check the update status for the order
+        $reverb_order_status = $argumentsObject->status;
+        $paid_order_statuses_array = $this->_getOrderStatusSourceSingleton()->getPaidOrderStatusesArray();
+        $should_create_order = in_array($reverb_order_status, $paid_order_statuses_array);
+        return $should_create_order;
     }
 
     /**
@@ -113,6 +173,32 @@ class Reverb_ReverbSync_Model_Sync_Order_Update extends Reverb_ProcessQueue_Mode
 
         $success_message = Mage::helper('ReverbSync')->__(self::SUCCESS_ORDER_STATUS_UPDATED, $reverb_order_status);
         return $this->_returnSuccessCallbackResult($success_message);
+    }
+
+    /**
+     * @return Reverb_ReverbSync_Model_Source_Order_Status
+     */
+    protected function _getOrderStatusSourceSingleton()
+    {
+        if (is_null($this->_orderStatusSource))
+        {
+            $this->_orderStatusSource = Mage::getSingleton('reverbSync/source_order_status');
+        }
+
+        return $this->_orderStatusSource;
+    }
+
+    /**
+     * @return Reverb_ReverbSync_Model_Source_Orderurl
+     */
+    protected function _getOrderCreationRetrievalUrlSource()
+    {
+        if (is_null($this->_orderCreationRetrievalUrlSource))
+        {
+            $this->_orderCreationRetrievalUrlSource = Mage::getSingleton('reverbSync/source_orderurl');
+        }
+
+        return $this->_orderCreationRetrievalUrlSource;
     }
 
     /**
