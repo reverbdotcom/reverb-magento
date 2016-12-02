@@ -1,0 +1,6 @@
+{
+    "name": "reverbdotcom/reverb-magento",
+    "type": "magento-module",
+    "description": "This is a Magento app for integrating with Reverb's API including product sync (magento->reverb) and order sync (reverb->magento).",
+    "license": "Apache-2.0"
+}
