@@ -10,7 +10,7 @@
 <config>
   <modules>
     <Reverb_ReverbSync>
-      <version>0.1.18</version>
+      <version>0.1.19</version>
     </Reverb_ReverbSync>
   </modules>
   <global>

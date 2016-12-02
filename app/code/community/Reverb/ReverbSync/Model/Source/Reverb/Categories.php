@@ -69,6 +69,9 @@ class Reverb_ReverbSync_Model_Source_Reverb_Categories
         return $array_of_orm_data_arrays;
     }
 
+    /**
+     * @return Reverb_ReverbSync_Model_Category_Reverb
+     */
     protected function _getReverbCategorySingleton()
     {
         if (is_null($this->_reverbCategorySingleton))
