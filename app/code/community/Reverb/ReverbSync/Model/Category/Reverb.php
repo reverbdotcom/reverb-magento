@@ -51,11 +51,10 @@ class Reverb_ReverbSync_Model_Category_Reverb extends Mage_Core_Model_Abstract
         return $this->getData(self::PARENT_UUID_FIELD, $parent_uuid);
     }
 
-    public function convertJsonObjectArrayToORMDataArray(array $jsonObject, $include_primary_key = false)
+    public function convertJsonObjectArrayToORMDataArray(stdClass $jsonObject, $include_primary_key = false)
     {
         $orm_data_array = array();
         $orm_data_array['name'] = $jsonObject->name;
-        $orm_data_array['description'] = $jsonObject->description;
         $orm_data_array['reverb_category_slug'] = $jsonObject->slug;
         if ($include_primary_key)
         {
