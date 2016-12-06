@@ -1,3 +1,7 @@
+## 0.9.7
+
+* Fixes issues loading the categories screen due to migration problems
+
 ## 0.9.6
 * If using sync orders Awaiting Shipment, then only Paid orders will create during updates. Prevents old orders from being re-created during updates for customers using this feature.
 * Ability to turn off Reverb Logging in settings - off by default. Saves disk space for customers who don't have logrotate or other forms of log cleanup.
