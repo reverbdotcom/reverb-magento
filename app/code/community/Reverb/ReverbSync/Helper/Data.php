@@ -420,7 +420,7 @@ class Reverb_ReverbSync_Helper_Data
         $options_array[CURLOPT_RETURNTRANSFER] = 1;
 
         $x_auth_token = Mage::getStoreConfig('ReverbSync/extension/api_token');
-        $options_array[CURLOPT_HTTPHEADER] = array("X-Auth-Token: $x_auth_token", "Content-type: application/hal+json");
+        $options_array[CURLOPT_HTTPHEADER] = array("Authorization: Bearer $x_auth_token", "Content-type: application/hal+json");
 
         $options_array[CURLOPT_URL] = $url;
 

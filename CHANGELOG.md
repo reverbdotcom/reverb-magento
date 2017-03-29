@@ -1,3 +1,7 @@
+## 0.9.8
+
+* Uses Oauth header for authentication so that shops can generate their own tokens that do not change during password change
+
 ## 0.9.7
 
 * Fixes issues loading the categories screen due to migration problems
