@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <DELLCReverb_ReverbSync>
+            <active>true</active>
+            <codePool>local</codePool>
+            <depends>
+                <Reverb_ReverbSync/>
+            </depends>
+        </DELLCReverb_ReverbSync>
+    </modules>
+</config>
