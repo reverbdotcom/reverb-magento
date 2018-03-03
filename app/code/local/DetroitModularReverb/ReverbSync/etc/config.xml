@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <DetroitModularReverb_ReverbSync>
+            <version>0.0.1</version>
+        </DetroitModularReverb_ReverbSync>
+    </modules>
+
+    <global>
+        <models>
+            <detroit_modular_reverb_sync>
+                <class>DetroitModularReverb_ReverbSync_Model</class>
+            </detroit_modular_reverb_sync>
+
+            <reverbSync>
+                <rewrite>
+                    <Mapper_Product>DetroitModularReverb_ReverbSync_Model_Mapper_Product</Mapper_Product>
+                </rewrite>
+            </reverbSync>
+        </models>
+    </global>
+</config>

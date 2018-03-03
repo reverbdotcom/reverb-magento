@@ -2,13 +2,12 @@
 /**
  * Author: Sean Dunagan (github: dunagan5887)
  * Date: 3/2/18
- * Time: 7:01 PM
  */
 
 /**
- * Class DELLCReverb_ReverbSync_Model_Mapper_Product
+ * Class DetroitModularReverb_ReverbSync_Model_Mapper_Product
  */
-class DELLCReverb_ReverbSync_Model_Mapper_Product extends Reverb_ReverbSync_Model_Mapper_Product
+class DetroitModularReverb_ReverbSync_Model_Mapper_Product extends Reverb_ReverbSync_Model_Mapper_Product
 {
     const QTY_TO_SET_FOR_INVENTORY = 1;
 
