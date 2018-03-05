@@ -20,7 +20,7 @@ Please read this entire README prior to installing the application.
 
 ## Professional Support
 
-If you need help with your Magento 1.x install or integration of this plugin with your Magento 1.x instance, please contact these independent consultants for support. Please note that Reverb does not manage these relationships or support the plugin directly and that * these consultants work with the 1.x version of the plugin only * . For professional support on 2.x, please go here:  https://github.com/reverbdotcom/reverb-magento-2
+If you need help with your Magento 1.x install or integration of this plugin with your Magento 1.x instance, please contact these independent consultants for support. Please note that Reverb does not manage these relationships or support the plugin directly and that **these consultants work with the 1.x version of the plugin only** . For professional support on 2.x, please go here:  https://github.com/reverbdotcom/reverb-magento-2
 
 ##### Sean Dunagan
 
