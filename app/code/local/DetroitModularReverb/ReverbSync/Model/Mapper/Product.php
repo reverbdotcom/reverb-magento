@@ -20,9 +20,14 @@ class DetroitModularReverb_ReverbSync_Model_Mapper_Product extends Reverb_Reverb
 
         if (isset($api_content_data['inventory']))
         {
-            $api_content_data['inventory'] = $this->_getQuantityToSetForInventory();
+            $inventory_level = intval($api_content_data['inventory']);
+            if ($inventory_level != 0)
+            {
+                // Only force the inventory to be 1 if there actually is qty to be set
+                $api_content_data['inventory'] = $this->_getQuantityToSetForInventory();
 
-            $listingWrapper->setApiCallContentData($api_content_data);
+                $listingWrapper->setApiCallContentData($api_content_data);
+            }
         }
     }
 
