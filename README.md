@@ -138,9 +138,9 @@ The bulk sync uses multiple threads (runs in parallel). It takes some time to sp
 
 Please make sure you've [cleared your magento cache](https://www.properhost.com/support/kb/23/How-To-Clear-The-Magento-Cache).
 
-## Support and Announcements
+## Reverb Support
 
-Please join the [Reverb Magento Support Group](https://groups.google.com/forum/#!forum/reverb-magento)
+While Reverb cannot debug specific issues related to your Magento installation, we can assist you with some configuration and give guidance where needed. We can be reached at integrations@reverb.com
 
 ## Contributing
 
