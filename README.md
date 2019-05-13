@@ -52,13 +52,13 @@ If you're continuing to have cron issues, please install Reverb on a fresh magen
 
 #### Q: How can I map make/model and other fields?
 
-If you don't already have make & model fields in your magento installation, you can add them by using the Catalog->Attributes section to add two new fields (for example, "reverb_make" and "reverb_model"). Then go to Catalog->Attributes->Attribute Sets and add those fields into your default attribute set so they appear on every product. Finally, go to (System->Configuration->Reverb Configuration) and map the make and model fields to your newly created fields. You can do the same for other reverb attributes such as finish/year/shipping_profile_name
+If you don't already have make & model fields in your magento installation, you can add them by using the Catalog->Attributes section to add two new fields (for example, "reverb_make" and "reverb_model"). Then go to Catalog->Attributes->Attribute Sets and add those fields into your default attribute set so they appear on every product. Finally, go to (System->Configuration->Reverb Configuration) and map the make and model fields to your newly created fields. You can do the same for other reverb attributes such as finish/year/shipping_profile_name. For shipping, you should map the Reverb API field to shipping_profile_name.
 
 #### Q: How can I set all my items to free shipping?
 
 1. Set up a [Reverb Shipping Profile](https://reverb.com/my/selling/shipping_rates) with free shipping ($0), called "Free Shipping".
 2. Add a magento attribute for reverb_shipping_profile from Catalog->Manage Attributes. Set a default value of "Free Shipping" (corresponding to the profile you created in step 1).
-3. Add a mapping from Shipping Profile to your newly created attribute in the System->Configuration->Reverb Settings screen.
+3. Add a mapping from Shipping Profile to your newly created attribute in the System->Configuration->Reverb Settings screen. The Magento Attribute code should read reverb_shipping_profile, and then the Reverb API field should read shipping_profile_name.
 
 ## Installation: Part 1 - Install the App
 
