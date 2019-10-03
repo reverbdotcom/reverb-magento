@@ -1,3 +1,7 @@
+## 0.9.9
+
+* Updates shipping providers
+
 ## 0.9.8
 
 * Uses Oauth header for authentication so that shops can generate their own tokens that do not change during password change

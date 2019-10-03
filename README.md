@@ -12,7 +12,7 @@ Please read this entire README prior to installing the application.
 
 * Create new draft listings on Reverb from Magento products, including image & category sync
 * Control whether price/title/inventory syncs individualy.
-* Sync updates for inventory from Magento to Reverb. 
+* Sync updates for inventory from Magento to Reverb.
 * Sync orders from Reverb to Magento
 * Sync shipping tracking information from Magento to Reverb
 * Configurable products - children are synced as individual listings on Reverb
@@ -38,11 +38,11 @@ Email: [zztimur@gmail.com](mailto:zztimur@gmail.com?Subject=Reverb%20Magento%20P
 
 #### Q: Why aren't things synced in real time, or failing to sync at all?
 
-If you're experiencing problems with your cron, please install [AOE Scheduler](https://www.magentocommerce.com/magento-connect/aoe-scheduler.html) to inspect the functioning of your cron.  
+If you're experiencing problems with your cron, please install [AOE Scheduler](https://www.magentocommerce.com/magento-connect/aoe-scheduler.html) to inspect the functioning of your cron.
 
 The Reverb sync runs on a cron (magento's scheduler)  that's set to every minute for product syncs and every two minutes for order syncing. This is done so that when you save a product we won't interfere with your normal magento functions, and do all the sync in the background.
 
-However the design of Magento's cron means that other cron-based plugins that take a long time to run may interfere with each other. Reverb generally finishes its work in seconds, but we have seen plugins that can take many minutes to run, or even crash, preventing plugins like Reverb from finishing their work. 
+However the design of Magento's cron means that other cron-based plugins that take a long time to run may interfere with each other. Reverb generally finishes its work in seconds, but we have seen plugins that can take many minutes to run, or even crash, preventing plugins like Reverb from finishing their work.
 
 If you're continuing to have cron issues, please install Reverb on a fresh magento instance without any other plugins as a test. If that works, the problem is with one of your other plugins. Please ensure you have no error messages in your cron and php logs prior to contacting Reverb Support.
 
@@ -69,13 +69,13 @@ Please follow the instructions below to download and install the app. This assum
 export MAGENTO_PATH=/path/to/magento
 
 # Download the release
-cd /tmp && wget https://github.com/reverbdotcom/magento/archive/0.9.8.tar.gz
+cd /tmp && wget https://github.com/reverbdotcom/magento/archive/0.9.9.tar.gz
 
 # Unzip the release
-tar zxvf 0.9.8.tar.gz
+tar zxvf 0.9.9.tar.gz
 
 # Copy everything from the app folder into your magento app
-rsync -avzp magento-0.9.8/app/* $MAGENTO_PATH/htdocs/app/
+rsync -avzp magento-0.9.9/app/* $MAGENTO_PATH/htdocs/app/
 
 # Clear your cache
 rm -rf $MAGENTO_PATH/htdocs/var/cache
