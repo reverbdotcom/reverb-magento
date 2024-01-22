@@ -1,3 +1,7 @@
+## 0.9.10
+
+* Updates category images to use new host
+
 ## 0.9.9
 
 * Updates shipping providers
