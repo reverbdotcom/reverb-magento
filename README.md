@@ -24,7 +24,7 @@ If you need help with your Magento 1.x install or integration of this plugin wit
 
 ##### Sean Dunagan
 
-Github: [dunagan5887](https://github.com/dunagan588700)
+Github: [dunagan5887](https://github.com/dunagan5887)
 
 Email: [dunagan5887@gmail.com](mailto:dunagan5887@gmail.com?Subject=Reverb%20Magento%20Plugin)
 
